@@ -262,11 +262,123 @@ yum install gcc gcc-c++ libstdc++-devel
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="可选-安装高版本gcc">[可选] 安装高版本GCC</h4>
-<p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">GNU镜像列表</a>里选择源下载必要依赖项，这些依赖项包括：
-- MPFR
-- MPC
-- GCC本体</p>
-<h3 id="恢复discuz原站数据">恢复Discuz原站数据</h3>
+<p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">GNU镜像列表</a>里选择源下载必要依赖项，这些项包括：</p>
+<ul>
+<li>m4</li>
+<li>gmp</li>
+<li>mpfr</li>
+<li>mpc</li>
+<li>gcc本体</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 解压、编译及安装m4</span>
+tar zxf m4-xx.xx.xx.tar.gz
+<span style="color:#0086b3">cd</span> m4-xx.xx.xx
+./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/m4
+make
+make install
+
+<span style="color:#998;font-style:italic"># 解压、编译及安装gmp</span>
+tar zxf gmp-xx.xx.xx.tar.gz
+<span style="color:#0086b3">cd</span> gmp-xx.xx.xx
+./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp
+make
+make install
+
+<span style="color:#998;font-style:italic"># 解压、编译及安装mpfr</span>
+tar zxf mpfr-xx.xx.xx.tar.gz
+<span style="color:#0086b3">cd</span> mpfr-xx.xx.xx
+./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/mpfr --with-gmp<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp
+make
+make install
+
+<span style="color:#998;font-style:italic"># 解压、编译及安装mpc</span>
+tar zxf mpc-xx.xx.xx.tar.gz
+<span style="color:#0086b3">cd</span> mpc-xx.xx.xx
+./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/mpc --with-gmp<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp --with-mpfr<span style="color:#000;font-weight:bold">=</span>/usr/local/mpfr
+make
+make install
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="安装nginx">安装Nginx</h4>
+<p>正式安装Nginx之前，还需要准备一些依赖项的源码（并不需要编译安装），它们是</p>
+<ul>
+<li><a href="http://ftp.pcre.org/pub/pcre">pcre</a></li>
+<li><a href="http://www.zlib.net">zlib</a></li>
+<li><a href="https://www.openssl.org/source">openssl</a></li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 解压依赖项目的源码</span>
+tar zxf pcre-xx.xx.tar.gz
+tar zxf zlib-xx.xx.xx.tar.gz
+tar zxf openssl-xx-xx-xx.tar.gz
+</code></pre></td></tr></table>
+</div>
+</div><p>再次确认需要安装的Nginx模块后，执行以下指令（这里选择安装ssl模块）</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 解压并源码安装Nginx</span>
+tar zxf nginx-xx.xx.xx.tar.gz
+<span style="color:#0086b3">cd</span> nginx-xx.xx.xx
+./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/nginx <span style="color:#d14">\
+</span><span style="color:#d14"></span>            --with-http_ssl_module <span style="color:#d14">\
+</span><span style="color:#d14"></span>            --with-zlib<span style="color:#000;font-weight:bold">={</span>zlib_parent_dir<span style="color:#000;font-weight:bold">}</span>/zlib-xx.xx.xx <span style="color:#d14">\
+</span><span style="color:#d14"></span>            --with-pcre<span style="color:#000;font-weight:bold">={</span>pcre_parent_dir<span style="color:#000;font-weight:bold">}</span>/pcre-xx.xx <span style="color:#d14">\
+</span><span style="color:#d14"></span>            --with-openssl<span style="color:#000;font-weight:bold">={</span>openssl_parent_dir<span style="color:#000;font-weight:bold">}</span>/openssl-xx.xx.xx
+make
+make install
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="恢复discuz原站数据">恢复Discuz原站数据</h3>
 
         </div>
 

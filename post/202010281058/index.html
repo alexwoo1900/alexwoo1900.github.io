@@ -200,9 +200,11 @@
             <h2 id="discuz论坛搬迁记录">Discuz论坛搬迁记录</h2>
 <h3 id="备份discuz原站数据">备份Discuz原站数据</h3>
 <blockquote>
-<p>在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括：<br>
-原Discuz源代码、配置文件以及图片等静态资源<br>
-原Discuz数据库中的所有表</p>
+<p>在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括：</p>
+<ul>
+<li>原Discuz源代码、配置文件以及图片等静态资源</li>
+<li>原Discuz数据库中的所有表</li>
+</ul>
 </blockquote>
 <h4 id="备份原discuz的源代码等资源">备份原Discuz的源代码等资源</h4>
 <p>只需要完整地复制原程序目录即可。</p>
@@ -212,14 +214,16 @@
 后台-&gt;站长-&gt;数据库-&gt;备份-&gt;自定义备份</p>
 <p>对于后者，我们可以手动选择所有数据表进行保存。</p>
 <p><strong>但对于前者，系统是不会对数据库中的common类型的表进行备份的。</strong><br>
-遇到仅备份Discuz!和UCenter数据的情况，请务必保留原Discuz系统的安装包，因为我们需要使用*{root_dir}/install/index.php*来恢复common表。（index.php是Discuz安装程序的入口，在论坛构建完成时后台为了系统安全性会要求用户将其删除）</p>
-<p>备份下来的表数据会以.sql文件的形式保存在*{root_dir}/data/backup_xxxxxx*中。</p>
+遇到仅备份Discuz!和UCenter数据的情况，请务必保留原Discuz系统的安装包，因为我们需要使用<code>{root_dir}/install/index.php</code>来恢复common表。（index.php是Discuz安装程序的入口，在论坛构建完成时后台为了系统安全性会要求用户将其删除）</p>
+<p>备份下来的表数据会以.sql文件的形式保存在<code>{root_dir}/data/backup_xxxxxx</code>中。</p>
 <h3 id="配置新的服务器环境">配置新的服务器环境</h3>
 <blockquote>
-<p>在裸CentOS系统中，我们需要安装并配置好几个必要的软件，它们包括：<br>
-服务器软件Nginx及其依赖<br>
-解析软件PHP及其他一系列的支持模块<br>
-数据库软件MySQL</p>
+<p>在裸CentOS系统中，我们需要安装并配置好几个必要的软件，它们包括：</p>
+<ul>
+<li>服务器软件Nginx及其依赖</li>
+<li>解析软件PHP及其他一系列的支持模块</li>
+<li>数据库软件MySQL</li>
+</ul>
 </blockquote>
 <h4 id="更新系统工具">更新系统工具</h4>
 <ul>

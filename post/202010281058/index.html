@@ -274,6 +274,9 @@ cd m4-xx.xx.xx
 make
 make install
 
+# 设定M4的环境变量
+export M4=/usr/local/m4/bin/m4
+
 # 解压、编译及安装gmp
 tar zxf gmp-xx.xx.xx.tar.gz
 cd gmp-xx.xx.xx
@@ -391,19 +394,15 @@ make install
 <h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
 <h4 id="2-4-1-更新mysql源">2-4-1 更新MySQL源</h4>
 <p>为了获取较新版本的MySQL，我们先更新MySQL源。一般有两种方式：</p>
-<ul>
-<li>方式一</li>
-</ul>
-<pre><code class="language-bash"># 选择正确的源版本（重要！），下载
+<pre><code class="language-bash"># 方式一
+# 选择正确的源版本（重要！），下载
 wget http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
 
 # 安装源
 yum localhost mysql-community-release-el6-7.noarch.rpm
-</code></pre>
-<ul>
-<li>方式二</li>
-</ul>
-<pre><code class="language-bash"># 直接在yum源列表中新建mysql-community.repo。
+
+# 方式二
+# 直接在yum源列表中新建mysql-community.repo。
 touch /etc/yum.repos.d/mysql-community.repo
 </code></pre>
 <p>在<a href="https://mirror.tuna.tsinghua.edu.cn/help/mysql">清华大学开源软件镜像站</a>中选择<strong>正确的系统版本</strong>后，将源内容复制到mysql-community.repo中。</p>
@@ -418,14 +417,12 @@ mysqli.default_socket = /var/lib/mysql/mysql.sock
 pdo_mysql.default_socket = /var/lib/mysql/mysql.sock
 </code></pre>
 <h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
-<blockquote>
 <p>论坛所要恢复的数据包括：</p>
 <ul>
 <li>源代码和静态资源</li>
 <li>数据库表</li>
-<li>UCenter通讯服务</li>
+<li>UCenter通讯服务（不需要提前备份文件）</li>
 </ul>
-</blockquote>
 <h3 id="3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</h3>
 <p>只需要将原程序目录移动至新服务器下即可。</p>
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
@@ -471,26 +468,7 @@ source {sql_file}
         </div>
     </article>
     
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
     
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     
     

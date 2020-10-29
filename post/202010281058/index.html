@@ -143,36 +143,32 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
       <ul>
-        <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
+        <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
+        <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
+      </ul>
+    </li>
+    <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
+      <ul>
+        <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
+        <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
+        <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
+        <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
+        <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a>
           <ul>
-            <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
-            <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
+            <li><a href="#2-4-1-更新mysql源">2-4-1 更新MySQL源</a></li>
+            <li><a href="#2-4-2-安装mysql">2-4-2 安装MySQL</a></li>
+            <li><a href="#2-4-3-初始化mysql">2-4-3 初始化MySQL</a></li>
           </ul>
         </li>
-        <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
-          <ul>
-            <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
-            <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
-            <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
-            <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
-            <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a>
-              <ul>
-                <li><a href="#2-4-1-更新mysql源">2-4-1 更新MySQL源</a></li>
-                <li><a href="#2-4-2-安装mysql">2-4-2 安装MySQL</a></li>
-                <li><a href="#2-4-3-初始化mysql">2-4-3 初始化MySQL</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
-          <ul>
-            <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
-            <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
-            <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
-          </ul>
-        </li>
+      </ul>
+    </li>
+    <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
+      <ul>
+        <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
+        <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
+        <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
       </ul>
     </li>
   </ul>
@@ -289,11 +285,11 @@ yum install gcc gcc-c++ libstdc++-devel -y
 </div><h3 id="可选-安装高版本gcc">[可选] 安装高版本GCC</h3>
 <p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">开源镜像列表</a>里选择GNU源下载必要依赖项，这些项包括：</p>
 <ul>
-<li>m4</li>
-<li>gmp</li>
-<li>mpfr</li>
-<li>mpc</li>
-<li>gcc本体</li>
+<li>m4，宏处理器</li>
+<li>gmp，数学计算库</li>
+<li>mpfr，用于多精度浮点运算的C语言库</li>
+<li>mpc，用于多精度复数运算的C语言库</li>
+<li>gcc，编译器</li>
 </ul>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -476,9 +472,12 @@ make install
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./configure <span style="color:#ae81ff">\
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 这里用--with-config-file-path指定使用的ini所在目录</span>
+<span style="color:#75715e"># 同时开启对php-fpm、openssl、curl、ftp、mysql、zip等常用功能的支持</span>
+./configure <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>/usr/local/php <span style="color:#ae81ff">\ </span>
     --with-config-file-path<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --enable-fpm <span style="color:#ae81ff">\
@@ -540,8 +539,7 @@ make install
 </span><span style="color:#ae81ff"></span>    --enable-zip <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --enable-mysqlnd-compression-support <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --with-pear <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-opcache<span style="color:#960050;background-color:#1e0010">&#39;</span>
-
+</span><span style="color:#ae81ff"></span>    --enable-opcache
 make
 make install
 </code></pre></td></tr></table>
@@ -593,7 +591,7 @@ touch /etc/yum.repos.d/mysql-community.repo
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
-<p>在PHP应用的php.ini中添加以下内容</p>
+<p>在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1

@@ -217,13 +217,11 @@
         <div class="post-content">
             <p>本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。</p>
 <h2 id="一备份discuz原站数据">一、备份Discuz原站数据</h2>
-<blockquote>
 <p>在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括：</p>
 <ul>
 <li>原Discuz源代码、配置文件以及图片等静态资源</li>
 <li>原Discuz数据库中的所有表</li>
 </ul>
-</blockquote>
 <h3 id="1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</h3>
 <p>只需要完整地复制原程序目录即可。</p>
 <h3 id="1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</h3>
@@ -235,14 +233,12 @@
 遇到仅备份Discuz!和UCenter数据的情况，请务必保留原Discuz系统的安装包，因为我们需要使用<code>{origin_root_dir}/install/index.php</code>来恢复common表。（index.php是Discuz安装程序的入口，在论坛构建完成时后台为了系统安全性会要求用户将其删除）</p>
 <p>备份下来的表数据会以.sql文件的形式保存在<code>{old_root_dir}/data/backup_xxxxxx</code>中。</p>
 <h2 id="二配置新的服务器环境">二、配置新的服务器环境</h2>
-<blockquote>
 <p>在裸CentOS系统中，我们需要安装并配置好几个必要的软件，它们包括：</p>
 <ul>
 <li>服务器软件Nginx及其依赖</li>
 <li>解析软件PHP及其他一系列的支持模块</li>
 <li>数据库软件MySQL</li>
 </ul>
-</blockquote>
 <h3 id="2-1-更新系统工具">2-1 更新系统工具</h3>
 <p>在裸系统的前提下，为了保证后续的编译安装工作能顺利进行，我们得做一些预备工作：</p>
 <pre><code class="language-bash"># 将新的yum源文件下载到yum.repos.d文件夹内
@@ -501,7 +497,7 @@ source {sql_file}
     <div class="post bg-white">
       <script src="https://utteranc.es/client.js"
             repo = "alexwoo1900/alexwoo1900.github.io"
-            issue-item = "pathname"
+            issue-term = "pathname"
             theme = "github-light"
             crossorigin="anonymous"
             async>

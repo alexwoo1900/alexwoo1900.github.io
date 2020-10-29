@@ -168,6 +168,12 @@
         <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
       </ul>
     </li>
+    <li><a href="#恢复全站https">恢复全站HTTPS</a>
+      <ul>
+        <li><a href="#获取ssl证书">获取SSL证书</a></li>
+        <li><a href="#启用nginx的https访问功能">启用Nginx的HTTPS访问功能</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -255,9 +261,12 @@ yum makecache
 
 # 安装GCC、G++等工具
 yum install gcc gcc-c++ libstdc++-devel -y
+
+# [可选] 安装VIM、Git等工具
+yum install vim git -y
 </code></pre>
 <h3 id="可选-安装高版本gcc">[可选] 安装高版本GCC</h3>
-<p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">开源镜像列表</a>里选择GNU源下载必要依赖项，这些项包括：</p>
+<p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">开源镜像列表</a>里选择GNU源下载必要的依赖，这些软件包括：</p>
 <ul>
 <li>m4，宏处理器</li>
 <li>gmp，数学计算库</li>
@@ -297,6 +306,18 @@ cd mpc-xx.xx.xx
 ./configure --prefix=/usr/local/mpc --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr
 make
 make install
+
+# 解压、编译及安装gcc
+tar zxf gcc-xx.xx.xx.tar.gz
+cd gcc-xx.xx.xx
+./configure \
+    --prefix=/usr/local/gcc \
+    --enable-threads=posix \
+    --with-gmp=/usr/local/gmp \
+    --with-mpfr=/usr/local/mpfr \
+    --with-mpc=/usr/local/mpc \
+    -disable-checking \
+    -disable-multilib
 </code></pre>
 <h3 id="2-2-安装并设置nginx">2-2 安装并设置Nginx</h3>
 <p>正式安装Nginx之前，还需要准备一些依赖项的源码（并不需要编译安装），它们是</p>
@@ -443,6 +464,33 @@ source {sql_file}
 <pre><code class="language-vim"># 将文件中所有的TYPE=替换成ENGINE=
 :%s/TYPE=/ENGINE=/g
 </code></pre>
+<h2 id="恢复全站https">恢复全站HTTPS</h2>
+<p>在新的服务器重新部署全HTTPS站点需要经过以下步骤：</p>
+<ul>
+<li>购买一个可用域名</li>
+<li>申请一个免费的SSL证书</li>
+<li>启用服务器软件的HTTPS访问</li>
+<li>修改站点部分资源的访问方式</li>
+</ul>
+<h3 id="获取ssl证书">获取SSL证书</h3>
+<p>这里使用Let&rsquo;s Encrypt的免费SSL证书</p>
+<pre><code class="language-bash"># 获取let's encrypt程序
+git clone https://github.com/letsencrypt/letsencrypt
+
+cd letsencrypt
+
+# 生成证书
+./letsencrypt-auto certonly --standalone --email {your_email} -d {your_domain}
+</code></pre>
+<p>生成证书时程序需要使用80端口进行验证工作，所以我们要提前<strong>关闭占用80端口的其他程序</strong></p>
+<p>完成时，程序会在/etc/letsencrypt/live/{your_domain}下生成4个密钥证书文件：</p>
+<ul>
+<li>cert.pem 服务端证书</li>
+<li>chain.pem 根证书和中继证书</li>
+<li>fullchain.pem 包含了前两者内容的文件</li>
+<li>privkey.pem 私钥</li>
+</ul>
+<h3 id="启用nginx的https访问功能">启用Nginx的HTTPS访问功能</h3>
 
         </div>
 

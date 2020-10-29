@@ -27,6 +27,7 @@
 
     <link rel="stylesheet" href='/css/normalize.css'>
     <link rel="stylesheet" href='/css/style.css'>
+    <link rel="stylesheet" href='/css/prism.css'>
     <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     
@@ -34,10 +35,6 @@
     
     
     
-    
-        <link rel="stylesheet" href='/css/douban.css'>
-    
-        <link rel="stylesheet" href='/css/other.css'>
     
 </head>
 
@@ -605,6 +602,14 @@ pdo_mysql.default_socket <span style="color:#f92672">=</span> <span style="color
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
+<blockquote>
+<p>论坛所要恢复的数据包括：</p>
+<ul>
+<li>源代码和静态资源</li>
+<li>数据库表</li>
+<li>UCenter通讯服务</li>
+</ul>
+</blockquote>
 <h3 id="3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</h3>
 <p>只需要将原程序目录移动至新服务器下即可。</p>
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
@@ -634,6 +639,19 @@ USE <span style="color:#f92672">{</span>db_name<span style="color:#f92672">}</sp
 
 <span style="color:#75715e"># 从sql文件中恢复数据表</span>
 source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由于MySQL中已经摒弃了<code>TYPE=xxxx</code>这种旧式的指定数据库存储引擎的写法，改而采用<code>ENGINE=xxxx</code>
+在source的过程中可能会因为sql文件中使用了旧写法而导致恢复表数据失败，这要求我们对其中的文本作批量替换。</p>
+<p>以vim为例：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 将文件中所有的TYPE=替换成ENGINE=</span>
+:%s/TYPE<span style="color:#f92672">=</span>/ENGINE<span style="color:#f92672">=</span>/g
 </code></pre></td></tr></table>
 </div>
 </div>
@@ -706,9 +724,6 @@ source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}
             <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
         </div>
         <div class="github-badge">
-            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
-        </div>
-        <div class="github-badge">
             <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
         </div>
     </div>
@@ -724,6 +739,7 @@ source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}
                 }
             };
     </script>
+    <script src='/js/prism.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 <a id="rocket" href="#top"></a>
@@ -735,8 +751,6 @@ source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}
 
 
 
-
-    <script src='/js/douban.js'></script>
 
                 </div>
 

@@ -22,7 +22,7 @@
       <pubDate>Wed, 28 Oct 2020 10:58:48 +0800</pubDate>
       
       <guid>https://alexwoo1900.github.io/post/202010281058/</guid>
-      <description>Discuz论坛搬迁记录 本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。 备份Discuz原站数据 在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括： 原Discuz</description>
+      <description>本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。 一、备份Discuz原站数据 在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括： 原Discuz源代码、配置文件以及</description>
     </item>
     
   </channel>

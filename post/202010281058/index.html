@@ -143,26 +143,26 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#备份discuz原站数据">备份Discuz原站数据</a>
+    <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
       <ul>
-        <li><a href="#备份原discuz的源代码等资源">备份原Discuz的源代码等资源</a></li>
-        <li><a href="#备份原discuz数据库中的所有表">备份原Discuz数据库中的所有表</a></li>
+        <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
+        <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
       </ul>
     </li>
-    <li><a href="#配置新的服务器环境">配置新的服务器环境</a>
+    <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
       <ul>
-        <li><a href="#更新系统工具">更新系统工具</a></li>
+        <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
         <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
-        <li><a href="#安装并设置nginx">安装并设置Nginx</a></li>
-        <li><a href="#安装并设置php">安装并设置PHP</a></li>
-        <li><a href="#安装并初始化mysql">安装并初始化MySQL</a></li>
+        <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
+        <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
+        <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a></li>
       </ul>
     </li>
-    <li><a href="#恢复discuz原站数据">恢复Discuz原站数据</a>
+    <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
       <ul>
-        <li><a href="#恢复discuz的源代码等资源">恢复Discuz的源代码等资源</a></li>
-        <li><a href="#恢复common表数据">恢复common表数据</a></li>
-        <li><a href="#恢复discuz和ucenter数据">恢复Discuz!和UCenter数据</a></li>
+        <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
+        <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
+        <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
       </ul>
     </li>
   </ul>
@@ -212,9 +212,8 @@
         
         
         <div class="post-content">
-            <h1 id="discuz论坛搬迁记录">Discuz论坛搬迁记录</h1>
-<p>本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。</p>
-<h2 id="备份discuz原站数据">备份Discuz原站数据</h2>
+            <p>本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。</p>
+<h2 id="一备份discuz原站数据">一、备份Discuz原站数据</h2>
 <blockquote>
 <p>在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括：</p>
 <ul>
@@ -222,9 +221,9 @@
 <li>原Discuz数据库中的所有表</li>
 </ul>
 </blockquote>
-<h3 id="备份原discuz的源代码等资源">备份原Discuz的源代码等资源</h3>
+<h3 id="1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</h3>
 <p>只需要完整地复制原程序目录即可。</p>
-<h3 id="备份原discuz数据库中的所有表">备份原Discuz数据库中的所有表</h3>
+<h3 id="1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</h3>
 <p>一般来说有两种操作路径：<br>
 后台-&gt;站长-&gt;数据库-&gt;备份-&gt;Discuz!和UCenter数据<br>
 后台-&gt;站长-&gt;数据库-&gt;备份-&gt;自定义备份</p>
@@ -232,7 +231,7 @@
 <p><strong>但对于前者，系统是不会对数据库中的common类型的表进行备份的。</strong><br>
 遇到仅备份Discuz!和UCenter数据的情况，请务必保留原Discuz系统的安装包，因为我们需要使用<code>{origin_root_dir}/install/index.php</code>来恢复common表。（index.php是Discuz安装程序的入口，在论坛构建完成时后台为了系统安全性会要求用户将其删除）</p>
 <p>备份下来的表数据会以.sql文件的形式保存在<code>{old_root_dir}/data/backup_xxxxxx</code>中。</p>
-<h2 id="配置新的服务器环境">配置新的服务器环境</h2>
+<h2 id="二配置新的服务器环境">二、配置新的服务器环境</h2>
 <blockquote>
 <p>在裸CentOS系统中，我们需要安装并配置好几个必要的软件，它们包括：</p>
 <ul>
@@ -241,7 +240,7 @@
 <li>数据库软件MySQL</li>
 </ul>
 </blockquote>
-<h3 id="更新系统工具">更新系统工具</h3>
+<h3 id="2-1-更新系统工具">2-1 更新系统工具</h3>
 <p>在裸系统的前提下，为了保证后续的编译安装工作能顺利进行，我们得做一些预备工作：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -350,7 +349,7 @@ make
 make install
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="安装并设置nginx">安装并设置Nginx</h3>
+</div><h3 id="2-2-安装并设置nginx">2-2 安装并设置Nginx</h3>
 <p>正式安装Nginx之前，还需要准备一些依赖项的源码（并不需要编译安装），它们是</p>
 <ul>
 <li><a href="http://ftp.pcre.org/pub/pcre">pcre</a></li>
@@ -398,8 +397,9 @@ make
 make install
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="安装并设置php">安装并设置PHP</h3>
-<h3 id="安装并初始化mysql">安装并初始化MySQL</h3>
+</div><h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
+<h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
+<h4 id="2-4-1-更新mysql源">2-4-1 更新MySQL源</h4>
 <p>为了获取较新版本的MySQL，我们先更新MySQL源。一般有两种方式：</p>
 <ul>
 <li>方式一</li>
@@ -435,7 +435,7 @@ touch /etc/yum.repos.d/mysql-community.repo
 </div>
 </div><p>在<a href="https://mirror.tuna.tsinghua.edu.cn/help/mysql">清华大学开源软件镜像站</a>中选择<strong>正确的系统版本</strong>后，将源内容复制到mysql-community.repo中。</p>
 <p><strong>更新完源之后，我们可以编辑源文件中指定版本的enabled项为0来禁用其安装。</strong></p>
-<p>正式安装MySQL</p>
+<h4 id="2-4-2-安装mysql">2-4-2 安装MySQL</h4>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -444,12 +444,13 @@ touch /etc/yum.repos.d/mysql-community.repo
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum install mysql-community-server -y
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="恢复discuz原站数据">恢复Discuz原站数据</h2>
-<h3 id="恢复discuz的源代码等资源">恢复Discuz的源代码等资源</h3>
+</div><h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
+<h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
+<h3 id="3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</h3>
 <p>只需要将原程序目录移动至新服务器下即可。</p>
-<h3 id="恢复common表数据">恢复common表数据</h3>
+<h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
 <p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下</p>
-<h3 id="恢复discuz和ucenter数据">恢复Discuz!和UCenter数据</h3>
+<h3 id="3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</h3>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1

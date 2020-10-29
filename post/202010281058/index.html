@@ -245,21 +245,22 @@
 </blockquote>
 <h3 id="2-1-更新系统工具">2-1 更新系统工具</h3>
 <p>在裸系统的前提下，为了保证后续的编译安装工作能顺利进行，我们得做一些预备工作：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 将新的yum源文件下载到yum.repos.d文件夹内</span>
+<pre><code class="language-bash"># 将新的yum源文件下载到yum.repos.d文件夹内
 wget -P /etc/yum.repos.d http://mirrors.163.com/.help/CentOS6-Base-163.repo
 
-<span style="color:#75715e"># 备份旧的yum源文件</span>
+# 备份旧的yum源文件
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 
-<span style="color:#75715e"># 用新的yum源文件替代旧的yum源文件</span>
+# 用新的yum源文件替代旧的yum源文件
 mv /etc/yum.repos.d/CentOS6-Base-163.repo /etc/yum.repos.d/CentOS-Base.repo
 
-<span style="color:#75715e"># 缓存包信息，提升后续的查找速度</span>
+# 缓存包信息，提升后续的查找速度
 yum makecache
 
-<span style="color:#75715e"># 安装GCC、G++等工具</span>
+# 安装GCC、G++等工具
 yum install gcc gcc-c++ libstdc++-devel -y
-</code></pre></div><h3 id="可选-安装高版本gcc">[可选] 安装高版本GCC</h3>
+</code></pre>
+<h3 id="可选-安装高版本gcc">[可选] 安装高版本GCC</h3>
 <p>如果你想要源码安装高版本的GCC，请从<a href="https://alexwoo1900.github.io/post/202010281458/">开源镜像列表</a>里选择GNU源下载必要依赖项，这些项包括：</p>
 <ul>
 <li>m4，宏处理器</li>
@@ -268,151 +269,159 @@ yum install gcc gcc-c++ libstdc++-devel -y
 <li>mpc，用于多精度复数运算的C语言库</li>
 <li>gcc，编译器</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 如果下载的是tar.xz包，请先后使用xz d及tar xf指令替代以下tar zxf解压过程</span>
+<pre><code class="language-bash"># 如果下载的是tar.xz包，请先后使用xz d及tar xf指令替代以下tar zxf解压过程
 
-<span style="color:#75715e"># 解压、编译及安装m4</span>
+# 解压、编译及安装m4
 tar zxf m4-xx.xx.xx.tar.gz
 cd m4-xx.xx.xx
-./configure --prefix<span style="color:#f92672">=</span>/usr/local/m4
+./configure --prefix=/usr/local/m4
 make
 make install
 
-<span style="color:#75715e"># 解压、编译及安装gmp</span>
+# 解压、编译及安装gmp
 tar zxf gmp-xx.xx.xx.tar.gz
 cd gmp-xx.xx.xx
-./configure --prefix<span style="color:#f92672">=</span>/usr/local/gmp
+./configure --prefix=/usr/local/gmp
 make
 make install
 
-<span style="color:#75715e"># 解压、编译及安装mpfr</span>
+# 解压、编译及安装mpfr
 tar zxf mpfr-xx.xx.xx.tar.gz
 cd mpfr-xx.xx.xx
-./configure --prefix<span style="color:#f92672">=</span>/usr/local/mpfr --with-gmp<span style="color:#f92672">=</span>/usr/local/gmp
+./configure --prefix=/usr/local/mpfr --with-gmp=/usr/local/gmp
 make
 make install
 
-<span style="color:#75715e"># 解压、编译及安装mpc</span>
+# 解压、编译及安装mpc
 tar zxf mpc-xx.xx.xx.tar.gz
 cd mpc-xx.xx.xx
-./configure --prefix<span style="color:#f92672">=</span>/usr/local/mpc --with-gmp<span style="color:#f92672">=</span>/usr/local/gmp --with-mpfr<span style="color:#f92672">=</span>/usr/local/mpfr
+./configure --prefix=/usr/local/mpc --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr
 make
 make install
-</code></pre></div><h3 id="2-2-安装并设置nginx">2-2 安装并设置Nginx</h3>
+</code></pre>
+<h3 id="2-2-安装并设置nginx">2-2 安装并设置Nginx</h3>
 <p>正式安装Nginx之前，还需要准备一些依赖项的源码（并不需要编译安装），它们是</p>
 <ul>
 <li><a href="http://ftp.pcre.org/pub/pcre">pcre</a></li>
 <li><a href="http://www.zlib.net">zlib</a></li>
 <li><a href="https://www.openssl.org/source">openssl</a></li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 解压依赖项目的源码</span>
+<pre><code class="language-bash"># 解压依赖项目的源码
 tar zxf pcre-xx.xx.tar.gz
 tar zxf zlib-xx.xx.xx.tar.gz
 tar zxf openssl-xx-xx-xx.tar.gz
-</code></pre></div><p>再次确认需要安装的Nginx模块后，执行以下指令（这里选择安装ssl模块）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 解压并源码安装Nginx</span>
+</code></pre>
+<p>再次确认需要安装的Nginx模块后，执行以下指令（这里选择安装ssl模块）</p>
+<pre><code class="language-bash"># 解压并源码安装Nginx
 tar zxf nginx-xx.xx.xx.tar.gz
 cd nginx-xx.xx.xx 
-./configure --prefix<span style="color:#f92672">=</span>/usr/local/nginx <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>            --with-http_ssl_module <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>            --with-zlib<span style="color:#f92672">={</span>zlib_parent_dir<span style="color:#f92672">}</span>/zlib-xx.xx.xx <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>            --with-pcre<span style="color:#f92672">={</span>pcre_parent_dir<span style="color:#f92672">}</span>/pcre-xx.xx <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>            --with-openssl<span style="color:#f92672">={</span>openssl_parent_dir<span style="color:#f92672">}</span>/openssl-xx.xx.xx
+./configure --prefix=/usr/local/nginx \
+            --with-http_ssl_module \
+            --with-zlib={zlib_parent_dir}/zlib-xx.xx.xx \
+            --with-pcre={pcre_parent_dir}/pcre-xx.xx \
+            --with-openssl={openssl_parent_dir}/openssl-xx.xx.xx
 make
 make install
-</code></pre></div><h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 这里用--with-config-file-path指定使用的ini所在目录</span>
-<span style="color:#75715e"># 同时开启对php-fpm、openssl、curl、ftp、mysql、zip等常用功能的支持</span>
-./configure <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>/usr/local/php <span style="color:#ae81ff">\ </span>
-    --with-config-file-path<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-fpm <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-inline-optimization <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --disable-debug <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --disable-rpath <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-shared <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-soap <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-xmlrpc <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-openssl <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-mcrypt <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-pcre-regex <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-sqlite3 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-zlib <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-bcmath <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-iconv <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-bz2 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-calendar <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-curl <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-cdb <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-dom <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-exif <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-fileinfo <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-filter <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-pcre-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-ftp <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-gd <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-openssl-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-jpeg-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-png-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-freetype-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-gd-native-ttf <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-gd-jis-conv <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-gettext <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-gmp <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-mhash <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-json <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-mbstring <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-mbregex <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-mbregex-backtrack <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-libmbfl <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-onig <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-pdo <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-mysqli<span style="color:#f92672">=</span>mysqlnd <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-pdo-mysql<span style="color:#f92672">=</span>mysqlnd <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-zlib-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-pdo-sqlite <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-readline <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-session <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-shmop <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-simplexml <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-sockets <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-sysvmsg <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-sysvsem <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-sysvshm <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-wddx <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-libxml-dir <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-xsl <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-zip <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-mysqlnd-compression-support <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --with-pear <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    --enable-opcache
+</code></pre>
+<h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
+<pre><code class="language-bash"># 这里用--with-config-file-path指定使用的ini所在目录
+# 同时开启对php-fpm、openssl、curl、ftp、mysql、zip等常用功能的支持
+./configure \
+    --prefix=/usr/local/php \ 
+    --with-config-file-path=/etc \
+    --enable-fpm \
+    --enable-inline-optimization \
+    --disable-debug \
+    --disable-rpath \
+    --enable-shared \
+    --enable-soap \
+    --with-xmlrpc \
+    --with-openssl \
+    --with-mcrypt \
+    --with-pcre-regex \
+    --with-sqlite3 \
+    --with-zlib \
+    --enable-bcmath \
+    --with-iconv \
+    --with-bz2 \
+    --enable-calendar \
+    --with-curl \
+    --with-cdb \
+    --enable-dom \
+    --enable-exif \
+    --enable-fileinfo \
+    --enable-filter \
+    --with-pcre-dir \
+    --enable-ftp \
+    --with-gd \
+    --with-openssl-dir \
+    --with-jpeg-dir \
+    --with-png-dir \
+    --with-freetype-dir \
+    --enable-gd-native-ttf \
+    --enable-gd-jis-conv \
+    --with-gettext \
+    --with-gmp \
+    --with-mhash \
+    --enable-json \
+    --enable-mbstring \
+    --enable-mbregex \
+    --enable-mbregex-backtrack \
+    --with-libmbfl \
+    --with-onig \
+    --enable-pdo \
+    --with-mysqli=mysqlnd \
+    --with-pdo-mysql=mysqlnd \
+    --with-zlib-dir \
+    --with-pdo-sqlite \
+    --with-readline \
+    --enable-session \
+    --enable-shmop \
+    --enable-simplexml \
+    --enable-sockets \
+    --enable-sysvmsg \
+    --enable-sysvsem \
+    --enable-sysvshm \
+    --enable-wddx \
+    --with-libxml-dir \
+    --with-xsl \
+    --enable-zip \
+    --enable-mysqlnd-compression-support \
+    --with-pear \
+    --enable-opcache
 make
 make install
-</code></pre></div><h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
+</code></pre>
+<h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
 <h4 id="2-4-1-更新mysql源">2-4-1 更新MySQL源</h4>
 <p>为了获取较新版本的MySQL，我们先更新MySQL源。一般有两种方式：</p>
 <ul>
 <li>方式一</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 选择正确的源版本（重要！），下载</span>
+<pre><code class="language-bash"># 选择正确的源版本（重要！），下载
 wget http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
 
-<span style="color:#75715e"># 安装源</span>
+# 安装源
 yum localhost mysql-community-release-el6-7.noarch.rpm
-</code></pre></div><ul>
+</code></pre>
+<ul>
 <li>方式二</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 直接在yum源列表中新建mysql-community.repo。</span>
+<pre><code class="language-bash"># 直接在yum源列表中新建mysql-community.repo。
 touch /etc/yum.repos.d/mysql-community.repo
-</code></pre></div><p>在<a href="https://mirror.tuna.tsinghua.edu.cn/help/mysql">清华大学开源软件镜像站</a>中选择<strong>正确的系统版本</strong>后，将源内容复制到mysql-community.repo中。</p>
+</code></pre>
+<p>在<a href="https://mirror.tuna.tsinghua.edu.cn/help/mysql">清华大学开源软件镜像站</a>中选择<strong>正确的系统版本</strong>后，将源内容复制到mysql-community.repo中。</p>
 <p><strong>更新完源之后，我们可以编辑源文件中指定版本的enabled项为0来禁用其安装。</strong></p>
 <h4 id="2-4-2-安装mysql">2-4-2 安装MySQL</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum install mysql-community-server -y
-</code></pre></div><h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
+<pre><code class="language-bash">yum install mysql-community-server -y
+</code></pre>
+<h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
 <p>在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">mysql.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
-mysqli.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
-pdo_mysql.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
-</code></pre></div><h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
+<pre><code class="language-cpp">mysql.default_socket = /var/lib/mysql/mysql.sock
+mysqli.default_socket = /var/lib/mysql/mysql.sock
+pdo_mysql.default_socket = /var/lib/mysql/mysql.sock
+</code></pre>
+<h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
 <blockquote>
 <p>论坛所要恢复的数据包括：</p>
 <ul>
@@ -426,19 +435,22 @@ pdo_mysql.default_socket <span style="color:#f92672">=</span> <span style="color
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
 <p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下</p>
 <h3 id="3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 登录并输入密码</span>
+<pre><code class="language-bash"># 登录并输入密码
 mysql -u root -p
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 选择数据库</span>
-USE <span style="color:#f92672">{</span>db_name<span style="color:#f92672">}</span>
+</code></pre>
+<pre><code class="language-bash"># 选择数据库
+USE {db_name}
 
-<span style="color:#75715e"># 从sql文件中恢复数据表</span>
-source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}</span>
-</code></pre></div><p>由于MySQL中已经摒弃了<code>TYPE=xxxx</code>这种旧式的指定数据库存储引擎的写法，改而采用<code>ENGINE=xxxx</code>
+# 从sql文件中恢复数据表
+source {sql_file}
+</code></pre>
+<p>由于MySQL中已经摒弃了<code>TYPE=xxxx</code>这种旧式的指定数据库存储引擎的写法，改而采用<code>ENGINE=xxxx</code>
 在source的过程中可能会因为sql文件中使用了旧写法而导致恢复表数据失败，这要求我们对其中的文本作批量替换。</p>
 <p>以vim为例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 将文件中所有的TYPE=替换成ENGINE=</span>
-:%s/TYPE<span style="color:#f92672">=</span>/ENGINE<span style="color:#f92672">=</span>/g
-</code></pre></div>
+<pre><code class="language-bash"># 将文件中所有的TYPE=替换成ENGINE=
+:%s/TYPE=/ENGINE=/g
+</code></pre>
+
         </div>
 
         
@@ -489,7 +501,7 @@ source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}
     <div class="post bg-white">
       <script src="https://utteranc.es/client.js"
             repo = "alexwoo1900/alexwoo1900.github.io"
-            issueTerm = "pathname"
+            issueNumber = "pathname"
             theme = "github-light"
             crossorigin="anonymous"
             async>

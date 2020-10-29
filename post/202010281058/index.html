@@ -143,26 +143,36 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
+    <li>
       <ul>
-        <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
-        <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
-      </ul>
-    </li>
-    <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
-      <ul>
-        <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
-        <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
-        <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
-        <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
-        <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a></li>
-      </ul>
-    </li>
-    <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
-      <ul>
-        <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
-        <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
-        <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
+        <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
+          <ul>
+            <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
+            <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
+          </ul>
+        </li>
+        <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
+          <ul>
+            <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
+            <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
+            <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
+            <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
+            <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a>
+              <ul>
+                <li><a href="#2-4-1-更新mysql源">2-4-1 更新MySQL源</a></li>
+                <li><a href="#2-4-2-安装mysql">2-4-2 安装MySQL</a></li>
+                <li><a href="#2-4-3-初始化mysql">2-4-3 初始化MySQL</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
+          <ul>
+            <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
+            <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
+            <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -242,9 +252,9 @@
 </blockquote>
 <h3 id="2-1-更新系统工具">2-1 更新系统工具</h3>
 <p>在裸系统的前提下，为了保证后续的编译安装工作能顺利进行，我们得做一些预备工作：</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
@@ -260,19 +270,19 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 将新的yum源文件下载到yum.repos.d文件夹内</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 将新的yum源文件下载到yum.repos.d文件夹内</span>
 wget -P /etc/yum.repos.d http://mirrors.163.com/.help/CentOS6-Base-163.repo
 
-<span style="color:#998;font-style:italic"># 备份旧的yum源文件</span>
+<span style="color:#75715e"># 备份旧的yum源文件</span>
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 
-<span style="color:#998;font-style:italic"># 用新的yum源文件替代旧的yum源文件</span>
+<span style="color:#75715e"># 用新的yum源文件替代旧的yum源文件</span>
 mv /etc/yum.repos.d/CentOS6-Base-163.repo /etc/yum.repos.d/CentOS-Base.repo
 
-<span style="color:#998;font-style:italic"># 缓存包信息，提升后续的查找速度</span>
+<span style="color:#75715e"># 缓存包信息，提升后续的查找速度</span>
 yum makecache
 
-<span style="color:#998;font-style:italic"># 安装GCC、G++等工具</span>
+<span style="color:#75715e"># 安装GCC、G++等工具</span>
 yum install gcc gcc-c++ libstdc++-devel -y
 </code></pre></td></tr></table>
 </div>
@@ -285,9 +295,9 @@ yum install gcc gcc-c++ libstdc++-devel -y
 <li>mpc</li>
 <li>gcc本体</li>
 </ul>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
@@ -318,33 +328,33 @@ yum install gcc gcc-c++ libstdc++-devel -y
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 如果下载的是tar.xz包，请先后使用xz d及tar xf指令替代以下tar zxf解压过程</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 如果下载的是tar.xz包，请先后使用xz d及tar xf指令替代以下tar zxf解压过程</span>
 
-<span style="color:#998;font-style:italic"># 解压、编译及安装m4</span>
+<span style="color:#75715e"># 解压、编译及安装m4</span>
 tar zxf m4-xx.xx.xx.tar.gz
-<span style="color:#0086b3">cd</span> m4-xx.xx.xx
-./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/m4
+cd m4-xx.xx.xx
+./configure --prefix<span style="color:#f92672">=</span>/usr/local/m4
 make
 make install
 
-<span style="color:#998;font-style:italic"># 解压、编译及安装gmp</span>
+<span style="color:#75715e"># 解压、编译及安装gmp</span>
 tar zxf gmp-xx.xx.xx.tar.gz
-<span style="color:#0086b3">cd</span> gmp-xx.xx.xx
-./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp
+cd gmp-xx.xx.xx
+./configure --prefix<span style="color:#f92672">=</span>/usr/local/gmp
 make
 make install
 
-<span style="color:#998;font-style:italic"># 解压、编译及安装mpfr</span>
+<span style="color:#75715e"># 解压、编译及安装mpfr</span>
 tar zxf mpfr-xx.xx.xx.tar.gz
-<span style="color:#0086b3">cd</span> mpfr-xx.xx.xx
-./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/mpfr --with-gmp<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp
+cd mpfr-xx.xx.xx
+./configure --prefix<span style="color:#f92672">=</span>/usr/local/mpfr --with-gmp<span style="color:#f92672">=</span>/usr/local/gmp
 make
 make install
 
-<span style="color:#998;font-style:italic"># 解压、编译及安装mpc</span>
+<span style="color:#75715e"># 解压、编译及安装mpc</span>
 tar zxf mpc-xx.xx.xx.tar.gz
-<span style="color:#0086b3">cd</span> mpc-xx.xx.xx
-./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/mpc --with-gmp<span style="color:#000;font-weight:bold">=</span>/usr/local/gmp --with-mpfr<span style="color:#000;font-weight:bold">=</span>/usr/local/mpfr
+cd mpc-xx.xx.xx
+./configure --prefix<span style="color:#f92672">=</span>/usr/local/mpc --with-gmp<span style="color:#f92672">=</span>/usr/local/gmp --with-mpfr<span style="color:#f92672">=</span>/usr/local/mpfr
 make
 make install
 </code></pre></td></tr></table>
@@ -356,24 +366,24 @@ make install
 <li><a href="http://www.zlib.net">zlib</a></li>
 <li><a href="https://www.openssl.org/source">openssl</a></li>
 </ul>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 解压依赖项目的源码</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 解压依赖项目的源码</span>
 tar zxf pcre-xx.xx.tar.gz
 tar zxf zlib-xx.xx.xx.tar.gz
 tar zxf openssl-xx-xx-xx.tar.gz
 </code></pre></td></tr></table>
 </div>
 </div><p>再次确认需要安装的Nginx模块后，执行以下指令（这里选择安装ssl模块）</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
@@ -385,96 +395,247 @@ tar zxf openssl-xx-xx-xx.tar.gz
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 解压并源码安装Nginx</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 解压并源码安装Nginx</span>
 tar zxf nginx-xx.xx.xx.tar.gz
-<span style="color:#0086b3">cd</span> nginx-xx.xx.xx 
-./configure --prefix<span style="color:#000;font-weight:bold">=</span>/usr/local/nginx <span style="color:#d14">\
-</span><span style="color:#d14"></span>            --with-http_ssl_module <span style="color:#d14">\
-</span><span style="color:#d14"></span>            --with-zlib<span style="color:#000;font-weight:bold">={</span>zlib_parent_dir<span style="color:#000;font-weight:bold">}</span>/zlib-xx.xx.xx <span style="color:#d14">\
-</span><span style="color:#d14"></span>            --with-pcre<span style="color:#000;font-weight:bold">={</span>pcre_parent_dir<span style="color:#000;font-weight:bold">}</span>/pcre-xx.xx <span style="color:#d14">\
-</span><span style="color:#d14"></span>            --with-openssl<span style="color:#000;font-weight:bold">={</span>openssl_parent_dir<span style="color:#000;font-weight:bold">}</span>/openssl-xx.xx.xx
+cd nginx-xx.xx.xx 
+./configure --prefix<span style="color:#f92672">=</span>/usr/local/nginx <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>            --with-http_ssl_module <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>            --with-zlib<span style="color:#f92672">={</span>zlib_parent_dir<span style="color:#f92672">}</span>/zlib-xx.xx.xx <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>            --with-pcre<span style="color:#f92672">={</span>pcre_parent_dir<span style="color:#f92672">}</span>/pcre-xx.xx <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>            --with-openssl<span style="color:#f92672">={</span>openssl_parent_dir<span style="color:#f92672">}</span>/openssl-xx.xx.xx
 make
 make install
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
-<h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./configure <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>/usr/local/php <span style="color:#ae81ff">\ </span>
+    --with-config-file-path<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-fpm <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-inline-optimization <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --disable-debug <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --disable-rpath <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-shared <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-soap <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-xmlrpc <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-openssl <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-mcrypt <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-pcre-regex <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-sqlite3 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-zlib <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-bcmath <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-iconv <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-bz2 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-calendar <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-curl <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-cdb <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-dom <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-exif <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-fileinfo <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-filter <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-pcre-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-ftp <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-gd <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-openssl-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-jpeg-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-png-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-freetype-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-gd-native-ttf <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-gd-jis-conv <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-gettext <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-gmp <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-mhash <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-json <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-mbstring <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-mbregex <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-mbregex-backtrack <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-libmbfl <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-onig <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-pdo <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-mysqli<span style="color:#f92672">=</span>mysqlnd <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-pdo-mysql<span style="color:#f92672">=</span>mysqlnd <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-zlib-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-pdo-sqlite <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-readline <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-session <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-shmop <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-simplexml <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-sockets <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-sysvmsg <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-sysvsem <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-sysvshm <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-wddx <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-libxml-dir <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-xsl <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-zip <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-mysqlnd-compression-support <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --with-pear <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --enable-opcache<span style="color:#960050;background-color:#1e0010">&#39;</span>
+
+make
+make install
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
 <h4 id="2-4-1-更新mysql源">2-4-1 更新MySQL源</h4>
 <p>为了获取较新版本的MySQL，我们先更新MySQL源。一般有两种方式：</p>
 <ul>
 <li>方式一</li>
 </ul>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 选择正确的源版本（重要！），下载</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 选择正确的源版本（重要！），下载</span>
 wget http://repo.mysql.com/mysql-community-release-el6-7.noarch.rpm
 
-<span style="color:#998;font-style:italic"># 安装源</span>
+<span style="color:#75715e"># 安装源</span>
 yum localhost mysql-community-release-el6-7.noarch.rpm
 </code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>方式二</li>
 </ul>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 直接在yum源列表中新建mysql-community.repo。</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 直接在yum源列表中新建mysql-community.repo。</span>
 touch /etc/yum.repos.d/mysql-community.repo
 </code></pre></td></tr></table>
 </div>
 </div><p>在<a href="https://mirror.tuna.tsinghua.edu.cn/help/mysql">清华大学开源软件镜像站</a>中选择<strong>正确的系统版本</strong>后，将源内容复制到mysql-community.repo中。</p>
 <p><strong>更新完源之后，我们可以编辑源文件中指定版本的enabled项为0来禁用其安装。</strong></p>
 <h4 id="2-4-2-安装mysql">2-4-2 安装MySQL</h4>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum install mysql-community-server -y
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum install mysql-community-server -y
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
-<h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
+<p>在PHP应用的php.ini中添加以下内容</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">mysql.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
+mysqli.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
+pdo_mysql.default_socket <span style="color:#f92672">=</span> <span style="color:#f92672">/</span>var<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>mysql<span style="color:#f92672">/</span>mysql.sock
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三恢复discuz原站数据">三、恢复Discuz原站数据</h2>
 <h3 id="3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</h3>
 <p>只需要将原程序目录移动至新服务器下即可。</p>
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
 <p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下</p>
 <h3 id="3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</h3>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 登录并输入密码</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 登录并输入密码</span>
 mysql -u root -p
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#998;font-style:italic"># 选择数据库</span>
-USE <span style="color:#000;font-weight:bold">{</span>db_name<span style="color:#000;font-weight:bold">}</span>
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 选择数据库</span>
+USE <span style="color:#f92672">{</span>db_name<span style="color:#f92672">}</span>
 
-<span style="color:#998;font-style:italic"># 从sql文件中恢复数据表</span>
-<span style="color:#0086b3">source</span> <span style="color:#000;font-weight:bold">{</span>sql_file<span style="color:#000;font-weight:bold">}</span>
+<span style="color:#75715e"># 从sql文件中恢复数据表</span>
+source <span style="color:#f92672">{</span>sql_file<span style="color:#f92672">}</span>
 </code></pre></td></tr></table>
 </div>
 </div>

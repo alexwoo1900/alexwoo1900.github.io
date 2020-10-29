@@ -307,7 +307,7 @@ cd mpc-xx.xx.xx
 make
 make install
 
-# 解压、编译及安装gcc
+# 解压并配置gcc
 tar zxf gcc-xx.xx.xx.tar.gz
 cd gcc-xx.xx.xx
 ./configure \
@@ -318,6 +318,11 @@ cd gcc-xx.xx.xx
     --with-mpc=/usr/local/mpc \
     -disable-checking \
     -disable-multilib
+# 添加库地址到环境变量中
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/gmp/lib:/usr/local/mpfr/lib:/usr/local/mpc/lib
+# 编译及安装
+make
+make install
 </code></pre>
 <h3 id="2-2-安装并设置nginx">2-2 安装并设置Nginx</h3>
 <p>正式安装Nginx之前，还需要准备一些依赖项的源码（并不需要编译安装），它们是</p>

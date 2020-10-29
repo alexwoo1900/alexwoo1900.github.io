@@ -447,7 +447,7 @@ source {sql_file}
 <p>由于MySQL中已经摒弃了<code>TYPE=xxxx</code>这种旧式的指定数据库存储引擎的写法，改而采用<code>ENGINE=xxxx</code>
 在source的过程中可能会因为sql文件中使用了旧写法而导致恢复表数据失败，这要求我们对其中的文本作批量替换。</p>
 <p>以vim为例：</p>
-<pre><code class="language-bash"># 将文件中所有的TYPE=替换成ENGINE=
+<pre><code class="language-vim"># 将文件中所有的TYPE=替换成ENGINE=
 :%s/TYPE=/ENGINE=/g
 </code></pre>
 
@@ -501,7 +501,7 @@ source {sql_file}
     <div class="post bg-white">
       <script src="https://utteranc.es/client.js"
             repo = "alexwoo1900/alexwoo1900.github.io"
-            issueNumber = "pathname"
+            issue-item = "pathname"
             theme = "github-light"
             crossorigin="anonymous"
             async>

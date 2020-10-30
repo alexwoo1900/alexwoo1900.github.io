@@ -168,10 +168,10 @@
         <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
       </ul>
     </li>
-    <li><a href="#恢复全站https">恢复全站HTTPS</a>
+    <li><a href="#四恢复全站https">四、恢复全站HTTPS</a>
       <ul>
-        <li><a href="#获取ssl证书">获取SSL证书</a></li>
-        <li><a href="#启用nginx的https访问功能">启用Nginx的HTTPS访问功能</a></li>
+        <li><a href="#4-1-获取ssl证书">4-1 获取SSL证书</a></li>
+        <li><a href="#4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</a></li>
       </ul>
     </li>
   </ul>
@@ -348,8 +348,14 @@ cd nginx-xx.xx.xx
 make
 make install
 </code></pre>
+<p>安装完毕之后，暂时不动Nginx的conf文件。</p>
 <h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
-<pre><code class="language-bash"># 这里用--with-config-file-path指定使用的ini所在目录
+<pre><code class="language-bash"># 解压PHP
+tar zxf php-xx.xx.xx.tar.gz
+
+cd php-xx.xx.xx
+
+# 这里用--with-config-file-path指定使用的ini所在目录
 # 同时开启对php-fpm、openssl、curl、ftp、mysql、zip等常用功能的支持
 ./configure \
     --prefix=/usr/local/php \ 
@@ -469,7 +475,7 @@ source {sql_file}
 <pre><code class="language-vim"># 将文件中所有的TYPE=替换成ENGINE=
 :%s/TYPE=/ENGINE=/g
 </code></pre>
-<h2 id="恢复全站https">恢复全站HTTPS</h2>
+<h2 id="四恢复全站https">四、恢复全站HTTPS</h2>
 <p>在新的服务器重新部署全HTTPS站点需要经过以下步骤：</p>
 <ul>
 <li>购买一个可用域名</li>
@@ -477,7 +483,7 @@ source {sql_file}
 <li>启用服务器软件的HTTPS访问</li>
 <li>修改站点部分资源的访问方式</li>
 </ul>
-<h3 id="获取ssl证书">获取SSL证书</h3>
+<h3 id="4-1-获取ssl证书">4-1 获取SSL证书</h3>
 <p>这里使用Let&rsquo;s Encrypt的免费SSL证书</p>
 <pre><code class="language-bash"># 获取let's encrypt程序
 git clone https://github.com/letsencrypt/letsencrypt
@@ -495,7 +501,7 @@ cd letsencrypt
 <li>fullchain.pem 包含了前两者内容的文件</li>
 <li>privkey.pem 私钥</li>
 </ul>
-<h3 id="启用nginx的https访问功能">启用Nginx的HTTPS访问功能</h3>
+<h3 id="4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</h3>
 
         </div>
 

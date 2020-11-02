@@ -218,7 +218,39 @@ cd nginx-xx.xx.xx
 make
 make install
 </code></pre>
-<p>安装完毕之后，暂时不动Nginx的conf文件。</p>
+<p>安装完毕之后，为nginx配置80端口访问规则、启用php和gzip</p>
+<pre><code class="language-nginx">server {
+    listen  80;
+    server_name {domain};
+
+    gzip on;                            // 是否开启gzip
+    gzip_buffers 32 4K;                 // 压缩缓存块数、每块大小
+    gzip_comp_level 6;                  // 压缩等级，等级越高，压缩率越大
+    gzip_min_length 100;                // 用于压缩的文件起点大小
+    gzip_types application/javascript;  // 用于压缩的文件类型
+    gzip_disable &quot;MSIE [1-6]\.&quot;         // 禁用压缩的条件，此处表示IE6及以下版本不启用gzip
+    gzip_vary on;                       // 是否传输gzip压缩标志
+
+    location / {
+        root    {www_root};
+        index   index.html index.htm index.php;
+    }
+
+    location ~ \.php$ {
+        root            {www_root};
+        fastcgi_index   index.php;
+        fastcgi_pass    127.0.0.1:9000;
+        include         fastcgi_params;
+        fastcgi_param   SCRIPT_FILENAME     $document_root$fastcgi_script_name;
+        fastcgi_param   SCRIPT_NAME         $fastcgi_script_name;
+    }
+
+    error_page  500 502 503 504 /50x.html;
+    location = /50x.html {
+        root    html;
+    }
+}
+</code></pre>
 <h3 id="2-3-安装并设置php">2-3 安装并设置PHP</h3>
 <pre><code class="language-bash"># 解压PHP
 tar zxf php-xx.xx.xx.tar.gz
@@ -331,7 +363,7 @@ mysql -u root -p
 # {new_password}
 
 # 建库，该数据库的名称要跟旧数据库的名称相同
-create database {old_database}
+create database {database_name}
 </code></pre>
 <p>为了让php的mysql扩展能连上mysql服务，我们可以指定socket参数。
 方式是在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
@@ -349,14 +381,15 @@ pdo_mysql.default_socket = /var/lib/mysql/mysql.sock
 <h3 id="3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</h3>
 <p>只需要将原程序目录移动至新服务器下即可。</p>
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
-<p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下</p>
+<p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下，然后在浏览器输入{domain}/install进入安装流程，一步步进行直至数据库安装完毕。</p>
+<p><strong>3-3的source方式不能100%地恢复common表，所以此处使用原始安装。</strong></p>
 <h3 id="3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</h3>
 <p>已经拥有sql文件再进行数据库还原是一件简单的事，要注意的是恢复过程中是否有失败项。</p>
 <pre><code class="language-bash"># 登录并输入密码
 mysql -u root -p
 
 # 选择数据库
-USE {db_name}
+use {database_name}
 
 # 从sql文件中恢复数据表
 source {sql_file}
@@ -392,13 +425,34 @@ cd letsencrypt
 ./letsencrypt-auto certonly --standalone --email {your_email} -d {your_domain}
 </code></pre>
 <p>生成证书时程序需要使用80端口进行验证工作，所以我们要提前<strong>关闭占用80端口的其他程序</strong></p>
-<p>完成时，程序会在/etc/letsencrypt/live/{your_domain}下生成4个密钥证书文件：</p>
+<p>完成时，程序会在/etc/letsencrypt/live/{domain}下生成4个密钥证书文件：</p>
 <ul>
 <li>cert.pem 服务端证书</li>
 <li>chain.pem 根证书和中继证书</li>
 <li>fullchain.pem 包含了前两者内容的文件</li>
 <li>privkey.pem 私钥</li>
 </ul>
+<p>在nginx.conf添加以下文本以支持SSL：</p>
+<pre><code class="language-nginx">// 修改端口80访问规则为443访问规则，添加必要的证书参数
+server {
+    listen 443 ssl;
+    server_name localhost;
+    ssl_certificate {keys_path}/cert.pem
+    ssl_cartficate_key {keys_path}/privkey.pem
+
+    gzip on;
+    // ...
+}
+
+// 重新添加端口80的访问规则，使得所有http的所有请求跳转至https，使用rewrite模块也可以达到以下的效果
+server {
+    listen 80;
+    server_name {domain};
+    if ($scheme = http) {
+        return 301 https://$host$request_uri?;
+    }
+}
+</code></pre>
 <h3 id="4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</h3>
 <h3 id="4-3-修改站点资源访问方式">4-3 修改站点资源访问方式</h3>
 <p>确保以下两处地址采用的协议为https</p>

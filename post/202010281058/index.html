@@ -74,139 +74,7 @@
                 <div class="col-8" id="main">
                     
 <div class="res-cons">
-    <style type="text/css">
-    .post-toc {
-        position: fixed;
-        width: 200px;
-        margin-left: -210px;
-        padding: 5px 10px;
-        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
-        font-size: 12px;
-        border: 1px solid rgba(0, 0, 0, .07);
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.98);
-        background-clip: padding-box;
-        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
-        word-wrap: break-word;
-        white-space: nowrap;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        z-index: 999;
-        cursor: pointer;
-        max-height: 70%;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .post-toc .post-toc-title {
-        width: 100%;
-        margin: 0 auto;
-        font-size: 20px;
-        font-weight: 400;
-        text-transform: uppercase;
-        text-align: center;
-    }
-
-    .post-toc .post-toc-content {
-        font-size: 15px;
-    }
-
-    .post-toc .post-toc-content>nav>ul {
-        margin: 10px 0;
-    }
-
-    .post-toc .post-toc-content ul {
-        padding-left: 20px;
-        list-style: square;
-        margin: 0.5em;
-        line-height: 1.8em;
-    }
-
-    .post-toc .post-toc-content ul ul {
-        padding-left: 15px;
-        display: none;
-    }
-
-    @media print,
-    screen and (max-width:1057px) {
-        .post-toc {
-            display: none;
-        }
-    }
-</style>
-<div class="post-toc" style="position: absolute; top: 188px;">
-    <h2 class="post-toc-title">文章目录</h2>
-    <div class="post-toc-content">
-        <nav id="TableOfContents">
-  <ul>
-    <li><a href="#一备份discuz原站数据">一、备份Discuz原站数据</a>
-      <ul>
-        <li><a href="#1-1-备份原discuz的源代码等资源">1-1 备份原Discuz的源代码等资源</a></li>
-        <li><a href="#1-2-备份原discuz数据库中的所有表">1-2 备份原Discuz数据库中的所有表</a></li>
-      </ul>
-    </li>
-    <li><a href="#二配置新的服务器环境">二、配置新的服务器环境</a>
-      <ul>
-        <li><a href="#2-1-更新系统工具">2-1 更新系统工具</a></li>
-        <li><a href="#可选-安装高版本gcc">[可选] 安装高版本GCC</a></li>
-        <li><a href="#2-2-安装并设置nginx">2-2 安装并设置Nginx</a></li>
-        <li><a href="#2-3-安装并设置php">2-3 安装并设置PHP</a></li>
-        <li><a href="#2-4-安装并初始化mysql">2-4 安装并初始化MySQL</a>
-          <ul>
-            <li><a href="#2-4-1-更新mysql源">2-4-1 更新MySQL源</a></li>
-            <li><a href="#2-4-2-安装mysql">2-4-2 安装MySQL</a></li>
-            <li><a href="#2-4-3-初始化mysql">2-4-3 初始化MySQL</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li><a href="#三恢复discuz原站数据">三、恢复Discuz原站数据</a>
-      <ul>
-        <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
-        <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
-        <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
-        <li><a href="#3-4-恢复discuz通讯服务">3-4 恢复Discuz!通讯服务</a></li>
-      </ul>
-    </li>
-    <li><a href="#四恢复全站https">四、恢复全站HTTPS</a>
-      <ul>
-        <li><a href="#4-1-获取ssl证书">4-1 获取SSL证书</a></li>
-        <li><a href="#4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</a></li>
-        <li><a href="#4-3-修改站点资源访问方式">4-3 修改站点资源访问方式</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-    </div>
-</div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var postToc = $(".post-toc");
-        if (postToc.length) {
-            var leftPos = $("#main").offset().left;
-            if(leftPos<220){
-                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
-            }
-
-            var t = postToc.offset().top - 20,
-                a = {
-                    start: {
-                        position: "absolute",
-                        top: t
-                    },
-                    process: {
-                        position: "fixed",
-                        top: 20
-                    },
-                };
-            $(window).scroll(function () {
-                var e = $(window).scrollTop();
-                e < t ? postToc.css(a.start) : postToc.css(a.process)
-            })
-        }
-    })
-</script>
+    
     <article class="post">
         <header>
             <h1 class="post-title">Discuz论坛搬迁记录</h1>
@@ -424,6 +292,9 @@ cd php-xx.xx.xx
     --enable-opcache
 make
 make install
+
+# 启用默认设置
+cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
 </code></pre>
 <h3 id="2-4-安装并初始化mysql">2-4 安装并初始化MySQL</h3>
 <h4 id="2-4-1-更新mysql源">2-4-1 更新MySQL源</h4>
@@ -454,8 +325,16 @@ grep 'temporary password' /var/log/mysqld.log
 
 # 修改root密码
 set password for root@localhost = password('{new_password}')
+
+# 登录
+mysql -u root -p
+# {new_password}
+
+# 建库，该数据库的名称要跟旧数据库的名称相同
+create database {old_database}
 </code></pre>
-<p>在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
+<p>为了让php的mysql扩展能连上mysql服务，我们可以指定socket参数。
+方式是在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
 <pre><code class="language-cpp">mysql.default_socket = /var/lib/mysql/mysql.sock
 mysqli.default_socket = /var/lib/mysql/mysql.sock
 pdo_mysql.default_socket = /var/lib/mysql/mysql.sock
@@ -472,10 +351,11 @@ pdo_mysql.default_socket = /var/lib/mysql/mysql.sock
 <h3 id="3-2-恢复common表数据">3-2 恢复common表数据</h3>
 <p>将原安装包内的<code>{origin_root_dir}/install/index.php</code>复制到现在程序文件夹的<code>{new_root_dir}/install</code>下</p>
 <h3 id="3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</h3>
+<p>已经拥有sql文件再进行数据库还原是一件简单的事，要注意的是恢复过程中是否有失败项。</p>
 <pre><code class="language-bash"># 登录并输入密码
 mysql -u root -p
-</code></pre>
-<pre><code class="language-bash"># 选择数据库
+
+# 选择数据库
 USE {db_name}
 
 # 从sql文件中恢复数据表

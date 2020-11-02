@@ -432,6 +432,7 @@ cd letsencrypt
 <li>fullchain.pem 包含了前两者内容的文件</li>
 <li>privkey.pem 私钥</li>
 </ul>
+<h3 id="4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</h3>
 <p>在nginx.conf添加以下文本以支持SSL：</p>
 <pre><code class="language-nginx">// 修改端口80访问规则为443访问规则，添加必要的证书参数
 server {
@@ -453,7 +454,6 @@ server {
     }
 }
 </code></pre>
-<h3 id="4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</h3>
 <h3 id="4-3-修改站点资源访问方式">4-3 修改站点资源访问方式</h3>
 <p>确保以下两处地址采用的协议为https</p>
 <ol>

@@ -18,7 +18,7 @@
         
     <meta property="article:modified_time" content='2020-10-28T10:58:48&#43;08:00'>
         
-    <meta name="Keywords" content="Web,Javascript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
+    <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
     <meta name="description" content="Discuz论坛搬迁记录">
         
     <meta name="author" content="Alex Woo">
@@ -166,12 +166,14 @@
         <li><a href="#3-1-恢复discuz的源代码等资源">3-1 恢复Discuz的源代码等资源</a></li>
         <li><a href="#3-2-恢复common表数据">3-2 恢复common表数据</a></li>
         <li><a href="#3-3-恢复discuz和ucenter数据">3-3 恢复Discuz!和UCenter数据</a></li>
+        <li><a href="#3-4-恢复discuz通讯服务">3-4 恢复Discuz!通讯服务</a></li>
       </ul>
     </li>
     <li><a href="#四恢复全站https">四、恢复全站HTTPS</a>
       <ul>
         <li><a href="#4-1-获取ssl证书">4-1 获取SSL证书</a></li>
         <li><a href="#4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</a></li>
+        <li><a href="#4-3-修改站点资源访问方式">4-3 修改站点资源访问方式</a></li>
       </ul>
     </li>
   </ul>
@@ -221,7 +223,7 @@
         
         
         <div class="post-content">
-            <p>本博文用于记录Discuz! X3.4论坛系统从CentOS7迁移至CentOS6的完整过程，其中大部分的技巧同样适用于其他Discuz系统搬家。</p>
+            <p>本博文用于记录将Discuz! X3.4论坛程序从其他操作系统迁移至CentOS6的完整过程，采用的流程同样适用于其他Discuz!站点搬家。</p>
 <h2 id="一备份discuz原站数据">一、备份Discuz原站数据</h2>
 <p>在删除Discuz原站数据之前，我们须对其进行全面的备份，必要的数据包括：</p>
 <ul>
@@ -358,7 +360,7 @@ cd php-xx.xx.xx
 # 这里用--with-config-file-path指定使用的ini所在目录
 # 同时开启对php-fpm、openssl、curl、ftp、mysql、zip等常用功能的支持
 ./configure \
-    --prefix=/usr/local/php \ 
+    --prefix=/usr/local/php \
     --with-config-file-path=/etc \
     --enable-fpm \
     --enable-inline-optimization \
@@ -443,6 +445,16 @@ touch /etc/yum.repos.d/mysql-community.repo
 <pre><code class="language-bash">yum install mysql-community-server -y
 </code></pre>
 <h4 id="2-4-3-初始化mysql">2-4-3 初始化MySQL</h4>
+<pre><code class="language-bash"># 启动mysql服务
+service mysqld start
+
+# 查看root初始生成的临时密码
+grep 'temporary password' /var/log/mysqld.log
+# 2020-10-23T23:59:59.282457Z 1 [Note] A temporary password is generated for root@localhost: {temporary_password}
+
+# 修改root密码
+set password for root@localhost = password('{new_password}')
+</code></pre>
 <p>在/etc/php.ini中添加以下内容（<strong>这里的php.ini位置跟上面步骤的&ndash;with-config-file-path参数值相对应</strong>）：</p>
 <pre><code class="language-cpp">mysql.default_socket = /var/lib/mysql/mysql.sock
 mysqli.default_socket = /var/lib/mysql/mysql.sock
@@ -475,6 +487,12 @@ source {sql_file}
 <pre><code class="language-vim"># 将文件中所有的TYPE=替换成ENGINE=
 :%s/TYPE=/ENGINE=/g
 </code></pre>
+<h3 id="3-4-恢复discuz通讯服务">3-4 恢复Discuz!通讯服务</h3>
+<ol>
+<li>记下UCenter-&gt;应用管理中的<strong>ID</strong>，并且记录编辑页面内的<strong>通信密钥</strong></li>
+<li>在站长-&gt;UCenter设置中找到<strong>UCenter应用ID</strong>并确认与步骤1的<strong>ID</strong>一致（单应用不用担心这个问题）</li>
+<li>将步骤1记录的<strong>通信密钥</strong>填入<strong>UCenter通讯密钥</strong>一项</li>
+</ol>
 <h2 id="四恢复全站https">四、恢复全站HTTPS</h2>
 <p>在新的服务器重新部署全HTTPS站点需要经过以下步骤：</p>
 <ul>
@@ -502,6 +520,12 @@ cd letsencrypt
 <li>privkey.pem 私钥</li>
 </ul>
 <h3 id="4-2-启用nginx的https访问功能">4-2 启用Nginx的HTTPS访问功能</h3>
+<h3 id="4-3-修改站点资源访问方式">4-3 修改站点资源访问方式</h3>
+<p>确保以下两处地址采用的协议为https</p>
+<ol>
+<li>站长-&gt;Ucenter设置-&gt;UCenter访问地址</li>
+<li>UCenter-&gt;应用管理-&gt;编辑应用-&gt;应用的主URL</li>
+</ol>
 
         </div>
 

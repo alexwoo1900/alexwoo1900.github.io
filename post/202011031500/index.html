@@ -100,7 +100,7 @@
 我们将以这三个问题作为解读线索，一步步分析mini3d源码的构成以及相关思路。</li>
 </ol>
 <h3 id="窗口的创建及销毁">窗口的创建及销毁</h3>
-<p>窗口创建与关闭使用的都是常规的Windows API，创建窗口的过程关注窗口与窗口类，关注窗口时则着重处理各种句柄。</p>
+<p>窗口创建与关闭使用的都是常规的Windows API，创建窗口的过程关注窗口与窗口类，销毁窗口时则着重处理各种句柄。</p>
 <pre><code class="language-cpp">int screen_init(int w, int h, const TCHAR *title) 
 {
 	// 创建窗口类
@@ -253,10 +253,6 @@ void device_destroy(device_t *device)
 
         <img class="mx-auto" alt="device内存分配" src="/image/device_malloc.png" />   
     </p>
-<pre><code class="language-cpp">typedef struct { float r, g, b; } color_t;
-typedef struct { float u, v; } texcoord_t;
-typedef struct { point_t pos; texcoord_t tc; color_t color; float rhw; } vertex_t;
-</code></pre>
 <h3 id="摄像机初始化">摄像机初始化</h3>
 <pre><code class="language-cpp">
 </code></pre>
@@ -316,15 +312,17 @@ typedef struct { point_t pos; texcoord_t tc; color_t color; float rhw; } vertex_
 		}
 	}
 }
-
-先看该代码逻辑下非平行线段的像素着色方式：
-![线段像素着色方式](/image/draw_line.png)
-
-非平行线段的画图逻辑可以这样理解：
-1. 需要涂色的像素块的x坐标每移动dx/dy时，其y坐标需要移动1。如果我们想知道y坐标具体是在什么是时候移动1，则必须要了解x坐标移动dx/dy的时机。
-2. 求dx/dy可以转化成求(dy + dy + ... + dy) = dx这个等式里dy的累加次数。
-3. 下一次计算x坐标的移动值之前要舍弃使用过的累加值dx。
 </code></pre>
+<p>先看该代码逻辑下非平行线段的像素着色方式：
+
+        <img class="mx-auto" alt="线段像素着色方式" src="/image/draw_line.png" />   
+    </p>
+<p>非平行线段的画图逻辑可以这样理解：</p>
+<ol>
+<li>需要涂色的像素块的x坐标每移动dx/dy时，其y坐标需要移动1。如果我们想知道y坐标具体是在什么是时候移动1，则必须要了解x坐标移动dx/dy的时机。</li>
+<li>求dx/dy可以转化成求(dy + dy + &hellip; + dy) = dx这个等式里dy的累加次数。</li>
+<li>下一次计算x坐标的移动值之前要舍弃使用过的累加值dx。</li>
+</ol>
 
         </div>
 

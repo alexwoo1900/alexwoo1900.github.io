@@ -9,8 +9,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>202011031500 | 绣湖小屋</title>
-    <meta property="og:title" content="202011031500 - 绣湖小屋">
+    <title>解析mini3d | 绣湖小屋</title>
+    <meta property="og:title" content="解析mini3d - 绣湖小屋">
     <meta property="og:type" content="article">
         
     <meta property="article:published_time" content='2020-11-03T15:00:27&#43;08:00'>
@@ -19,7 +19,7 @@
     <meta property="article:modified_time" content='2020-11-03T15:00:27&#43;08:00'>
         
     <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
-    <meta name="description" content="202011031500">
+    <meta name="description" content="解析mini3d">
         
     <meta name="author" content="Alex Woo">
     <meta property="og:url" content="https://alexwoo1900.github.io/post/202011031500/">
@@ -77,7 +77,7 @@
     
     <article class="post">
         <header>
-            <h1 class="post-title">202011031500</h1>
+            <h1 class="post-title">解析mini3d</h1>
         </header>
         <date class="post-meta meta-date">
             2020年11月3日
@@ -91,8 +91,122 @@
         
         
         <div class="post-content">
-            <h3 id="设备内存管理">设备内存管理</h3>
-<pre><code class="language-cpp">void device_init(device_t *device, int width, int height, void *fb) {
+            <h2 id="windows窗口">Windows窗口</h2>
+<p>编写3D窗口程序通常会遇到三个基本问题：</p>
+<ol>
+<li>如何进行窗口的创建、初始化及销毁</li>
+<li>如何将图像数据传递到指定窗口并被描绘出来</li>
+<li>如何让窗口捕捉并响应特定动作
+我们将以这三个问题作为解读线索，一步步分析mini3d源码的构成以及相关思路。</li>
+</ol>
+<h3 id="窗口的创建及销毁">窗口的创建及销毁</h3>
+<p>窗口创建与关闭使用的都是常规的Windows API，创建窗口的过程关注窗口与窗口类，关注窗口时则着重处理各种句柄。</p>
+<pre><code class="language-cpp">int screen_init(int w, int h, const TCHAR *title) 
+{
+	// 创建窗口类
+	WNDCLASS wc = { CS_BYTEALIGNCLIENT, (WNDPROC)screen_events, 0, 0, 0,
+		NULL, NULL, NULL, NULL, _T(&quot;SCREEN3.1415926&quot;) };
+	// 注册窗口类
+	if (!RegisterClass(&amp;wc)) return -1;
+	// 创建窗口
+	screen_handle = CreateWindow(_T(&quot;SCREEN3.1415926&quot;), title,
+		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+		0, 0, 0, 0, NULL, NULL, wc.hInstance, NULL);
+	if (screen_handle == NULL) return -2;
+	// 显示窗口
+	ShowWindow(screen_handle, SW_NORMAL);
+}
+
+int screen_close(void) 
+{
+	if (screen_dc) {
+		if (screen_ob) {
+			SelectObject(screen_dc, screen_ob);
+			screen_ob = NULL;
+		}
+		DeleteDC(screen_dc);
+		screen_dc = NULL;
+	}
+	if (screen_hb) {
+		DeleteObject(screen_hb);
+		screen_hb = NULL;
+	}
+	if (screen_handle) {
+		CloseWindow(screen_handle);
+		screen_handle = NULL;
+	}
+	return 0;
+}
+</code></pre>
+<h3 id="窗口绘图">窗口绘图</h3>
+<p>如何在窗口中绘制出我们想要的图像，这似乎要求我们先要掌握图像数据的流向。
+mini3d通过framebuffer指向的空间来存储图像数据，这要求在程序的某个地方必须建立起framebuffer到窗口的联系。</p>
+<pre><code class="language-cpp">int screen_init(int w, int h, const TCHAR *title) 
+{
+	// 创建位图内存区域（ptr指向），并返DIB句柄（screen_hb）
+	screen_hb = CreateDIBSection(screen_dc, &amp;bi, DIB_RGB_COLORS, &amp;ptr, 0, 0);
+	if (screen_hb == NULL) return -3;
+	// 将DIB句柄（screen_hb）换入内存设备环境（screen_dc）
+	screen_ob = (HBITMAP)SelectObject(screen_dc, screen_hb);
+	// 函数外用screen_fb来获得ptr指向内存的使用权
+	screen_fb = (unsigned char*)ptr;
+}
+
+void screen_update(void)
+{
+	// 将内存设备环境(screen_dc)作为源环境，将其数据覆盖(SRCCOPY)到作为目标环境的视频设备环境(hDC)中
+	BitBlt(hDC, 0, 0, screen_w, screen_h, screen_dc, 0, 0, SRCCOPY);
+}
+
+int main(void) 
+{
+	// 将screen_fb指向的内存作为framebuffer来使用
+	device_init(&amp;device, 800, 600, screen_fb);
+}
+</code></pre>
+<h3 id="窗口消息机制">窗口消息机制</h3>
+<pre><code class="language-cpp">// 将screen_events注册为窗口消息回调函数（窗口过程）
+WNDCLASS wc = { CS_BYTEALIGNCLIENT, (WNDPROC)screen_events, 0, 0, 0, 
+		NULL, NULL, NULL, NULL, _T(&quot;SCREEN3.1415926&quot;) };
+
+// 回调函数根据消息的类型来设置或者消除相应标记
+static LRESULT screen_events(HWND hWnd, UINT msg, 
+	WPARAM wParam, LPARAM lParam) 
+	{
+	switch (msg) {
+    // 设置退出标记
+	case WM_CLOSE: screen_exit = 1; break;
+    // 设置按键标记
+	case WM_KEYDOWN: screen_keys[wParam &amp; 511] = 1; break;
+    // 消除按键标记
+	case WM_KEYUP: screen_keys[wParam &amp; 511] = 0; break;
+	// 采用默认处理方式
+	default: return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+	return 0;
+}
+
+// 分发窗口消息
+void screen_dispatch(void) 
+{
+	MSG msg;
+	while (1) 
+	{
+        // 窥视队列是否存在消息
+		if (!PeekMessage(&amp;msg, NULL, 0, 0, PM_NOREMOVE)) break;
+        // 尝试获取队列中的消息
+		if (!GetMessage(&amp;msg, NULL, 0, 0)) break;
+        // 分发消息
+		DispatchMessage(&amp;msg);
+	}
+}
+</code></pre>
+<h2 id="图形渲染">图形渲染</h2>
+<p>把一系列点数据组合成基本图形元素，再转换到framebuffer上的像素数据，中间需要经历很多算法的处理。
+下面我们从数据准备阶段的内存分配讲起，把mini3d涉及到的图形原理给剖析清楚。</p>
+<h3 id="设备内存管理">设备内存管理</h3>
+<pre><code class="language-cpp">void device_init(device_t *device, int width, int height, void *fb) 
+{
 	int need = sizeof(void*) * (height * 2 + 1024) + width * height * 8;
 	char *ptr = (char*)malloc(need + 64);
 	char *framebuf, *zbuf;
@@ -126,7 +240,8 @@
 	device-&gt;render_state = RENDER_STATE_WIREFRAME;
 }
 
-void device_destroy(device_t *device) {
+void device_destroy(device_t *device) 
+{
 	if (device-&gt;framebuffer)
 		free(device-&gt;framebuffer);
 	device-&gt;framebuffer = NULL;
@@ -134,42 +249,81 @@ void device_destroy(device_t *device) {
 	device-&gt;texture = NULL;
 }
 </code></pre>
-<p>其中device初始内存分配方式如下图示：
+<p>直观地，device初始内存分配方式如下图示：
 
         <img class="mx-auto" alt="device内存分配" src="/image/device_malloc.png" />   
     </p>
-<h3 id="消息机制">消息机制</h3>
-<pre><code class="language-cpp">// 将screen_events注册为窗口消息回调函数
-WNDCLASS wc = { CS_BYTEALIGNCLIENT, (WNDPROC)screen_events, 0, 0, 0, 
-		NULL, NULL, NULL, NULL, _T(&quot;SCREEN3.1415926&quot;) };
-
-// 回调函数根据消息的类型来设置或者消除相应标记
-static LRESULT screen_events(HWND hWnd, UINT msg, 
-	WPARAM wParam, LPARAM lParam) {
-	switch (msg) {
-    // 设置退出标记
-	case WM_CLOSE: screen_exit = 1; break;
-    // 设置按键标记
-	case WM_KEYDOWN: screen_keys[wParam &amp; 511] = 1; break;
-    // 消除按键标记
-	case WM_KEYUP: screen_keys[wParam &amp; 511] = 0; break;
-	default: return DefWindowProc(hWnd, msg, wParam, lParam);
+<pre><code class="language-cpp">typedef struct { float r, g, b; } color_t;
+typedef struct { float u, v; } texcoord_t;
+typedef struct { point_t pos; texcoord_t tc; color_t color; float rhw; } vertex_t;
+</code></pre>
+<h3 id="摄像机初始化">摄像机初始化</h3>
+<pre><code class="language-cpp">
+</code></pre>
+<h3 id="光栅化">光栅化</h3>
+<h4 id="world-matrix">World Matrix</h4>
+<h4 id="view-matrix">View Matrix</h4>
+<h4 id="projection-matrix">Projection Matrix</h4>
+<p>transform = world * view * projection</p>
+<h3 id="描绘线段">描绘线段</h3>
+<pre><code class="language-cpp">void device_draw_line(device_t *device, int x1, int y1, int x2, int y2, IUINT32 c) {
+	int x, y, rem = 0;
+	// 线段两端点重合时只画一个点
+	if (x1 == x2 &amp;&amp; y1 == y2) {
+		device_pixel(device, x1, y1, c);
 	}
-	return 0;
+	// 线段平行于y轴时，直接沿轴描点
+	else if (x1 == x2) {
+		int inc = (y1 &lt;= y2) ? 1 : -1;
+		for (y = y1; y != y2; y += inc) device_pixel(device, x1, y, c);
+		device_pixel(device, x2, y2, c);
+	}
+	// 线段平行于x轴时，直接沿轴描点
+	else if (y1 == y2) {
+		int inc = (x1 &lt;= x2) ? 1 : -1;
+		for (x = x1; x != x2; x += inc) device_pixel(device, x, y1, c);
+		device_pixel(device, x2, y2, c);
+	}
+	// 非平行线段的画图逻辑
+	else {
+		int dx = (x1 &lt; x2) ? x2 - x1 : x1 - x2;
+		int dy = (y1 &lt; y2) ? y2 - y1 : y1 - y2;
+		if (dx &gt;= dy) {
+			if (x2 &lt; x1) x = x1, y = y1, x1 = x2, y1 = y2, x2 = x, y2 = y;
+			for (x = x1, y = y1; x &lt;= x2; x++) {
+				device_pixel(device, x, y, c);
+				rem += dy;
+				if (rem &gt;= dx) {
+					rem -= dx;
+					y += (y2 &gt;= y1) ? 1 : -1;
+					device_pixel(device, x, y, c);
+				}
+			}
+			device_pixel(device, x2, y2, c);
+		}
+		else {
+			if (y2 &lt; y1) x = x1, y = y1, x1 = x2, y1 = y2, x2 = x, y2 = y;
+			for (x = x1, y = y1; y &lt;= y2; y++) {
+				device_pixel(device, x, y, c);
+				rem += dx;
+				if (rem &gt;= dy) {
+					rem -= dy;
+					x += (x2 &gt;= x1) ? 1 : -1;
+					device_pixel(device, x, y, c);
+				}
+			}
+			device_pixel(device, x2, y2, c);
+		}
+	}
 }
 
-// 分发窗口消息
-void screen_dispatch(void) {
-	MSG msg;
-	while (1) {
-        // 窥视队列是否存在消息
-		if (!PeekMessage(&amp;msg, NULL, 0, 0, PM_NOREMOVE)) break;
-        // 尝试获取队列中的消息
-		if (!GetMessage(&amp;msg, NULL, 0, 0)) break;
-        // 分发消息
-		DispatchMessage(&amp;msg);
-	}
-}
+先看该代码逻辑下非平行线段的像素着色方式：
+![线段像素着色方式](/image/draw_line.png)
+
+非平行线段的画图逻辑可以这样理解：
+1. 需要涂色的像素块的x坐标每移动dx/dy时，其y坐标需要移动1。如果我们想知道y坐标具体是在什么是时候移动1，则必须要了解x坐标移动dx/dy的时机。
+2. 求dx/dy可以转化成求(dy + dy + ... + dy) = dx这个等式里dy的累加次数。
+3. 下一次计算x坐标的移动值之前要舍弃使用过的累加值dx。
 </code></pre>
 
         </div>
@@ -281,7 +435,7 @@ void screen_dispatch(void) {
 <ul class="widget-list">
     
     <li>
-        <a href="https://alexwoo1900.github.io/post/202011031500/" title="202011031500">202011031500</a>
+        <a href="https://alexwoo1900.github.io/post/202011031500/" title="解析mini3d">解析mini3d</a>
     </li>
     
     <li>

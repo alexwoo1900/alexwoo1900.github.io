@@ -76,7 +76,7 @@
     <article class="post">
         <header>
             <h1 class="post-title">
-                <a href="https://alexwoo1900.github.io/post/202011031500/" title="202011031500">202011031500</a>
+                <a href="https://alexwoo1900.github.io/post/202011031500/" title="解析mini3d">解析mini3d</a>
             </h1>
         </header>
         <date class="post-meta meta-date">
@@ -84,7 +84,7 @@
         </date>
         
         <div class="post-content">
-            设备内存管理 void device_init(device_t *device, int width, int height, void *fb) { int need = sizeof(void*) * (height * 2 + 1024) + width * height * 8; char *ptr = (char*)malloc(need + 64); char *framebuf, *zbuf; int j; assert(ptr); device-&gt;framebuffer = (IUINT32**)ptr; device-&gt;zbuffer = (float**)(ptr + sizeof(void*) * height); ptr += sizeof(void*) * height * 2; device-&gt;texture = (IUINT32**)ptr; ptr += sizeof(void*) * 1024; framebuf = (char*)ptr; zbuf = (char*)ptr + width * height * 4; ptr += width * height * 8; if (fb != NULL) framebuf = (char*)fb; for (j = 0; j &lt; height; j++) { device-&gt;framebuffer[j] = (IUINT32*)(framebuf + width * 4 * j); device-&gt;zbuffer[j] = (float*)(zbuf + width * 4 * j); } device-&gt;texture[0] = (IUINT32*)ptr; device-&gt;texture[1] = (IUINT32*)(ptr + 16); memset(device-&gt;texture[0], 0, 64); device-&gt;tex_width = 2; device-&gt;tex_height = 2;……
+            Windows窗口 编写3D窗口程序通常会遇到三个基本问题： 如何进行窗口的创建、初始化及销毁 如何将图像数据传递到指定窗口并被描绘出来 如何让窗口捕捉并响应特定动作 我们将以这三个问题作为解读线索，一步步分析mini3d源码的构成以及相关思路。 窗口的创建及销毁 窗口创建与关闭使用的都是常规……
         </div>
         <p class="readmore"><a href="https://alexwoo1900.github.io/post/202011031500/">阅读全文</a></p>
     </article>
@@ -179,7 +179,7 @@
 <ul class="widget-list">
     
     <li>
-        <a href="https://alexwoo1900.github.io/post/202011031500/" title="202011031500">202011031500</a>
+        <a href="https://alexwoo1900.github.io/post/202011031500/" title="解析mini3d">解析mini3d</a>
     </li>
     
     <li>

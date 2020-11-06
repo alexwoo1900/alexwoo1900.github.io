@@ -339,20 +339,20 @@ void device_destroy(device_t *device)
         <img class="mx-auto" alt="三角形" src="/image/triangle.png" />   
     </p>
 <p>上下三角很容易理解，左右三角的区别在于p2在线段p1-p3的左侧还是右侧。这一点可以根据向量叉乘的特点检测出来。</p>
-<p>如图所示有：
+<p>以图示的左三角为例，假设：
 $$
 \overrightarrow a = p3 - p1 = (p3 \rightarrow pos.x - p1 \rightarrow pos.x, p3 \rightarrow pos.y - p1 \rightarrow pos.y)
 $$</p>
 <p>$$
 \overrightarrow b = p2 - p1 = (p2 \rightarrow pos.x - p1 \rightarrow pos.x, p2 \rightarrow pos.y - p1 \rightarrow pos.y)
 $$</p>
-<p>在左手坐标系下（顺时针为正向角度）有：</p>
+<p>在左手坐标系下采用左手定则判断两向量<strong>叉乘方向向内</strong>，故有：</p>
 <p>$$
-\overrightarrow a \times \overrightarrow b = (p3 \rightarrow pos.x - p1 \rightarrow pos.x) \ast (p2 \rightarrow pos.y - p1 \rightarrow pos.y) - (p3 \rightarrow pos.y - p1 \rightarrow pos.y) \ast (p2 \rightarrow pos.x - p1 \rightarrow pos.x) \leq 0
+\overrightarrow a \times \overrightarrow b = (p3 \rightarrow pos.x - p1 \rightarrow pos.x) \ast (p2 \rightarrow pos.y - p1 \rightarrow pos.y) - (p3 \rightarrow pos.y - p1 \rightarrow pos.y) \ast (p2 \rightarrow pos.x - p1 \rightarrow pos.x) \geq 0
 $$</p>
 <p>最终可以写成如下形式
 $$
-p3 \rightarrow pos.x \leq \frac{(p3 \rightarrow pos.y - p1 \rightarrow pos.y)}{(p2 \rightarrow pos.y - p1 \rightarrow pos.y)} \ast (p2 \rightarrow pos.x - p1 \rightarrow pos.x) + p1 \rightarrow pos.x
+p3 \rightarrow pos.x \geq \frac{(p3 \rightarrow pos.y - p1 \rightarrow pos.y)}{(p2 \rightarrow pos.y - p1 \rightarrow pos.y)} \ast (p2 \rightarrow pos.x - p1 \rightarrow pos.x) + p1 \rightarrow pos.x
 $$</p>
 <p>正好对应左三角的分支条件。右三角同理可证。</p>
 <h3 id="描绘线段">描绘线段</h3>

@@ -313,7 +313,7 @@ void device_destroy(device_t *device)
 <h4 id="坐标归一化">坐标归一化</h4>
 <p>归一化（<em>nomalize/homogenize</em>）是指以下转换过程：
 $$
-{x^', y^', z^', w^' \neq 1} \rightarrow {\frac{x^'}{w^'}, \frac{y^'}{w^'}, \frac{z^'}{w^'}, 1}
+\rightarrow {\frac{x^'}{w^'}, \frac{y^'}{w^'}, \frac{z^'}{w^'}, 1}
 $$
 通常地，分量w=1的齐次坐标进行完仿射变换后是不需要做归一化操作的，因为仿射变换并不改变齐次坐标的w分量。</p>
 <h3 id="预处理三角形数据">预处理三角形数据</h3>

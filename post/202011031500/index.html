@@ -303,6 +303,16 @@ void device_destroy(device_t *device)
 	}
 }
 </code></pre>
+<p>以上的代码主要内容有几点：</p>
+<ol>
+<li>应用矩阵变换（包括模型变换、视图变换、投影变换）</li>
+<li>进行CVV裁剪</li>
+<li>坐标归一化</li>
+<li>进行视口变换</li>
+</ol>
+<h4 id="坐标归一化">坐标归一化</h4>
+<p>归一化<em>Nomalization</em>是指从${x^', y^', z^', w^' \neq 1}$ 转换成 ${\frac{x^'}{w^'}, \frac{y^'}{w^'}, \frac{z^'}{w^'}, 1}$
+通常地，只进行仿射变换的齐次坐标是不需要做归一化操作的，因为仿射变换并不改变齐次坐标的w分量。</p>
 <h3 id="预处理三角形数据">预处理三角形数据</h3>
 <p>为了更好地应用扫描线算法，我们必须把三角形处理成底边平行于x轴的三角形集合，“是否分割原三角形”、“左右边的点选取”这些因素将普通三角形区分为四种不同的情况。</p>
 <p>先看这部分的代码及注释：</p>
@@ -405,7 +415,7 @@ $$</p>
 <p>正好对应左三角的分支条件。右三角同理可证。</p>
 <h3 id="计算扫描线">计算扫描线</h3>
 <p>有了预处理后的三角形数据，下一步就要一维化这些三角形，即将“面”离散成一段段的“线”。</p>
-<p><code>trapezoid_edge_interp</code>用插值计算出高度y在left、right两条边上对应的两个端点。
+<p><code>trapezoid_edge_interp</code>用插值计算出高度y在left、right两条边上对应的两个端点。<br>
 <code>trapezoid_init_scan_line</code>则是根据两个端点收集描绘一整条线段所必要的数据。</p>
 <pre><code class="language-cpp">void trapezoid_edge_interp(trapezoid_t *trap, float y) {
 	float s1 = trap-&gt;left.v2.pos.y - trap-&gt;left.v1.pos.y;

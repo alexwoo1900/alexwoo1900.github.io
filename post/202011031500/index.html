@@ -258,9 +258,9 @@ void device_destroy(device_t *device)
 <pre><code class="language-cpp">
 </code></pre>
 <h3 id="光栅化">光栅化</h3>
-<h4 id="world-matrix">World Matrix</h4>
-<h4 id="view-matrix">View Matrix</h4>
-<h4 id="projection-matrix">Projection Matrix</h4>
+<h4 id="模型矩阵">模型矩阵</h4>
+<h4 id="视图矩阵">视图矩阵</h4>
+<h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
@@ -315,7 +315,8 @@ void device_destroy(device_t *device)
 $$
 \{x^{'}, y^{'}, z^{'}, w^{'} \neq 1\} \rightarrow \{\frac{x^{'}}{w^{'}}, \frac{y^{'}}{w^{'}}, \frac{z^{'}}{w^{'}}, 1\}
 $$
-通常地，分量w=1的齐次坐标进行完仿射变换后是不需要做归一化操作的，因为仿射变换并不改变齐次坐标的w分量。</p>
+通常地，分量w=1的齐次坐标进行完仿射变换后是不需要做归一化操作的，因为仿射变换并不改变齐次坐标的w分量。
+但如果该齐次坐标还经过了透视投影的过程，其w分量将会被改变。</p>
 <h3 id="预处理三角形数据">预处理三角形数据</h3>
 <p>为了更好地应用扫描线算法，我们必须把三角形处理成底边平行于x轴的三角形集合，“是否分割原三角形”、“左右边的点选取”这些因素将普通三角形区分为四种不同的情况。</p>
 <p>先看这部分的代码及注释：</p>

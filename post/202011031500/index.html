@@ -258,7 +258,31 @@ void device_destroy(device_t *device)
 <pre><code class="language-cpp">
 </code></pre>
 <h3 id="光栅化">光栅化</h3>
+<p>讲解各种矩阵的构建之前，先看看代码中应用矩阵的方式：</p>
+<pre><code class="language-cpp">void matrix_apply(vector_t *y, const vector_t *x, const matrix_t *m) {
+	float X = x-&gt;x, Y = x-&gt;y, Z = x-&gt;z, W = x-&gt;w;
+	y-&gt;x = X * m-&gt;m[0][0] + Y * m-&gt;m[1][0] + Z * m-&gt;m[2][0] + W * m-&gt;m[3][0];
+	y-&gt;y = X * m-&gt;m[0][1] + Y * m-&gt;m[1][1] + Z * m-&gt;m[2][1] + W * m-&gt;m[3][1];
+	y-&gt;z = X * m-&gt;m[0][2] + Y * m-&gt;m[1][2] + Z * m-&gt;m[2][2] + W * m-&gt;m[3][2];
+	y-&gt;w = X * m-&gt;m[0][3] + Y * m-&gt;m[1][3] + Z * m-&gt;m[2][3] + W * m-&gt;m[3][3];
+}
+</code></pre>
+<p>这里采用了右乘的方式，构建矩阵的时候要注意元素的排放。</p>
 <h4 id="模型矩阵">模型矩阵</h4>
+<p>模型矩阵用于做针对于模型的平移、旋转、镜像、缩放等操作。</p>
+<h1 id="endpmatrix">旋转矩阵
+$$
+\begin{pmatrix}
+x&amp;y\<br>
+\end{pmatrix}
+\begin{pmatrix}
+\cos \theta&amp;\sin \theta\<br>
+-\sin \theta&amp;\cos \theta\<br>
+\end{pmatrix}</h1>
+<p>\begin{pmatrix}
+\cos \thetax-\sin \thetay&amp;\sin \thetax+\cos \thetay\<br>
+\end{pmatrix}
+$$</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

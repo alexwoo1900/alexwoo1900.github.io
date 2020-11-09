@@ -268,16 +268,10 @@ void device_destroy(device_t *device)
 <p>这里采用了右乘的方式，构建矩阵的时候要注意元素的排放。</p>
 <h4 id="模型矩阵">模型矩阵</h4>
 <p>模型矩阵用于做针对于模型的平移、旋转、镜像、缩放等操作。</p>
-<h1 id="endpmatrix">$$
-\begin{pmatrix}
-x&amp;y\<br>
-\end{pmatrix}
+<p>$$
 \begin{pmatrix}
 \cos \theta&amp;\sin \theta\<br>
 -\sin \theta&amp;\cos \theta\<br>
-\end{pmatrix}</h1>
-<p>\begin{pmatrix}
-\cos \thetax-\sin \thetay&amp;\sin \thetax+\cos \thetay\<br>
 \end{pmatrix}
 $$</p>
 <h4 id="视图矩阵">视图矩阵</h4>

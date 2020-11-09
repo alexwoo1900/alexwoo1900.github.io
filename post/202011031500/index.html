@@ -268,6 +268,10 @@ void device_destroy(device_t *device)
 <p>这里采用了右乘的方式，构建矩阵的时候要注意元素的排放。</p>
 <h4 id="模型矩阵">模型矩阵</h4>
 <p>模型矩阵用于做针对于模型的平移、旋转、镜像、缩放等操作。</p>
+<p>一般的平面旋转矩阵：</p>
+<p>
+        <img class="mx-auto" alt="平面旋转" src="/image/rotate_2d.png" />   
+    </p>
 <p>$$
 \begin{pmatrix}
 x&amp;y
@@ -278,6 +282,10 @@ x&amp;y
 \cos \theta x-\sin \theta y&amp;\sin \theta x+\cos \theta y
 \end{pmatrix}
 $$</p>
+<p>虽然我们很容易构建平面旋转矩阵，但对于三维空间来说，却不那么容易。</p>
+<p>
+        <img class="mx-auto" alt="立体旋转" src="/image/rotate_3d.png" />   
+    </p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

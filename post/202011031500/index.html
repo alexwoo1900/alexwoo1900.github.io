@@ -255,8 +255,6 @@ void device_destroy(device_t *device)
         <img class="mx-auto" alt="device内存分配" src="/image/device_malloc.png" />   
     </p>
 <h3 id="摄像机初始化">摄像机初始化</h3>
-<pre><code class="language-cpp">
-</code></pre>
 <h3 id="光栅化">光栅化</h3>
 <p>讲解各种矩阵的构建之前，先看看代码中应用矩阵的方式：</p>
 <pre><code class="language-cpp">void matrix_apply(vector_t *y, const vector_t *x, const matrix_t *m) {
@@ -270,8 +268,7 @@ void device_destroy(device_t *device)
 <p>这里采用了右乘的方式，构建矩阵的时候要注意元素的排放。</p>
 <h4 id="模型矩阵">模型矩阵</h4>
 <p>模型矩阵用于做针对于模型的平移、旋转、镜像、缩放等操作。</p>
-<h1 id="endpmatrix">旋转矩阵
-$$
+<h1 id="endpmatrix">$$
 \begin{pmatrix}
 x&amp;y\<br>
 \end{pmatrix}

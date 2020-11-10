@@ -288,7 +288,7 @@ $$</p>
     </p>
 <p>模拟三维空间旋转时，由于涉及的变量较多，我们一般都把它简化为绕某个旋转轴旋转某个角度。
 从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式<em>Rodrigues Rotation</em>得出。</p>
-<p>这里给出罗德里格斯公式证明：</p>
+<p>这里给出罗德里格斯公式证明（向量左乘矩阵）：</p>
 <p>$$
 v = v_\bot + v_\Vert\\<br>
 \therefore v_\bot = v - v_\Vert\\<br>
@@ -328,7 +328,7 @@ k_z&amp;0&amp;-k_x\\<br>
 \therefore R = \begin{bmatrix}
 1 - 2(k_y \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_y - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_y + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x\\<br>
-0&amp;0&amp;0
+2 {\sin}^2 \frac{\theta}{2} k_x k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_y \sin \frac{\theta}{2})^2
 \end{bmatrix}
 $$</p>
 <h4 id="视图矩阵">视图矩阵</h4>

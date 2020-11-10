@@ -286,6 +286,14 @@ $$</p>
 <p>
         <img class="mx-auto" alt="立体旋转" src="/image/rotate_3d.png" />   
     </p>
+<p>模拟三维空间旋转时，由于涉及的变量较多，我们一般都把它简化为绕某个旋转轴旋转某个角度。
+从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式<em>Rodrigues Rotation</em>得出。</p>
+<p>这里给出罗德里格斯公式证明：
+$$
+v = v_\bot + v_\Vert
+v_\bot = v - v_\Vert
+v_\Vert = (v \dot k)k
+$$</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

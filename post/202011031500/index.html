@@ -295,16 +295,16 @@ v_\bot = v - v_\Vert\\<br>
 v_\Vert = (v \cdot k)k\\<br>
 v_\bot = v - (v \cdot k)k = -k \times (k \times v)\\<br>
 v_\Vert = v + k \times (k \times v)\\<br>
-assume w = k \times v\\<br>
-v_{rot} = v_\Vert + \cos \theta v_\bot + \sin \theta w
-v_{rot} = v + k \times (k \times v) - \cos \theta k \times (k \times v) + \sin \theta k \times v
-assume K = \begin{bmatrix}
+assume\ w = k \times v\\<br>
+v_{rot} = v_\Vert + \cos \theta v_\bot + \sin \theta w\\<br>
+v_{rot} = v + k \times (k \times v) - \cos \theta k \times (k \times v) + \sin \theta k \times v\\<br>
+assume\ K = \begin{bmatrix}
 0&amp;-k_z&amp;k_y\\<br>
 k_z&amp;0&amp;-k_x\\<br>
 -k_y&amp;k_x&amp;0
 \end{bmatrix}
-k \times v = Kv
-v_{rot} = v + (1 - \cos \theta)K^2v + \sin \theta v
+k \times v = Kv\\<br>
+v_{rot} = v + (1 - \cos \theta)K^2v + \sin \theta v\\<br>
 v_{rot} = (I + (1 - \cos \theta)k^2 + \sin \theta K)v
 $$</p>
 <h4 id="视图矩阵">视图矩阵</h4>

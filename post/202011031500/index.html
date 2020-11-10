@@ -331,6 +331,54 @@ k_z&amp;0&amp;-k_x\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_y \sin \frac{\theta}{2})^2
 \end{bmatrix}
 $$</p>
+<p>在使用右乘的程序里<strong>转置</strong>该矩阵即可。
+下面来看看最简单的放缩矩阵：</p>
+<p>$$
+\begin{pmatrix}
+x&amp;y&amp;z
+\end{pmatrix}\begin{pmatrix}
+a&amp;0&amp;0\\<br>
+0&amp;b&amp;0\\<br>
+0&amp;0&amp;c
+\end{pmatrix}=\begin{pmatrix}
+ax&amp;by&amp;cz
+\end{pmatrix}
+$$</p>
+<p>除了一般的放缩动作，还可以通过变换元素的正负号来达到镜像翻转的目的。
+最后来分析一下平移矩阵：</p>
+<p>$$
+\begin{pmatrix}
+x&amp;y
+\end{pmatrix}\begin{pmatrix}
+1&amp;0\\<br>
+0&amp;1
+\end{pmatrix}+\begin{pmatrix}
+t_x&amp;t_y
+\end{pmatrix}=\begin{pmatrix}
+x+t_x&amp;y+t_y
+\end{pmatrix}
+$$</p>
+<p>平移有一个反常识的性质：它不是线性变换（<em>linear transformation</em>）。
+对于线性空间V中的一个变换A，对于任意的$\alpha$和$\beta$以及数域P中的任意k，都有以下性质：
+$$
+A(\alpha + \beta) = A(\alpha) + A(\beta)
+A(k \alpha) = kA(\alpha)
+$$
+假设下图中的A（平移变换）它是一个线性变换
+$$
+A: \begin{pmatrix}
+x&amp;y
+\end{pmatrix}\begin{pmatrix} \rightarrow \begin{pmatrix}
+x+1&amp;y+1
+\end{pmatrix}\begin{pmatrix}
+$$
+对于空间内的两点(0, 1)和(1, 0)
+$$
+A(0, 1) = (1, 2)\\<br>
+A(1, 0) = (2, 1)\\<br>
+A(1, 1) = (2, 2)\\<br>
+A(0, 1) + A(1, 0) \neq A(1, 1)
+$$</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

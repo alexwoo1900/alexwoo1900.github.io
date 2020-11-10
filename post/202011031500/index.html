@@ -307,6 +307,23 @@ k \times v = Kv\\<br>
 \therefore v_{rot} = v + (1 - \cos \theta)K^2v + \sin \theta v\\<br>
 \therefore v_{rot} = (I + (1 - \cos \theta)k^2 + \sin \theta K)v
 $$</p>
+<p>进一步地：</p>
+<p>$$
+assume\ v_{rot} = Rv\\
+\therefore R = \begin{bmatrix}
+1&amp;0&amp;0\\<br>
+0&amp;1&amp;0\\<br>
+0&amp;0&amp;1
+\end{bmatrix} + (1 - \cos \theta) \ast \begin{bmatrix}
+-k^2_y -k^2_z&amp;k_x k_y&amp;-k_x k_z\\<br>
+k_x k_y&amp;-k^2_x -k^2_z&amp;k_y k_z\\<br>
+k_x k_z&amp;k_y k_z&amp;-k^2_x -k^2_y
+\end{bmatrix} + \sin \theta \ast \begin{bmatrix}
+0&amp;-k_z&amp;k_y\\<br>
+k_z&amp;0&amp;-k_x\\<br>
+-k_y&amp;k_x&amp;0
+\end{bmatrix}
+$$</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

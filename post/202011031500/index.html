@@ -289,24 +289,23 @@ $$</p>
     </p>
 <p>模拟三维空间旋转时，由于涉及的变量较多，我们一般都把它简化为绕某个旋转轴旋转某个角度。
 从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式（<em>Rodrigues Rotation</em>）得出。</p>
-<p>这里给出罗德里格斯公式证明（左乘方式)：</p>
+<p>这里给出罗德里格斯公式证明：</p>
 <p>$$
-v = v_\bot + v_\Vert\\<br>
+\because v = v_\bot + v_\Vert\\<br>
 \therefore v_\bot = v - v_\Vert\\<br>
-v_\Vert = (v \cdot k)k\\<br>
+\because v_\Vert = (v \cdot k)k\\<br>
 \therefore v_\bot = v - (v \cdot k)k = -k \times (k \times v)\\<br>
 \therefore v_\Vert = v + k \times (k \times v)\\<br>
 assume\ w = k \times v\\<br>
-\therefore v_{rot} = v_\Vert + \cos \theta v_\bot + \sin \theta w\\<br>
+\because v_{rot} = v_\Vert + \cos \theta v_\bot + \sin \theta w\\<br>
 \therefore v_{rot} = v + k \times (k \times v) - \cos \theta k \times (k \times v) + \sin \theta k \times v\\<br>
 assume\ K = \begin{bmatrix}
 0&amp;-k_z&amp;k_y\\<br>
 k_z&amp;0&amp;-k_x\\<br>
 -k_y&amp;k_x&amp;0
 \end{bmatrix}\\<br>
-k \times v = Kv\\<br>
-\therefore v_{rot} = v + (1 - \cos \theta)K^2v + \sin \theta v\\<br>
-\therefore v_{rot} = (I + (1 - \cos \theta)k^2 + \sin \theta K)v
+\because k \times v = Kv\\<br>
+\therefore v_{rot} = v + (1 - \cos \theta)K^2v + \sin \theta v = (I + (1 - \cos \theta)k^2 + \sin \theta K)v
 $$</p>
 <p>进一步地：</p>
 <p>$$
@@ -328,7 +327,7 @@ k_z&amp;0&amp;-k_x\\<br>
 \begin{cases}
 1 - \cos \theta = 2 {\sin}^2 \frac{\theta}{2}\\<br>
 \sin \theta = 2\sin \frac{\theta}{2} \cos \frac{\theta}{2}\\<br>
-\end{cases}
+\end{cases}\\<br>
 \therefore R = \begin{bmatrix}
 1 - 2(k_y \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_y - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_y + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x\\<br>
@@ -399,7 +398,8 @@ $y = Ax + b$是典型的仿射变换形式。</p>
 <p>
         <img class="mx-auto" alt="二三维原点" src="/image/2d_3d.png" />   
     </p>
-<p>但三维的情况下，$\exists A^{''}, a^{''} = (x, y, z)\ \forall z \neq 0$可以通过$b^{''} = A^{''}a^{''}$平移到$b^{''} = (x + t_x, y + t_y, z)$。
+<p>但三维的情况下，$\exists A^{''}, a^{''} = (x, y, z)\ \forall z \neq 0$可以通过$b^{''} = A^{''}a^{''}$平移到$b^{''} = (x + t_x, y + t_y, z)$。<br>
+这种$A^{''}$代表的线性变换一般被称作错切变换(<em>Transvection/shear mapping</em>)。
 $$
 \begin{pmatrix}
 1&amp;0&amp;\frac{t_x}{z}\\<br>
@@ -417,7 +417,7 @@ z
 $$</p>
 <p>显然，z取1时矩阵的形式最为简洁。</p>
 <p>
-        <img class="mx-auto" alt="错切变换" src="/image/shift.png" />   
+        <img class="mx-auto" alt="错切变换" src="/image/transvection.png" />   
     </p>
 <p>$$
 \begin{pmatrix}
@@ -434,7 +434,8 @@ y + t_y\\<br>
 1
 \end{pmatrix}
 $$</p>
-<p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移跟旋转等操作。</p>
+<p>所以我们可以通过一个升维映射、一个高维的线性变换、一个降维映射来完成低维度的仿射变换。</p>
+<p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移、旋转、放缩等操作。</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>
@@ -486,6 +487,8 @@ $$</p>
 <li>坐标归一化</li>
 <li>进行视口变换</li>
 </ol>
+<h4 id="应用矩阵变换">应用矩阵变换</h4>
+<p>常规地对点向量右乘MVP矩阵，将其转换到合适的位置。</p>
 <h4 id="坐标归一化">坐标归一化</h4>
 <p>归一化（<em>nomalize/homogenize</em>）是指以下转换过程：
 $$

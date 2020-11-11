@@ -288,7 +288,7 @@ $$</p>
         <img class="mx-auto" alt="立体旋转" src="/image/rotate_3d.png" />   
     </p>
 <p>模拟三维空间旋转时，由于涉及的变量较多，我们一般都把它简化为绕某个旋转轴旋转某个角度。
-从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式<em>Rodrigues Rotation</em>得出。</p>
+从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式（<em>Rodrigues Rotation</em>）得出。</p>
 <p>这里给出罗德里格斯公式证明（向量左乘矩阵）：</p>
 <p>$$
 v = v_\bot + v_\Vert\\<br>
@@ -362,13 +362,12 @@ x+1&amp;y+1
 \end{pmatrix}
 $$
 但对于空间内的原点(0, 0)，A显然并不符合第一条性质。<br>
-结论与假设相矛盾，反证可得平移变换并不是线性变换。
 $$
 A(0, 0) = (1, 1)\\<br>
 A(0, 0) + A(0, 0) \neq A(0, 0)
 $$
-这里面也蕴含着“线性变换要求原点的像还是原点”，平移自然不能满足这种条件。
-所幸的是平移属于仿射变换（<strong>Affine transformation</strong>），可以写成下面的形式：
+这里面也蕴含着“线性变换要求原点的像还是原点”，平移自然不能满足这种条件。</p>
+<p>所幸的是平移属于仿射变换（<em>Affine transformation</em>），可以写成下面的形式：
 $$
 \begin{pmatrix}
 x&amp;y
@@ -381,7 +380,26 @@ t_x&amp;t_y
 x+t_x&amp;y+t_y
 \end{pmatrix}
 $$
-这是$y = Ax + b$&ndash;典型的仿射变换形式。</p>
+$y = Ax + b$是典型的仿射变换形式。</p>
+<p>接下来有一个重要的数学概念：
+<strong>低维度的仿射变换可以通过高维度的线性变换来完成</strong>。</p>
+<p>为了便于理解，我们先在二维空间和三维空间上证明这个结论。</p>
+<p>由线性变换的性质可得：<br>
+在二维的情况下，$x = (0, 0)$无法通过$y = Ax$平移到$y = (a, b)$。<br>
+在三维的情况下，$x^{'} = (0, 0, 0)$同样无法通过$y^{'} = A^{'}x^{'}$平移到$y^{'} = (a, b, 0)$。</p>
+<p>但三维的情况下，$x^{''} = (0, 0, c) (c \neq 0)$可以通过$y^{''} = A^{''}x^{''}$平移到$y^{''} = (a, b, c)$。
+$$
+\begin{pmatrix}
+0&amp;0&amp;c
+\end{pmatrix}\begin{pmatrix}
+1&amp;0&amp;0\\<br>
+0&amp;1&amp;0\\<br>
+\frac{a}{c}&amp;\frac{b}{c}&amp;1
+\end{pmatrix}=\begin{pmatrix}
+a&amp;b&amp;c
+\end{pmatrix}
+$$</p>
+<p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移跟旋转等操作。</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = world * view * projection</p>

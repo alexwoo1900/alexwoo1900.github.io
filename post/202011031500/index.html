@@ -396,7 +396,7 @@ $y = Ax + b$是典型的仿射变换形式。</p>
 <p>
         <img class="mx-auto" alt="二三维原点" src="/image/2d_3d.png" />   
     </p>
-<p>但三维的情况下，$a^{''} = (x, y, z)\ \forall z \neq 0$可以通过$b^{''} = A^{''}a^{''}$平移到$b^{''} = (x + t_x, y + t_y, z)$。
+<p>但三维的情况下，$\exists A^{''}, a^{''} = (x, y, z)\ \forall z \neq 0$可以通过$b^{''} = A^{''}a^{''}$平移到$b^{''} = (x + t_x, y + t_y, z)$。
 $$
 \begin{pmatrix}
 1&amp;0&amp;\frac{t_x}{z}\\<br>
@@ -416,6 +416,21 @@ $$</p>
 <p>
         <img class="mx-auto" alt="错切变换" src="/image/shift.png" />   
     </p>
+<p>$$
+\begin{pmatrix}
+1&amp;0&amp;t_x\\<br>
+0&amp;1&amp;t_y\\<br>
+0&amp;0&amp;1
+\end{pmatrix}\begin{pmatrix}
+x\\<br>
+y\\<br>
+1
+\end{pmatrix}=\begin{pmatrix}
+x + t_x\\<br>
+y + t_y\\<br>
+1
+\end{pmatrix}
+$$</p>
 <p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移跟旋转等操作。</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>

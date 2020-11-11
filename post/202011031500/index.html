@@ -438,7 +438,7 @@ $$</p>
 <p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移、旋转、放缩等操作。</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <h4 id="投影矩阵">投影矩阵</h4>
-<p>transform = world * view * projection</p>
+<p>transform = Model * view * projection</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

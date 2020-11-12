@@ -451,9 +451,8 @@ $$</p>
 <p>而更复杂的摄像机坐标系不外乎是上面两种操作的线性组合而已。总结：<br>
 <strong>摄像机坐标 = 世界坐标 + 世界坐标系到摄像机坐标系的逆变换</strong></p>
 <p>假设4x4的$M_RT$是三维世界坐标系到摄像机坐标系的变换矩阵。<br>
-为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有（这里同样是用左乘的方式）：
-$M_{RT} = M_T M_R$<br>
-**先进行旋转再进行平移**</p>
+为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有（这里同样是用左乘的方式）：$M_{RT} = M_T M_R$</p>
+<p><strong>先进行旋转再进行平移</strong></p>
 <p>根据上面的矩阵推导，可以直接构造出平移矩阵$M_T$：
 $$
 \begin{pmatrix}
@@ -548,9 +547,9 @@ $$</p>
 <p>最后算出视图矩阵：
 $$
 M^{-1}_{RT} = M^{-1}_R M^{-1}_T = \begin{pmatrix}
-xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
-xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
-xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
+xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
+yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
+zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} \begin{pmatrix}
 1&amp;0&amp;0&amp;-eye.x\\<br>
@@ -558,9 +557,9 @@ xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
 0&amp;0&amp;1&amp;-eye.z\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} = \begin{pmatrix}
-xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
-xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
-xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
+xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;-(xaxis \cdot eye)\\<br>
+yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;-(yaxis \cdot eye)\\<br>
+zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>

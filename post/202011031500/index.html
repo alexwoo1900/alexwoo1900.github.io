@@ -514,13 +514,13 @@ $$</p>
 <p>对于旋转矩阵，我们要引入一个重要的性质：
 <strong>旋转矩阵的逆矩阵是其转置矩阵</strong></p>
 <p>这个可以用先前的罗德里格斯公式证明：
-$$</p>
-<p>M_R(\theta) = \begin{bmatrix}
+$$
+M_R(\theta) = \begin{bmatrix}
 1 - 2(k_y \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_y - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_y + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_y \sin \frac{\theta}{2})^2
-\end{bmatrix}</p>
-<p>M^{-1}_R(\theta) = M_R(-\theta) = 1 - 2(k_y \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_y + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y\\<br>
+\end{bmatrix}\\<br>
+M^{-1}_R(\theta) = M_R(-\theta) = 1 - 2(k_y \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_y + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;2 {\sin}^2 \frac{\theta}{2} k_x k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_y - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_z&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_z \sin \frac{\theta}{2})^2&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x\\<br>
 2 {\sin}^2 \frac{\theta}{2} k_x k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_y \sin \frac{\theta}{2})^2
 \end{bmatrix} = M^T_R(\theta)

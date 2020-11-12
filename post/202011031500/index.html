@@ -444,12 +444,65 @@ $$</p>
         <img class="mx-auto" alt="坐标转换" src="/image/camera.png" />   
     </p>
 <p>如图中“仅平移”的例子，世界坐标系中为$(2,2,2)$坐标的点在摄像机坐标为$(1,1,1)$的摄像机坐标系下坐标为$(1,1,1)$。相当于：<br>
-<strong>摄像机坐标 = 世界坐标 + 世界坐标系平移到摄像机坐标系的逆向量</strong></p>
+<strong>摄像机坐标 = 世界坐标 + 世界坐标系平移到摄像机坐标系的逆变换</strong></p>
 <p>而“仅旋转”的例子中，我们对摄像机坐标系作了最大的简化。假定摄像机与世界坐标系的原点重合，摄像机的yaxis与世界坐标系的y坐标重合，仅仅是在zaxis和xaxis上与z轴、x轴有个共同的夹角$\theta$。<br>
 已知object的世界坐标，目标是求object的摄像机坐标，先假设一个virtual object，它是object绕y轴$\theta$角度形成的点，不难看出该点的摄像机坐标和object的世界坐标是一样的。反之，object的摄像机坐标应该是其世界坐标绕y轴$-\theta$角度的结果。同样可以写成：<br>
 <strong>摄像机坐标 = 世界坐标 + 世界坐标系旋转到摄像机坐标系的逆变换</strong></p>
 <p>而更复杂的摄像机坐标系不外乎是上面两种操作的线性组合而已。总结：<br>
 <strong>摄像机坐标 = 世界坐标 + 世界坐标系到摄像机坐标系的逆变换</strong></p>
+<p>假设4x4的$M_RT$是三维世界坐标系到摄像机坐标系的变换矩阵。<br>
+为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有（这里同样是用左乘的方式）：
+$M_{RT} = M_T M_R$
+要注意的是，这种变换是**先进行旋转再进行平移**</p>
+<p>根据上面的矩阵推导，可以直接构造出平移矩阵M_T：
+$$
+\begin{pmatrix}
+1&amp;0&amp;0&amp;eye.x\\<br>
+0&amp;1&amp;0&amp;eye.y\\<br>
+0&amp;0&amp;1&amp;eye.z\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}
+$$</p>
+<p>M_R将世界坐标系的三基向量$(1, 0, 0)$、$(0, 1, 0)$、$(0, 0, 1)$变换成摄像机坐标系的三基向量$(xaxis.x, xaxis.y, xaxis.z)$、$(yaxis.x, yaxis.y, yaxis.z)$、$(zaxis.x, zaxis.y, zaxis.z)$，可以直接写出该旋转矩阵的形式。</p>
+<p>$$
+M_R \begin{pmatrix}
+1&amp;0&amp;0&amp;0\\<br>
+0&amp;1&amp;0&amp;0\\<br>
+0&amp;0&amp;1&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix} = \begin{pmatrix}
+xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
+yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
+zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}\\<br>
+M_R = \begin{pmatrix}
+xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
+yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
+zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}
+$$</p>
+<p>已知世界坐标系到摄像机坐标系的变换，我们的目的是求其逆变换。根据
+$$
+a = Ia = M^{-1} (Ma)
+$$
+可知，求其逆变换就是求原变换矩阵的逆。
+$$
+M^{-1}_{RT} = M^{-1}_R M^{-1}_T
+$$
+逆矩阵的形式是先平移后旋转，这符合我们对于原变换的逆过程的直观想法。</p>
+<p>M^{-1}_T的求逆非常简单</p>
+<p>$$
+$$
+\begin{pmatrix}
+1&amp;0&amp;0&amp;-eye.x\\<br>
+0&amp;1&amp;0&amp;-eye.y\\<br>
+0&amp;0&amp;1&amp;-eye.z\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}
+$$
+$$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>transform = Model * view * projection</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>

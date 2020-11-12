@@ -91,14 +91,15 @@
         
         
         <div class="post-content">
-            <h2 id="windows窗口">Windows窗口</h2>
+            <p>本篇解析日志分为两个部分。第一部分解释mini3d中有关Windows平台程序运行的代码，第二部分剖析计算机图形学中传统光栅化的过程及作一些必要的数学证明。</p>
+<h2 id="windows窗口">Windows窗口</h2>
 <p>编写3D窗口程序通常会遇到三个基本问题：</p>
 <ol>
 <li>如何进行窗口的创建、初始化及销毁</li>
 <li>如何将图像数据传递到指定窗口并被描绘出来</li>
-<li>如何让窗口捕捉并响应特定动作
-我们将以这三个问题作为解读线索，一步步分析mini3d源码的构成以及相关思路。</li>
+<li>如何让窗口捕捉并响应特定动作</li>
 </ol>
+<p>我们将以这三个问题作为解读线索，一步步分析mini3d上Windows窗口相关的代码。</p>
 <h3 id="窗口的创建及销毁">窗口的创建及销毁</h3>
 <p>窗口创建与关闭使用的都是常规的Windows API，创建窗口的过程关注窗口与窗口类，销毁窗口时则着重处理各种句柄。</p>
 <pre><code class="language-cpp">int screen_init(int w, int h, const TCHAR *title) 
@@ -255,6 +256,14 @@ void device_destroy(device_t *device)
         <img class="mx-auto" alt="device内存分配" src="/image/device_malloc.png" />   
     </p>
 <h3 id="摄像机初始化">摄像机初始化</h3>
+<p>摄像机（<em>camera/eye</em>）是一个虚拟出来在三维世界中代表人眼的对象，它的诸多属性共同决定着场景的被可视范围。</p>
+<p>初始化摄像机要做的就是给定摄像机的位置与朝向，然后对应着更新视图矩阵。（有关视图矩阵在下一小节详细分析）</p>
+<pre><code class="language-cpp">void camera_at_zero(device_t *device, float x, float y, float z) {
+	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 0, 1, 1 };
+	matrix_set_lookat(&amp;device-&gt;transform.view, &amp;eye, &amp;at, &amp;up);
+	transform_update(&amp;device-&gt;transform);
+}
+</code></pre>
 <h3 id="光栅化">光栅化</h3>
 <p>讲解各种矩阵的构建之前，先看看代码中应用矩阵的方式：</p>
 <pre><code class="language-cpp">void matrix_apply(vector_t *y, const vector_t *x, const matrix_t *m) {
@@ -564,6 +573,7 @@ zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 \end{pmatrix}
 $$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
+<p>这一节首先要说清楚的是“投影是什么意思，为什么需要投影矩阵？”</p>
 <p>Transform = Model * View * Projection</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,

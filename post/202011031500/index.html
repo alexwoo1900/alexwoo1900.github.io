@@ -452,7 +452,7 @@ $$</p>
 <strong>摄像机坐标 = 世界坐标 + 世界坐标系到摄像机坐标系的逆变换</strong></p>
 <p>假设4x4的$M_RT$是三维世界坐标系到摄像机坐标系的变换矩阵。<br>
 为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有（这里同样是用左乘的方式）：
-$M_{RT} = M_T M_R$
+$M_{RT} = M_T M_R$<br>
 **先进行旋转再进行平移**</p>
 <p>根据上面的矩阵推导，可以直接构造出平移矩阵$M_T$：
 $$
@@ -463,7 +463,8 @@ $$
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>
-<p>$M_R$将世界坐标系的三基向量$(1, 0, 0)$、$(0, 1, 0)$、$(0, 0, 1)$变换成摄像机坐标系的三基向量$(xaxis.x, xaxis.y, xaxis.z)$、$(yaxis.x, yaxis.y, yaxis.z)$、$(zaxis.x, zaxis.y, zaxis.z)$，可以直接写出该旋转矩阵的形式。</p>
+<p>$M_R$将世界坐标系的三基向量$(1, 0, 0)$、$(0, 1, 0)$、$(0, 0, 1)$变换成摄像机坐标系的三基向量$(xaxis.x, xaxis.y, xaxis.z)$、$(yaxis.x, yaxis.y, yaxis.z)$、$(zaxis.x, zaxis.y, zaxis.z)$，可以直接写出该旋转矩阵的形式。<br>
+注意，左乘形式下等式右侧的摄像机坐标系三基向量以列向量呈现。</p>
 <p>$$
 M_R \begin{pmatrix}
 1&amp;0&amp;0&amp;0\\<br>
@@ -471,15 +472,15 @@ M_R \begin{pmatrix}
 0&amp;0&amp;1&amp;0\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} = \begin{pmatrix}
-xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
-yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
-zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
+xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
+xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
+xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}\\<br>
 M_R = \begin{pmatrix}
-xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
-yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
-zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
+xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
+xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
+xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>
@@ -535,9 +536,28 @@ M^{-1}_R (\theta) = M_R (- \theta) = \begin{bmatrix}
 2 {\sin}^2 \frac{\theta}{2} k_x k_z + 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_y&amp;2 {\sin}^2 \frac{\theta}{2} k_y k_z - 2\sin \frac{\theta}{2} \cos \frac{\theta}{2} k_x&amp;1 - 2(k_x \sin \frac{\theta}{2})^2 - 2(k_y \sin \frac{\theta}{2})^2
 \end{bmatrix} = M^T_R (\theta)
 $$</p>
-<p>故旋转矩阵也是数学概念上的正交矩阵。我们可以直接得到结果：</p>
+<p>旋转矩阵是数学概念上的正交矩阵。我们可以直接得到结果：</p>
 <p>$$
 M^{-1}_R = \begin{pmatrix}
+xaxis.x&amp;xaxis.y&amp;xaxis.z&amp;0\\<br>
+yaxis.x&amp;yaxis.y&amp;yaxis.z&amp;0\\<br>
+zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}
+$$</p>
+<p>最后算出视图矩阵：
+$$
+M^{-1}_{RT} = M^{-1}_R M^{-1}_T = \begin{pmatrix}
+xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
+xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
+xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix} \begin{pmatrix}
+1&amp;0&amp;0&amp;-eye.x\\<br>
+0&amp;1&amp;0&amp;-eye.y\\<br>
+0&amp;0&amp;1&amp;-eye.z\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix} = \begin{pmatrix}
 xaxis.x&amp;yaxis.x&amp;zaxis.x&amp;0\\<br>
 xaxis.y&amp;yaxis.y&amp;zaxis.y&amp;0\\<br>
 xaxis.z&amp;yaxis.z&amp;zaxis.z&amp;0\\<br>

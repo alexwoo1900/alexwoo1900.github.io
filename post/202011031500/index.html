@@ -573,14 +573,35 @@ zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 \end{pmatrix}
 $$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
-<p>这一节首先要说清楚的是“投影是什么意思，为什么需要投影矩阵？”</p>
-<p>
+<p>这一节首先要说清楚的是“投影是什么意思？”</p>
+<p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>view volume</em>）。这个视域体可能是不规则的立体形状，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体的空间内。（通过规范视域体，我们能很方便地进行三维到二维的映射，后叙。）</p>
+<p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：
+
         <img class="mx-auto" alt="投影" src="/image/projection.png" />   
-    </p>
-<p>
+    
+对于原始视域体，正交投影采用的是轴对齐盒子，而透视投影采用的则是截棱锥。</p>
+<h5 id="正交投影">正交投影</h5>
+<h5 id="透视投影">透视投影</h5>
+<ol>
+<li>
+<p>为什么使用透视投影？
+人的眼睛类似于透镜，成像时有“近大远小”的特点，小孔成像相当于是透镜成像的简化模型。
+
+        <img class="mx-auto" alt="人眼成像" src="/image/eye.png" />   
+    
+采用透视投影就是模拟人眼成像，当然，<strong>这种模拟存在失真</strong>。</p>
+</li>
+<li>
+<p>为什么截锥状的原始视域体在变换到规范视域体后会在图像中产生“近大远小”的效果？
+
         <img class="mx-auto" alt="透视投影" src="/image/perspective.png" />   
-    </p>
-<p>Transform = Model * View * Projection</p>
+    
+先假设在原始视域体内Z轴坐标为z1、z2处各有一个大小相同的球（X轴坐标不同，为的是错开位置好进行对比）。<br>
+然后分别在z1、z2的位置截取与XY平面平行的的二维图像，再将这两幅图像投射到同一个二维面上。<br>
+可以发现球的图像的确是“近大远小”，原因也很显而易见：<strong>较远处的球所在的可视截面范围更大，投射时缩小的倍率也就更大</strong>。</p>
+</li>
+</ol>
+<p>这里面还存在一个问题：投射的过程中，物体的z轴数据是怎么变化的呢？</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

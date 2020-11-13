@@ -574,6 +574,12 @@ zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 $$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>这一节首先要说清楚的是“投影是什么意思，为什么需要投影矩阵？”</p>
+<p>
+        <img class="mx-auto" alt="投影" src="/image/projection.png" />   
+    </p>
+<p>
+        <img class="mx-auto" alt="透视投影" src="/image/perspective.png" />   
+    </p>
 <p>Transform = Model * View * Projection</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,

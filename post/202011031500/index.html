@@ -574,7 +574,7 @@ zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 $$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>这一节首先要说清楚的是“投影是什么意思？”</p>
-<p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>view volume</em>）。这个视域体可能是不规则的立体形状，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体的空间内。（通过规范视域体，我们能很方便地进行三维到二维的映射，后叙。）</p>
+<p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>view volume</em>）。这个视域体要对着摄像机（Z轴），上下左右尽量对称，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体的空间内。（通过规范视域体，我们能很方便地进行三维到二维的映射，后叙。）</p>
 <p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：
 
         <img class="mx-auto" alt="投影" src="/image/projection.png" />   
@@ -592,7 +592,7 @@ $$</p>
 经过放缩变换后,最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{n}{f-n})$。<br>
 根据先前矩阵的推导方式，我们很容易写出正交投影矩阵：
 $$
-\begin{pmatrix}
+P_O = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
 0&amp;0&amp;\frac{1}{f-n}&amp;-\frac{n}{f-n}\\<br>
@@ -620,6 +620,11 @@ $$</p>
 </li>
 </ol>
 <p>这里面还存在一个问题：投射的过程中，物体的z轴数据是怎么变化的呢？</p>
+<p>下面来推导透视投影矩阵。<br>
+因为我们已经有了正交投影矩阵，如果能找出截锥到立方体的变换矩阵，我们可以用以下公式求出透视投影矩阵：
+$$
+P_P = P_O M_{frustum \rightarrow cuboid}
+$$</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

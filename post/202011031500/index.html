@@ -444,7 +444,8 @@ y + t_y\\<br>
 \end{pmatrix}
 $$</p>
 <p>所以我们可以通过一个升维映射、一个高维的线性变换、一个降维映射来完成低维度的仿射变换。</p>
-<p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移、旋转、放缩等操作。</p>
+<p>那意味着所有的仿射变换我们都可以通过$y = Ax$这种形式进行，A这个模型矩阵可以同时完成平移、旋转、放缩等操作，只是计算规模比原来增加了一个维度。<br>
+后叙的三维点计算中，默认存在升降维映射，在表达中，$(x, y, z)$与$(x, y, z, 1)$都代表空间坐标系中的一个点。</p>
 <h4 id="视图矩阵">视图矩阵</h4>
 <p>视图矩阵用于将世界坐标系内的点数据转换成摄像机坐标系内的点数据，因为最终的成像是从摄像机的视角出发的，这样有利于图形计算。</p>
 <p>对于摄像机坐标系，我们可以把它看作是一个世界坐标系经过旋转和平移之后的产物。对于世界坐标系上的点在摄像机坐标系中怎么表示，我们不好直接分析。<br>
@@ -800,7 +801,7 @@ $$</p>
 	if (transform_check_cvv(&amp;c2) != 0) return;
 	if (transform_check_cvv(&amp;c3) != 0) return;
 
-	// 归一化后的点数据存为p1、p2、p3
+	// 归一化后作视口变换，最终的点存为p1、p2、p3
 	transform_homogenize(&amp;device-&gt;transform, &amp;p1, &amp;c1);
 	transform_homogenize(&amp;device-&gt;transform, &amp;p2, &amp;c2);
 	transform_homogenize(&amp;device-&gt;transform, &amp;p3, &amp;c3);
@@ -833,13 +834,51 @@ $$</p>
 </ol>
 <h4 id="应用矩阵变换">应用矩阵变换</h4>
 <p>常规地对点向量右乘MVP矩阵，将其转换到合适的位置。</p>
+<h4 id="cvv裁剪">CVV裁剪</h4>
+<p>这一步检查的是三角形是否超出我们的规范视域体，保留范围内的三角形数据。<br>
+具体要求$0 &lt; \frac{z}{w} &lt; 1, -1 &lt; \frac{x}{w} &lt; 1, -1 &lt; \frac{y}{w} &lt; 1$。</p>
+<pre><code class="language-cpp">int transform_check_cvv(const vector_t *v) {
+	float w = v-&gt;w;
+	int check = 0;
+	if (v-&gt;z &lt; 0.0f) check |= 1;
+	if (v-&gt;z &gt;  w) check |= 2;
+	if (v-&gt;x &lt; -w) check |= 4;
+	if (v-&gt;x &gt;  w) check |= 8;
+	if (v-&gt;y &lt; -w) check |= 16;
+	if (v-&gt;y &gt;  w) check |= 32;
+	return check;
+}
+</code></pre>
 <h4 id="坐标归一化">坐标归一化</h4>
 <p>归一化（<em>nomalize/homogenize</em>）是指以下转换过程：
 $$
 \{x^{'}, y^{'}, z^{'}, w^{'} \neq 1\} \rightarrow \{\frac{x^{'}}{w^{'}}, \frac{y^{'}}{w^{'}}, \frac{z^{'}}{w^{'}}, 1\}
 $$
 通常地，分量w=1的齐次坐标进行完仿射变换后是不需要做归一化操作的，因为仿射变换并不改变齐次坐标的w分量。
-但如果该齐次坐标还经过了透视投影的过程，其w分量将会被改变。</p>
+<strong>但如果该齐次坐标还经过了透视投影的过程，其w分量将会被改变。</strong><br>
+只有w分量为1的齐次坐标我们才能直接降维使用。</p>
+<p>PS. 如果说x、y、z代表的是宽、高、深三个空间维度，那w代表的是前三个维度的倍率。透视变换会让w与z轴数值等同起来，w的数值与z的数值成正比，同“截锥视域体中z值大的截面面积也大”的直观感受相吻合。</p>
+<h4 id="视口变换">视口变换</h4>
+<p>对于z轴数据我们先不处理，等到后面具体的画线阶段我们再来作深度判断。<br>
+这一步骤主要是对三角形顶点的xy坐标根据显示区域的大小作特定伸缩。
+<strong>注意，在伸缩前需要从世界坐标系转换到屏幕坐标系。</strong></p>
+<p>
+        <img class="mx-auto" alt="视口变换" src="/image/viewpoint.png" />   
+    </p>
+<p>$$
+\begin{pmatrix}
+x\\<br>
+y\\<br>
+z\\<br>
+1
+\end{pmatrix} \rightarrow \begin{pmatrix}
+(x + 1) \ast \frac{screen_width}{2} \\<br>
+(1 - y) \ast \frac{screen_height}{2}\\<br>
+z\\<br>
+1
+\end{pmatrix}
+$$</p>
+<p>最后我们得到了需要在显示区域上呈现的三角形的顶点数据。</p>
 <h3 id="预处理三角形数据">预处理三角形数据</h3>
 <p>为了更好地应用扫描线算法，我们必须把三角形处理成底边平行于x轴的三角形集合，“是否分割原三角形”、“左右边的点选取”这些因素将普通三角形区分为四种不同的情况。</p>
 <p>先看这部分的代码及注释：</p>

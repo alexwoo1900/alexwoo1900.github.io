@@ -144,6 +144,9 @@ int screen_close(void)
 mini3d通过framebuffer指向的空间来存储图像数据，这要求在程序的某个地方必须建立起framebuffer到窗口的联系。</p>
 <pre><code class="language-cpp">int screen_init(int w, int h, const TCHAR *title) 
 {
+	// bcHeight为负，表示从上往下存储图像，采用32位颜色像素
+	BITMAPINFO bi = { { sizeof(BITMAPINFOHEADER), w, -h, 1, 32, BI_RGB,
+		w * h * 4, 0, 0, 0, 0 } };
 	// 创建位图内存区域（ptr指向），并返DIB句柄（screen_hb）
 	screen_hb = CreateDIBSection(screen_dc, &amp;bi, DIB_RGB_COLORS, &amp;ptr, 0, 0);
 	if (screen_hb == NULL) return -3;
@@ -1018,6 +1021,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
 	for (; w &gt; 0; x++, w--) {
 		if (x &gt;= 0 &amp;&amp; x &lt; width) {
 			float rhw = scanline-&gt;v.rhw;
+			// rhw与z成反比，rhw越大，z越小，离摄像机越近
 			if (rhw &gt;= zbuffer[x]) {
 				float w = 1.0f / rhw;
 				zbuffer[x] = rhw;
@@ -1032,6 +1036,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
 					R = CMID(R, 0, 255);
 					G = CMID(G, 0, 255);
 					B = CMID(B, 0, 255);
+					// 32位DIB，bitCompression为BI_RGB时，四个字节分别为0、Red、Green、Blue
 					framebuffer[x] = (R &lt;&lt; 16) | (G &lt;&lt; 8) | (B);
 				}
 				if (render_state &amp; RENDER_STATE_TEXTURE) {

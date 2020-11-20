@@ -619,12 +619,113 @@ $$</p>
 可以发现球的图像的确是“近大远小”，原因也很显而易见：<strong>较远处的球所在的可视截面范围更大，投射时缩小的倍率也就更大</strong>。</p>
 </li>
 </ol>
-<p>这里面还存在一个问题：投射的过程中，物体的z轴数据是怎么变化的呢？</p>
 <p>下面来推导透视投影矩阵。<br>
 因为我们已经有了正交投影矩阵，如果能找出截锥到立方体的变换矩阵，我们可以用以下公式求出透视投影矩阵：
 $$
 P_P = P_O M_{frustum \rightarrow cuboid}
 $$</p>
+<p>重点在于推导$M_{frustum \rightarrow cuboid}$</p>
+<p>
+        <img class="mx-auto" alt="透视转正交" src="/image/persp2ortho.png" />   
+    </p>
+<p>如上图，我们取原始视域体内的一个截面，观察截面内的点在应用$M_{frustum \rightarrow cuboid}$前后是怎么变化的。
+我们很容易得到以下结论：</p>
+<ol>
+<li>截面在X轴、Y轴这两个方向上只做伸缩，遵循相似三角形原理变换到与近平面同样大小的矩形上。</li>
+<li>截面在Z轴的变化未知，它可能不规则地向Z轴负方向内凹，或者向Z轴正方向外凸。</li>
+</ol>
+<p>具体地，我们取两组观察点，分别为以下两种情况：
+
+        <img class="mx-auto" alt="观察点" src="/image/checkpoint.png" />   
+    </p>
+<p>对于左边的情况。<br>
+我们先在z截面取一边缘点$(x, y, z)$，经过矩阵变换后为$(x^{'}, y^{'}, z^{'})$，根据相似三角形原理$x^{'} = \frac{nx}{z}$，$y^{'} = \frac{ny}{z}$， $z^{'} = unknown$。有：
+$$
+M_{frustum \rightarrow cuboid} \begin{pmatrix}
+x\\<br>
+y\\<br>
+z\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+\frac{nx}{z}\\<br>
+\frac{ny}{z}\\<br>
+unknown\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+nx\\<br>
+ny\\<br>
+unknown\\<br>
+z
+\end{pmatrix}
+$$</p>
+<p>根据之前地矩阵推导经验，我们可以构造出$M_{frustum \rightarrow cuboid}$的大概轮廓：
+$$
+M_{frustum \rightarrow cuboid} = \begin{pmatrix}
+n&amp;0&amp;0&amp;0\\<br>
+0&amp;n&amp;0&amp;0\\<br>
+a&amp;b&amp;c&amp;d\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix}
+$$</p>
+<p>对于右边的情况。<br>
+我们先在近平面选择任一点$(x_n, y_n, n)$，经过矩阵变换后该点不变。有：
+$$
+\begin{pmatrix}
+n&amp;0&amp;0&amp;0\\<br>
+0&amp;n&amp;0&amp;0\\<br>
+a&amp;b&amp;c&amp;d\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix} \begin{pmatrix}
+x_n\\<br>
+y_n\\<br>
+n\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+x_n\\<br>
+y_n\\<br>
+n\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+n \cdot x_n\\<br>
+n \cdot y_n\\<br>
+n^2\\<br>
+n
+\end{pmatrix}
+$$
+可知$ax_n + by_n + cn + d = n^2$，从而得$a = b = 0, cn + d = n^2$</p>
+<p>我们再在远平面取任一点$(x_f, y_f, f)$，经过矩阵变换后该点变为$(x^{'}_f, y^{'}_f, f)$。有：
+$$
+\begin{pmatrix}
+n&amp;0&amp;0&amp;0\\<br>
+0&amp;n&amp;0&amp;0\\<br>
+0&amp;0&amp;c&amp;d\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix} \begin{pmatrix}
+x_f\\<br>
+y_f\\<br>
+f\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+x^{'}_f\\<br>
+y^{'}_f\\<br>
+f\\<br>
+1
+\end{pmatrix} = \begin{pmatrix}
+f \cdot x^{'}_f\\<br>
+f \cdot y^{'}_f\\<br>
+f^2\\<br>
+f
+\end{pmatrix}
+$$
+显然$cf + d = f^2$</p>
+<p>解方程组：
+$$
+\begin{cases}
+cn + d = n^2\\<br>
+cf + d = f^2
+\end{cases}
+$$
+得到$c = n + f, d = -nf$</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

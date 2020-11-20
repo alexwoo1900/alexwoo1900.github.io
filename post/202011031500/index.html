@@ -599,6 +599,15 @@ P_O = \begin{pmatrix}
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>
+<p>由于我们采用的视域体是关于轴平面对称的，可以对以上矩阵进行简化：
+$$
+P_O = \begin{pmatrix}
+\frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
+0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
+0&amp;0&amp;\frac{1}{f-n}&amp;-\frac{n}{f-n}\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix}
+$$</p>
 <h5 id="透视投影">透视投影</h5>
 <ol>
 <li>
@@ -726,6 +735,36 @@ cf + d = f^2
 \end{cases}
 $$
 得到$c = n + f, d = -nf$</p>
+<p>综上所述：
+$$
+M_{frustum \rightarrow cuboid} = \begin{pmatrix}
+n&amp;0&amp;0&amp;0\\<br>
+0&amp;n&amp;0&amp;0\\<br>
+0&amp;0&amp;n+f&amp;-nf\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix}
+$$</p>
+<p>我们可以计算出最终的透视矩阵。
+$$
+P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
+\frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
+0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
+0&amp;0&amp;\frac{1}{f-n}&amp;-\frac{n}{f-n}\\<br>
+0&amp;0&amp;0&amp;1
+\end{pmatrix} \begin{pmatrix}
+n&amp;0&amp;0&amp;0\\<br>
+0&amp;n&amp;0&amp;0\\<br>
+0&amp;0&amp;n+f&amp;-nf\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix} = \begin{pmatrix}
+\frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
+0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
+0&amp;0&amp;\frac{f}{f-n}&amp;-\frac{-nf}{f-n}\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix}
+$$</p>
+<p>这似乎已经完了，但是对于截锥视域体，我们通常不能直接拿到近平面的角点，尽管长宽数据更容易做透视矩阵的计算，但它们却不那么容易设置。
+我们所需要做的是采用一些更容易设置的参数作为输入，然后在内部计算出近平面的长宽，进而推导出最终矩阵。</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

@@ -763,8 +763,23 @@ n&amp;0&amp;0&amp;0\\<br>
 0&amp;0&amp;1&amp;0
 \end{pmatrix}
 $$</p>
-<p>这似乎已经完了，但是对于截锥视域体，我们通常不能直接拿到近平面的角点，尽管长宽数据更容易做透视矩阵的计算，但它们却不那么容易设置。
+<p>这似乎已经完了，但是对于截锥视域体，我们通常不能直接拿到近平面的角点，尽管长宽数据更容易做透视矩阵的计算，但它们却不那么容易设置。<br>
 我们所需要做的是采用一些更容易设置的参数作为输入，然后在内部计算出近平面的长宽，进而推导出最终矩阵。</p>
+<p>通常，我们采用的是视场角（<em>fov</em>）和平面宽高比（<em>aspect</em>）作为我们的推导输入。视场角可以理解为眼球上下转动的范围，平面宽高比就是远近平面的宽和高的比值。</p>
+<p>如上图所示，有关系：
+$$
+\tan \frac{fov}{2} = \frac{height}{2n}\\<br>
+aspect = \frac{width}{height}
+$$</p>
+<p>将$width$和$height$分别代换$r-l$和$t-b$，关于fov和aspect的透视矩阵为：
+$$
+\begin{pmatrix}
+\frac{1}{aspect \cdot \tan \frac{fov}{2}}&amp;0&amp;0&amp;0\\<br>
+0&amp;\frac{1}{\tan \frac{fov}{2}}&amp;0&amp;0\\<br>
+0&amp;0&amp;\frac{f}{f-n}&amp;-\frac{-nf}{f-n}\\<br>
+0&amp;0&amp;1&amp;0
+\end{pmatrix}
+$$</p>
 <h3 id="准备三角形数据">准备三角形数据</h3>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {

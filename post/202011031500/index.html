@@ -267,17 +267,19 @@ void device_destroy(device_t *device)
 	transform_update(&amp;device-&gt;transform);
 }
 </code></pre>
+<h3 id="数学推导约定">数学推导约定</h3>
+<p>正篇涉及的图形推导均按照Direct3D（下称D3D）的标准进行，即：</p>
+<ol>
+<li>使用左手坐标系（LHS）。</li>
+<li>规范视域体的范围从$(-1, -1, 0)$到$(1, 1, 1)$。</li>
+</ol>
+<p>附录涉及的图形推导则按照OpenGL的标准进行，即：</p>
+<ol>
+<li>使用右手坐标系（RHS）</li>
+<li>规范视域体的范围从$(-1, -1, -1)$到$(1, 1, 1)$</li>
+</ol>
+<p>为了更符合数理学科的习惯，关于矩阵计算的部分或证明均采用左乘方式进行（向量左乘矩阵），对照程序时将结论的矩阵进行<strong>转置</strong>即可。</p>
 <h3 id="推导mvp矩阵">推导MVP矩阵</h3>
-<p>讲解各种矩阵的构建之前，先看看代码中应用矩阵的方式：</p>
-<pre><code class="language-cpp">void matrix_apply(vector_t *y, const vector_t *x, const matrix_t *m) {
-	float X = x-&gt;x, Y = x-&gt;y, Z = x-&gt;z, W = x-&gt;w;
-	y-&gt;x = X * m-&gt;m[0][0] + Y * m-&gt;m[1][0] + Z * m-&gt;m[2][0] + W * m-&gt;m[3][0];
-	y-&gt;y = X * m-&gt;m[0][1] + Y * m-&gt;m[1][1] + Z * m-&gt;m[2][1] + W * m-&gt;m[3][1];
-	y-&gt;z = X * m-&gt;m[0][2] + Y * m-&gt;m[1][2] + Z * m-&gt;m[2][2] + W * m-&gt;m[3][2];
-	y-&gt;w = X * m-&gt;m[0][3] + Y * m-&gt;m[1][3] + Z * m-&gt;m[2][3] + W * m-&gt;m[3][3];
-}
-</code></pre>
-<p>程序采用了右乘的方式，但为了更符合数理学科的习惯，我们以下的证明均采用左乘证明，对照程序时将结论的矩阵进行<strong>转置</strong>即可。</p>
 <h4 id="模型矩阵">模型矩阵</h4>
 <p>模型矩阵（<em>Model Matrix</em>）用于做针对于模型的平移、旋转、镜像、缩放等操作。</p>
 <h5 id="旋转矩阵">旋转矩阵</h5>
@@ -464,7 +466,7 @@ $$</p>
 <p>而更复杂的摄像机坐标系不外乎是上面两种操作的线性组合而已。总结：<br>
 <strong>摄像机坐标 = 世界坐标 + 世界坐标系到摄像机坐标系的逆变换</strong></p>
 <p>假设4x4的$M_RT$是三维世界坐标系到摄像机坐标系的变换矩阵。<br>
-为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有（这里同样是用左乘的方式）：$M_{RT} = M_T M_R$</p>
+为了方便推导，我们把变换矩阵分解成平移矩阵$M_T$和旋转矩阵$M_R$有$M_{RT} = M_T M_R$</p>
 <p><strong>先进行旋转再进行平移</strong></p>
 <p>根据上面的矩阵推导，可以直接构造出平移矩阵$M_T$：
 $$
@@ -578,7 +580,9 @@ zaxis.x&amp;zaxis.y&amp;zaxis.z&amp;-(zaxis \cdot eye)\\<br>
 $$</p>
 <h4 id="投影矩阵">投影矩阵</h4>
 <p>这一节首先要说清楚的是“投影是什么意思？”</p>
-<p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>View Volume</em>）。这个视域体要对着摄像机（Z轴），上下左右尽量对称，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体（Canonical View Volume，CVV）的空间内。（通过规范视域体，我们能很方便地进行三维到二维的映射，后叙。）</p>
+<p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>View Volume</em>）。<br>
+这个视域体要对着摄像机（Z轴），上下左右尽量对称，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体（Canonical View Volume，CVV）的空间内。<br>
+这个规范视域体使用的是规范设备坐标系（Normalized Device Coordinates，NDC），它同样是一个<strong>左手坐标系</strong>。</p>
 <p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：
 
         <img class="mx-auto" alt="投影" src="/image/projection.png" />   
@@ -587,8 +591,7 @@ $$</p>
 <h5 id="正交投影">正交投影</h5>
 <p>轴对齐盒子下的场景转换到规范视域体内意味着正交投影只是对原场景中的点做仿射变换（伸缩、平移）而已。正交投影非常适合用于“鸟瞰图”、“固定视角固定场景的小游戏”等项目。</p>
 <p>接下来要构造负责正交投影这种变换的矩阵。<br>
-规范视域体与程序使用的图形API有关，Windows下我们遵从D3D的标准，即一个$(-1, -1, 0)$到$(1, 1, 1)$的方形区域。<br>
-另外，我们设原始视域体为$(l, b, n)$到$(r, t, f)$的盒子。
+我们设原始视域体为$(l, b, n)$到$(r, t, f)$的盒子。
 
         <img class="mx-auto" alt="正交投影" src="/image/ortho_projection.png" />   
     </p>
@@ -1117,186 +1120,27 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
 <li>求dx/dy可以转化成求(dy + dy + &hellip; + dy) = dx这个等式里dy的累加次数。</li>
 <li>下一次计算x坐标的移动值之前要舍弃使用过的累加值dx。</li>
 </ol>
-<h2 id="附推导opengl下的透视矩阵">附：推导OpenGL下的透视矩阵</h2>
-<p>OpenGL采用的规范视域体是$(-1, -1, -1)$到$(1, 1, 1)$的盒子。</p>
+<h2 id="附录推导opengl下的透视矩阵">附录：推导OpenGL下的透视矩阵</h2>
 <p>同样先推导正交矩阵。</p>
 <p>
         <img class="mx-auto" alt="OpenGL正交投影" src="/image/opengl_ortho.png" />   
-    </p>
+    
+<strong>通常我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong></p>
 <p>已知原始视域体X轴方向需要放缩$\frac{2}{r-l}$，Y轴方向需要放缩$\frac{2}{t-b}$，Z轴方向需要放缩$\frac{2}{f-n}$以调整成规范视域体大小。<br>
-经过放缩变换后,最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$。<br>
-根据先前矩阵的推导方式，我们直接写出正交投影矩阵：
-$$
-P_O = \begin{pmatrix}
-\frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
-0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
-0&amp;0&amp;0&amp;1
-\end{pmatrix}
-$$</p>
-<p>因为截锥视域体到盒子的变换过程不涉及规范视域体，所以$M_{frustum \rightarrow cuboid}$的推导过程不变。
-$$
-M_{frustum \rightarrow cuboid} = \begin{pmatrix}
-n&amp;0&amp;0&amp;0\\<br>
-0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;n+f&amp;-nf\\<br>
-0&amp;0&amp;1&amp;0
-\end{pmatrix}
-$$</p>
-<p>进而计算出最终透视矩阵。
-$$
-P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
-\frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
-0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
-0&amp;0&amp;0&amp;1
-\end{pmatrix} \begin{pmatrix}
-n&amp;0&amp;0&amp;0\\<br>
-0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;n+f&amp;-nf\\<br>
-0&amp;0&amp;1&amp;0
-\end{pmatrix} = \begin{pmatrix}
-\frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
-0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{f+n}{f-n}&amp;-\frac{2nf}{f-n}\\<br>
-0&amp;0&amp;1&amp;0
-\end{pmatrix}
-$$</p>
-<p>以上的推导都是基于代码中的摄像机设置，摄像机总是看向Z轴正方向。如果摄像机看向Z轴负方向呢？</p>
-<p>已知视域体的X轴、Y轴数据并没有变化。</p>
-<ol>
-<li><strong>假如我们为构造投影矩阵输入的参数是代表坐标的负数f与n</strong></li>
-</ol>
-<p>Z轴数据满足$f &lt; n, f &lt; 0, n &lt; 0$，视域体的深度从$f - n$变成了$-(f - n)$。其target点坐标仍为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, -\frac{f+n}{f-n})$<br>
+经过放缩变换后，<strong>我们还需要将视域体从OpenGL的右手坐标系转换到NDC下的左手坐标系中</strong>，需要对视域体作一个关于XY平面的镜像翻转处理
+最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$。</p>
+<p>Z轴数据满足$-f &lt; -n, -f &lt; 0, -n &lt; 0$，视域体的深度还是$f - n$。其target点坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$<br>
 我们可以直接写出其正交矩阵：
 $$
 P_O = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
-0&amp;0&amp;-\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
-0&amp;0&amp;0&amp;1
-\end{pmatrix}
-$$</p>
-<p>在我们使用相似三角形原理推导矩阵的时候，用到的深度z值和近平面深度n是正数，在这里z、n均为负数。
-$$
-M_{frustum \rightarrow cuboid} \begin{pmatrix}
-x\\<br>
-y\\<br>
-z\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
-\frac{-nx}{-z}\\<br>
-\frac{-ny}{-z}\\<br>
-unknown\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
--nx\\<br>
--ny\\<br>
-unknown\\<br>
--z
-\end{pmatrix}
-$$</p>
-<p>得到含未知数的矩阵后，同样地，我们从观察点得到：
-$$
-\begin{pmatrix}
--n&amp;0&amp;0&amp;0\\<br>
-0&amp;-n&amp;0&amp;0\\<br>
-a&amp;b&amp;c&amp;d\\<br>
-0&amp;0&amp;-1&amp;0
-\end{pmatrix} \begin{pmatrix}
-x_n\\<br>
-y_n\\<br>
-n\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
-x_n\\<br>
-y_n\\<br>
-n\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
--n \cdot x_n\\<br>
--n \cdot y_n\\<br>
--n^2\\<br>
--n
-\end{pmatrix}\\<br>
-\begin{pmatrix}
--n&amp;0&amp;0&amp;0\\<br>
-0&amp;-n&amp;0&amp;0\\<br>
-0&amp;0&amp;c&amp;d\\<br>
-0&amp;0&amp;-1&amp;0
-\end{pmatrix} \begin{pmatrix}
-x_f\\<br>
-y_f\\<br>
-f\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
-x^{'}_f\\<br>
-y^{'}_f\\<br>
-f\\<br>
-1
-\end{pmatrix} = \begin{pmatrix}
--f \cdot x^{'}_f\\<br>
--f \cdot y^{'}_f\\<br>
--f^2\\<br>
--f
-\end{pmatrix}
-$$</p>
-<p>解方程组：
-$$
-\begin{cases}
-cn + d = -n^2\\<br>
-cf + d = -f^2
-\end{cases}
-$$
-得到$c = -(f+n), d = fn$</p>
-<p>进而构造出$M_{frustum \rightarrow cuboid}$：
-$$
-M_{frustum \rightarrow cuboid} = \begin{pmatrix}
--n&amp;0&amp;0&amp;0\\<br>
-0&amp;-n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(f+n)&amp;fn\\<br>
-0&amp;0&amp;-1&amp;0
-\end{pmatrix}
-$$</p>
-<p>最终的透视矩阵：
-$$
-P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
-\frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
-0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
-0&amp;0&amp;0&amp;1
-\end{pmatrix} \begin{pmatrix}
--n&amp;0&amp;0&amp;0\\<br>
-0&amp;-n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(n+f)&amp;nf\\<br>
-0&amp;0&amp;-1&amp;0
-\end{pmatrix} = \begin{pmatrix}
--\frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
-0&amp;-\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{f+n}{f-n}&amp;-\frac{2fn}{f-n}\\<br>
-0&amp;0&amp;-1&amp;0
-\end{pmatrix}
-$$</p>
-<ol start="2">
-<li><strong>假如我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong></li>
-</ol>
-<p>Z轴数据满足$-f &lt; -n, -f &lt; 0, -n &lt; 0$，视域体的深度还是$f - n$。其target点坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, -\frac{f+n}{f-n})$<br>
-我们可以直接写出其正交矩阵：
-$$
-P_O = \begin{pmatrix}
-\frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
-0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
-0&amp;0&amp;0&amp;1
-\end{pmatrix} = \begin{pmatrix}
-\frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
-0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-frac{2}{f-n}&amp;-frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>
@@ -1386,17 +1230,17 @@ $$
 P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} \begin{pmatrix}
 n&amp;0&amp;0&amp;0\\<br>
 0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(f+n)&amp;nf\\<br>
+0&amp;0&amp;-(f+n)&amp;fn\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix} = \begin{pmatrix}
 \frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{3(f+n)}{f-n}&amp;\frac{2fn}{f-n}\\<br>
+0&amp;0&amp;\frac{3(f+n)}{f-n}&amp;\frac{2fn}{f-n}\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>

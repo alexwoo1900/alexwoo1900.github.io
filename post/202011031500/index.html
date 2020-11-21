@@ -1127,7 +1127,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
     
 <strong>通常我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong></p>
 <p>已知原始视域体X轴方向需要放缩$\frac{2}{r-l}$，Y轴方向需要放缩$\frac{2}{t-b}$，Z轴方向需要放缩$\frac{2}{f-n}$以调整成规范视域体大小。<br>
-经过放缩变换后，<strong>我们还需要将视域体从OpenGL的右手坐标系转换到NDC下的左手坐标系中</strong>，需要对视域体作一个关于XY平面的镜像翻转处理
+经过放缩变换后，<strong>我们还需要将视域体从OpenGL的右手坐标系转换到NDC下的左手坐标系中</strong>，需要对视域体作一个关于XY平面的镜像翻转处理，Z轴数据取反。
 最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$。</p>
 <p>Z轴数据满足$-f &lt; -n, -f &lt; 0, -n &lt; 0$，视域体的深度还是$f - n$。其target点坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$<br>
 我们可以直接写出其正交矩阵：
@@ -1140,7 +1140,7 @@ P_O = \begin{pmatrix}
 \end{pmatrix} = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-frac{2}{f-n}&amp;-frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</p>
@@ -1173,18 +1173,18 @@ a&amp;b&amp;c&amp;d\\<br>
 \end{pmatrix} \begin{pmatrix}
 x_n\\<br>
 y_n\\<br>
-n\\<br>
+-n\\<br>
 1
 \end{pmatrix} = \begin{pmatrix}
 x_n\\<br>
 y_n\\<br>
-n\\<br>
+-n\\<br>
 1
 \end{pmatrix} = \begin{pmatrix}
--n \cdot x_n\\<br>
--n \cdot y_n\\<br>
+n \cdot x_n\\<br>
+n \cdot y_n\\<br>
 -n^2\\<br>
--n
+n
 \end{pmatrix}\\<br>
 \begin{pmatrix}
 n&amp;0&amp;0&amp;0\\<br>
@@ -1194,34 +1194,34 @@ n&amp;0&amp;0&amp;0\\<br>
 \end{pmatrix} \begin{pmatrix}
 x_f\\<br>
 y_f\\<br>
-f\\<br>
+-f\\<br>
 1
 \end{pmatrix} = \begin{pmatrix}
 x^{'}_f\\<br>
 y^{'}_f\\<br>
-f\\<br>
+-f\\<br>
 1
 \end{pmatrix} = \begin{pmatrix}
--f \cdot x^{'}_f\\<br>
--f \cdot y^{'}_f\\<br>
+f \cdot x^{'}_f\\<br>
+f \cdot y^{'}_f\\<br>
 -f^2\\<br>
--f
+f
 \end{pmatrix}
 $$</p>
 <p>解方程组：
 $$
 \begin{cases}
-cn + d = -n^2\\<br>
-cf + d = -f^2
+-cn + d = -n^2\\<br>
+-cf + d = -f^2
 \end{cases}
 $$
-得到$c = -(f+n), d = fn$</p>
+得到$c = f+n, d = fn$</p>
 <p>进而构造出$M_{frustum \rightarrow cuboid}$：
 $$
 M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 n&amp;0&amp;0&amp;0\\<br>
 0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(f+n)&amp;fn\\<br>
+0&amp;0&amp;f+n&amp;fn\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>
@@ -1235,12 +1235,12 @@ P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 \end{pmatrix} \begin{pmatrix}
 n&amp;0&amp;0&amp;0\\<br>
 0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(f+n)&amp;fn\\<br>
+0&amp;0&amp;f+n&amp;fn\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix} = \begin{pmatrix}
 \frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{3(f+n)}{f-n}&amp;\frac{2fn}{f-n}\\<br>
+0&amp;0&amp;-\frac{f+n}{f-n}&amp;\frac{2fn}{f-n}\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>

@@ -583,6 +583,9 @@ $$</p>
 <p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>View Volume</em>）。<br>
 这个视域体要对着摄像机（Z轴），上下左右尽量对称，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体（Canonical View Volume，CVV）的空间内。<br>
 这个规范视域体使用的是规范设备坐标系（Normalized Device Coordinates，NDC），它同样是一个<strong>左手坐标系</strong>。</p>
+<p>
+        <img class="mx-auto" alt="NDC" src="/image/NDC.png" />   
+    </p>
 <p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：
 
         <img class="mx-auto" alt="投影" src="/image/projection.png" />   
@@ -1240,7 +1243,7 @@ n&amp;0&amp;0&amp;0\\<br>
 \end{pmatrix} = \begin{pmatrix}
 \frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{f+n}{f-n}&amp;\frac{2fn}{f-n}\\<br>
+0&amp;0&amp;-\frac{f+n}{f-n}&amp;-\frac{2fn}{f-n}\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>

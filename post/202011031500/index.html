@@ -1165,14 +1165,14 @@ $$</p>
 <p>以上的推导都是基于代码中的摄像机设置，摄像机总是看向Z轴正方向。如果摄像机看向Z轴负方向呢？</p>
 <p>已知视域体的X轴、Y轴数据并没有变化。</p>
 <ol>
-<li><strong>假如我们为构造投影矩阵输入的参数是代表坐标的负数f与n</strong>
-Z轴数据满足$f &lt; n, f &lt; 0, n &lt; 0$，视域体的深度从$f - n$变成了$-(f - n)$。其target点坐标仍为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$<br>
+<li><strong>假如我们为构造投影矩阵输入的参数是代表坐标的负数f与n</strong><br>
+Z轴数据满足$f &lt; n, f &lt; 0, n &lt; 0$，视域体的深度从$f - n$变成了$-(f - n)$。其target点坐标仍为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, -\frac{f+n}{f-n})$<br>
 我们可以直接写出其正交矩阵：
 $$
 P_O = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
-0&amp;0&amp;-\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</li>
@@ -1263,7 +1263,7 @@ $$
 P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;-\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} \begin{pmatrix}
 -n&amp;0&amp;0&amp;0\\<br>
@@ -1273,19 +1273,19 @@ P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 \end{pmatrix} = \begin{pmatrix}
 -\frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;-\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{3(f+n)}{f-n}&amp;-\frac{2fn}{f-n}\\<br>
+0&amp;0&amp;\frac{f+n}{f-n}&amp;-\frac{2fn}{f-n}\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>
 <ol start="2">
-<li><strong>假如我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong>
-Z轴数据满足$-f &lt; -n, -f &lt; 0, -n &lt; 0$，视域体的深度还是$f - n$。其target点坐标仍为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$<br>
+<li><strong>假如我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong><br>
+Z轴数据满足$-f &lt; -n, -f &lt; 0, -n &lt; 0$，视域体的深度还是$f - n$。其target点坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, -\frac{f+n}{f-n})$<br>
 我们可以直接写出其正交矩阵：
 $$
 P_O = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;-\frac{t+b}{t-b}\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix}
 $$</li>
@@ -1376,17 +1376,17 @@ $$
 P_P = P_O M_{frustum \rightarrow cuboid} = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;\frac{2}{f-n}&amp;-\frac{f+n}{f-n}\\<br>
+0&amp;0&amp;\frac{2}{f-n}&amp;\frac{f+n}{f-n}\\<br>
 0&amp;0&amp;0&amp;1
 \end{pmatrix} \begin{pmatrix}
 n&amp;0&amp;0&amp;0\\<br>
 0&amp;n&amp;0&amp;0\\<br>
-0&amp;0&amp;-(n+f)&amp;nf\\<br>
+0&amp;0&amp;-(f+n)&amp;nf\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix} = \begin{pmatrix}
 \frac{2n}{r-l}&amp;0&amp;0&amp;0\\<br>
 0&amp;\frac{2n}{t-b}&amp;0&amp;0\\<br>
-0&amp;0&amp;-\frac{f+n}{f-n}&amp;\frac{2fn}{f-n}\\<br>
+0&amp;0&amp;-\frac{3(f+n)}{f-n}&amp;\frac{2fn}{f-n}\\<br>
 0&amp;0&amp;-1&amp;0
 \end{pmatrix}
 $$</p>

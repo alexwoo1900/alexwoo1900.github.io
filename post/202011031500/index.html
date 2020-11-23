@@ -1133,7 +1133,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
     
 <strong>通常我们为构造投影矩阵输入的参数是代表距离的正数f与n</strong></p>
 <p>已知原始视域体X轴方向需要放缩$\frac{2}{r-l}$，Y轴方向需要放缩$\frac{2}{t-b}$，Z轴方向需要放缩$\frac{2}{f-n}$以调整成规范视域体大小。<br>
-经过放缩变换后，我们还需要<!-- raw HTML omitted -->将视域体从OpenGL的右手坐标系转换到NDC下的左手坐标系中<!-- raw HTML omitted -->，即对视域体作一个关于XY平面的镜像翻转处理，Z轴数据取反。
+经过放缩变换后，我们还需要$\color{red}{将视域体从OpenGL的右手坐标系转换到NDC下的左手坐标系中}，即对视域体作一个关于XY平面的镜像翻转处理，Z轴数据取反。
 最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{f+n}{f-n})$。</p>
 <p>我们可以直接写出其正交矩阵：
 $$

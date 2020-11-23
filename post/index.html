@@ -76,6 +76,24 @@
     <article class="post">
         <header>
             <h1 class="post-title">
+                <a href="https://alexwoo1900.github.io/post/202011231012/" title="矩阵计算工具">矩阵计算工具</a>
+            </h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年11月23日
+        </date>
+        
+        <div class="post-content">
+            向量叉乘转矩阵乘向量 已知$\vec a = (a_x, a_y, a_z), \vec b = (b_x, b_y, b_z), \exists A, \vec a \times \vec b = A \vec b$，求$A$。 设$i$，$j$，$k$为坐标系下的三个基向量。 $$ \vec a \times \vec b = \begin{vmatrix} i&amp;j&amp;k\\ a_x&amp;a_y&amp;a_z\\ b_x&amp;b_y&amp;b_z \end{vmatrix} = \begin{bmatrix} (a_y b_z - a_z b_y)i\\ (a_z b_x - a_x b_z)j\\ (a_x b_y - a_z b_x)k \end{bmatrix} = \begin{bmatrix} a_y b_z - a_z b_y\\ a_z b_x - a_x b_z\\ a_x b_y - a_z b_x \end{bmatrix} = \begin{bmatrix} 0&amp;-a_z&amp;a_y\\ a_z&amp;0&amp;-a_x\\ -a_z&amp;a_x&amp;0 \end{bmatrix} \begin{bmatrix} b_x\\ b_y\\ b_z \end{bmatrix} $$ 即 $$ A = \begin{bmatrix} 0&amp;-a_z&amp;a_y\\ a_z&amp;0&amp;-a_x\\ -a_z&amp;a_x&amp;0 \end{bmatrix} $$……
+        </div>
+        <p class="readmore"><a href="https://alexwoo1900.github.io/post/202011231012/">阅读全文</a></p>
+    </article>
+    
+    
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">
                 <a href="https://alexwoo1900.github.io/post/202011031500/" title="解读传统光栅化 - mini3d代码全剖析">解读传统光栅化 - mini3d代码全剖析</a>
             </h1>
         </header>
@@ -177,6 +195,10 @@
     <section class="widget">
         <h3 class="widget-title">最近文章</h3>
 <ul class="widget-list">
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202011231012/" title="矩阵计算工具">矩阵计算工具</a>
+    </li>
     
     <li>
         <a href="https://alexwoo1900.github.io/post/202011031500/" title="解读传统光栅化 - mini3d代码全剖析">解读传统光栅化 - mini3d代码全剖析</a>

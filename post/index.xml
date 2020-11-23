@@ -8,12 +8,12 @@
     <language>zh-CN</language>
     <lastBuildDate>Tue, 03 Nov 2020 15:00:27 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>解析mini3d</title>
+      <title>解读传统光栅化 - mini3d代码全剖析</title>
       <link>https://alexwoo1900.github.io/post/202011031500/</link>
       <pubDate>Tue, 03 Nov 2020 15:00:27 +0800</pubDate>
       
       <guid>https://alexwoo1900.github.io/post/202011031500/</guid>
-      <description>本篇解析日志分为两个部分。第一部分解释mini3d中有关Windows平台程序运行的代码，第二部分剖析计算机图形学中传统光栅化的过程及作一些必要的数学证明。 Windows窗口 编写3D窗口程序通常会遇到三个基本问题： 如何进行窗口的创建、初始化及销毁 如何将图像数据传递到指定窗口并被描</description>
+      <description>本篇博文分为两部分。 第一部分解释mini3d中有关Windows平台程序运行的代码。 第二部分剖析计算机图形学中传统光栅化的过程及作一些必要的数学证明。 Windows窗口 编写3D窗口程序通常会遇到三个基本问题： 如何进行窗口的创建、初始化及销毁 如何让窗口捕捉并响应特定动作 如何将图像数</description>
     </item>
     
     <item>

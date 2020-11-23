@@ -586,10 +586,7 @@ $$</p>
 <p>就像在拍电影的时候，导演在摄像机前需要决定什么场景能进入镜头，什么场景不能进入镜头。在三维成像过程中，我们也要设定一个可视区域，这个区域通常被称为视域体（<em>View Volume</em>）。<br>
 这个视域体要对着摄像机（Z轴），上下左右尽量对称，为了方便地在矩形显示设备上呈现，我们必须先将视域体内的点数据变换到一个被称为规范视域体（Canonical View Volume，CVV）的空间内。</p>
 <p>
-        <img class="mx-auto" alt="D3D_CVV" src="/image/D3D_CVV.png" />   
-    
-
-        <img class="mx-auto" alt="OpenGL_CVV" src="/image/OpenGL_CVV.png" />   
+        <img class="mx-auto" alt="D3D_OpenGL_CVV" src="/image/D3D_OpenGL_CVV.png" />   
     </p>
 <p>这个规范视域体使用的是规范设备坐标系（Normalized Device Coordinates，NDC），它同样是一个<strong>左手坐标系</strong>。</p>
 <p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：

@@ -591,7 +591,10 @@ $$</p>
 <p>这个规范视域体使用的是规范设备坐标系（Normalized Device Coordinates，NDC），它同样是一个<strong>左手坐标系</strong>。</p>
 <p>所谓的正交投影（<em>Orthographic Projection</em>）和透视投影（<em>Perspective Projection</em>）就是不同的视域体到规范视域体的变换：
 
-        <img class="mx-auto" alt="投影" src="/image/projection.png" />   
+        <img class="mx-auto" alt="正交投影" src="/image/D3D_Orthographic_projection.png" />   
+    
+
+        <img class="mx-auto" alt="透视投影" src="/image/D3D_Perspective_projection.png" />   
     
 对于原始视域体，正交投影采用的是轴对齐盒子，而透视投影采用的则是截棱锥。</p>
 <h5 id="正交投影">正交投影</h5>
@@ -599,7 +602,7 @@ $$</p>
 <p>接下来要构造负责正交投影这种变换的矩阵。<br>
 我们设原始视域体为$(l, b, n)$到$(r, t, f)$的盒子。
 
-        <img class="mx-auto" alt="正交投影" src="/image/ortho_projection.png" />   
+        <img class="mx-auto" alt="正交投影" src="/image/D3D_Orthographic_projection.png" />   
     </p>
 <p>已知原始视域体X轴方向需要放缩$\frac{2}{r-l}$，Y轴方向需要放缩$\frac{2}{t-b}$，Z轴方向需要放缩$\frac{1}{f-n}$以调整成规范视域体大小。<br>
 经过放缩变换后,最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{n}{f-n})$。<br>

@@ -606,7 +606,10 @@ $$</p>
     </p>
 <p>已知原始视域体X轴方向需要放缩$\frac{2}{r-l}$，Y轴方向需要放缩$\frac{2}{t-b}$，Z轴方向需要放缩$\frac{1}{f-n}$以调整成规范视域体大小。<br>
 经过放缩变换后,最终要移动至原点的target的坐标为$(\frac{r+l}{r-l}, \frac{t+b}{t-b}, \frac{n}{f-n})$。<br>
-根据先前矩阵的推导方式，我们很容易写出正交投影矩阵：
+
+        <img class="mx-auto" alt="正交投影" src="/image/D3D_Ortho3.png" />   
+    </p>
+<p>根据先前矩阵的推导方式，我们很容易写出正交投影矩阵：
 $$
 P_O = \begin{pmatrix}
 \frac{2}{r-l}&amp;0&amp;0&amp;-\frac{r+l}{r-l}\\<br>
@@ -651,7 +654,7 @@ P_P = P_O M_{frustum \rightarrow cuboid}
 $$</p>
 <p>重点在于推导$M_{frustum \rightarrow cuboid}$</p>
 <p>
-        <img class="mx-auto" alt="透视转正交" src="/image/persp2ortho.png" />   
+        <img class="mx-auto" alt="透视转正交" src="/image/D3D_Persp4.png" />   
     </p>
 <p>如上图，我们取原始视域体内的一个截面，观察截面内的点在应用$M_{frustum \rightarrow cuboid}$前后是怎么变化的。
 我们很容易得到以下结论：</p>

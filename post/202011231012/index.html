@@ -92,6 +92,7 @@
         
         <div class="post-content">
             <h2 id="向量叉乘转矩阵乘向量">向量叉乘转矩阵乘向量</h2>
+<p>向量间的叉乘可以通过矩阵乘向量的形式表达出来，这一技巧常用于向量计算的化简。</p>
 <p>已知$\vec a = (a_x, a_y, a_z), \vec b = (b_x, b_y, b_z), \exists A, \vec a \times \vec b = A \vec b$，求$A$。</p>
 <p>设$i$，$j$，$k$为坐标系下的三个基向量。
 $$
@@ -126,7 +127,10 @@ a_z&amp;0&amp;-a_x\\<br>
 \end{bmatrix}
 $$</p>
 <h2 id="矩阵lu分解">矩阵LU分解</h2>
-<p>下面给出证明：
+<p>对于非奇异矩阵（<em>Nonsingular Matrix</em>），一个求逆矩阵的方法是LU分解。即：<br>
+对于一个非奇异矩阵$A$，将其分解成一个下三角矩阵$L$和一个上三角矩阵$U$的乘积（$A = L U$）。
+需要$A$的逆时可以通过求解$L$和$U$的逆得到（$A^{-1} = U^{-1} L^{-1}$）。</p>
+<p>下面给出矩阵LU分解的步骤：
 $$
 A = \begin{bmatrix}
 x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
@@ -183,12 +187,12 @@ L_1 = \begin{bmatrix}
 0&amp;-\frac{x^{'}_{31}}{x^{'}_{11}}&amp;0&amp;1
 \end{bmatrix}
 $$</p>
-<p>根据经验，我们可以计算出$L_{n-1} \cdots L_1 L_0 A = U, n = rank(A)$中的任意$L_x$。</p>
+<p>一直把这个步骤进行下去最终可以得到上三角矩阵$U$，同时也可以计算出$L_{n-2} \cdots L_1 L_0 A = U, n = rank(A)$中的任意$L_x$。</p>
 <p>$$
 \because A = LU\\<br>
-\therefore L = L^{-1}_0 L^{-1}_1 \cdots L^{-1}_{n-1}
+\therefore L = L^{-1}_0 L^{-1}_1 \cdots L^{-1}_{n-2}
 $$</p>
-<p>接下来是想要快速求解$L^{-1}_x$的逆，以$L_0$为例：
+<p>为了得到$L$，我们接下来是想要快速求解$L^{-1}_x$的逆，以$L_0$为例：
 $$
 \left[
 \begin{array}{cccc|cccc}
@@ -213,6 +217,47 @@ L^{-1}_0 = \begin{pmatrix}
 \frac{x_{20}}{x_{00}}&amp;0&amp;1&amp;0\\<br>
 \frac{x_{30}}{x_{00}}&amp;0&amp;0&amp;1
 \end{pmatrix}
+$$</p>
+<p>这在直觉上是很容易理解的，如果说$L_0$是对$A$做基于行的初等变换，那$L^{-1}_0$也是对$A$做基于行的初等变换，且这个变换与$L_0$产生的效果是相反的。
+根据这一点，我们可以直接写出所有的$L^{-1}_x$，将它们相乘即可得到$L$。</p>
+<h2 id="矩阵lup分解">矩阵LUP分解</h2>
+<p>看了上面的LU分解很容易产生疑问：如果$x_{00}, x^{'}_{11} \cdots$这类元素的数值为0怎么办？<br>
+那在做左乘$L_x$之前，我们需要对矩阵进行一些行置换（*Pivoting*）操作，将别的行上的一些非零元换过来。</p>
+<p>假设我们有准备左乘$L_1$的非奇异矩阵$A$：
+$$
+A = \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;0&amp;x_{12}&amp;x_{13}\\<br>
+0&amp;x_{21}&amp;x_{22}&amp;x_{23}\\<br>
+0&amp;x_{31}&amp;x_{32}&amp;x_{33}
+\end{bmatrix}
+$$</p>
+<p>我们先在第二列选择一个最大的元素（这里假设是$x_{21}$），将其所在的行与第二行作置换。我们设这个置换矩阵为$P$，它也是一个初等变换矩阵。有：
+$$
+P A = P \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;0&amp;x_{12}&amp;x_{13}\\<br>
+0&amp;x_{21}&amp;x_{22}&amp;x_{23}\\<br>
+0&amp;x_{31}&amp;x_{32}&amp;x_{33}
+\end{bmatrix} = \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;x_{21}&amp;x_{22}&amp;x_{23}\\<br>
+0&amp;0&amp;x_{12}&amp;x_{13}\\<br>
+0&amp;x_{31}&amp;x_{32}&amp;x_{33}
+\end{bmatrix}
+$$</p>
+<p>我们根据LU分解中的矩阵推导，很容写出置换矩阵$P$：
+$$
+P = {bmatrix}
+1&amp;0&amp;0&amp;0\\<br>
+0&amp;0&amp;1&amp;0\\<br>
+0&amp;1&amp;0&amp;0\\<br>
+0&amp;0&amp;0&amp;1
+\end{bmatrix}
+$$</p>
+<p>按这种方式，我们可以把所有$P_x$都求解出来。结合LU分解中的结论，有：
+$$
+L_{n-2} P_{n-2} \cdots L_1 P_1 L_0 P_0 A = U
 $$</p>
 
         </div>

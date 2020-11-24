@@ -82,7 +82,7 @@
         </date>
         
         <div class="post-content">
-            向量叉乘转矩阵乘向量 已知$\vec a = (a_x, a_y, a_z), \vec b = (b_x, b_y, b_z), \exists A, \vec a \times \vec b = A \vec b$，求$A$。 设$i$，$j$，$k$为坐标系下的三个基向量。 $$ \vec a \times \vec b = \begin{vmatrix} i&amp;j&amp;k\\ a_x&amp;a_y&amp;a_z\\ b_x&amp;b_y&amp;b_z \end{vmatrix} = \begin{bmatrix} (a_y b_z - a_z b_y)i\\ (a_z b_x - a_x b_z)j\\ (a_x b_y - a_z b_x)k \end{bmatrix} = \begin{bmatrix} a_y b_z - a_z b_y\\ a_z b_x - a_x b_z\\ a_x b_y - a_z b_x \end{bmatrix} = \begin{bmatrix} 0&amp;-a_z&amp;a_y\\ a_z&amp;0&amp;-a_x\\ -a_z&amp;a_x&amp;0 \end{bmatrix} \begin{bmatrix} b_x\\ b_y\\ b_z \end{bmatrix} $$ 即 $$ A = \begin{bmatrix} 0&amp;-a_z&amp;a_y\\ a_z&amp;0&amp;-a_x\\ -a_z&amp;a_x&amp;0 \end{bmatrix} $$……
+            向量叉乘转矩阵乘向量 向量间的叉乘可以通过矩阵乘向量的形式表达出来，这一技巧常用于向量计算的化简。 已知$\vec a = (a_x, a_y, a_z), \vec b = (b_x, b_y, b_z), \exists A, \vec a \times \vec b = A \vec b$，求$A$。 设$i$，$j$，$k$为坐标系下的三个基向量。 $$ \vec a \times \vec b = \begin{vmatrix} i&amp;j&amp;k\\ a_x&amp;a_y&amp;a_z\\ b_x&amp;b_y&amp;b_z \end{vmatrix} = \begin{bmatrix} (a_y b_z - a_z b_y)i\\ (a_z b_x - a_x b_z)j\\ (a_x b_y - a_z b_x)k \end{bmatrix} = \begin{bmatrix}……
         </div>
         <p class="readmore"><a href="https://alexwoo1900.github.io/post/202011231012/">阅读全文</a></p>
     </article>

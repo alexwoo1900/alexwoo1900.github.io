@@ -1027,6 +1027,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
         <img class="mx-auto" alt="计算扫描线" src="/image/scanline.png" />   
     </p>
 <h3 id="绘制扫描线">绘制扫描线</h3>
+<p>在需要描绘的线段对应的缓冲区中填入颜色数据。</p>
 <p>这一步骤会利用到视口变换时所忽略的点数据中的z分量。<br>
 在使用左手坐标系的D3D中，对于在原点的摄像机，视域体中的点数据z分量越小，离镜头越近。<br>
 近端的物体会遮蔽拥有相同XY轴坐标的远端物体。</p>

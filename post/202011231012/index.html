@@ -125,6 +125,64 @@ a_z&amp;0&amp;-a_x\\<br>
 -a_z&amp;a_x&amp;0
 \end{bmatrix}
 $$</p>
+<h2 id="lu分解求逆矩阵">LU分解求逆矩阵</h2>
+<p>下面给出证明：
+$$
+A = \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+x_{10}&amp;x_{11}&amp;x_{12}&amp;x_{13}\\<br>
+x_{20}&amp;x_{21}&amp;x_{22}&amp;x_{23}\\<br>
+x_{30}&amp;x_{31}&amp;x_{32}&amp;x_{33}
+\end{bmatrix}\\<br>
+\exists L_0, L_0 A = \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;x^{'}_{11}&amp;x^{'}_{12}&amp;x^{'}_{13}\\<br>
+0&amp;x^{'}_{21}&amp;x^{'}_{22}&amp;x^{'}_{23}\\<br>
+0&amp;x^{'}_{31}&amp;x^{'}_{32}&amp;x^{'}_{33}
+\end{bmatrix}\\<br>
+L_0 = ?
+$$</p>
+<p>根据高斯消元法（<em>Gaussian Elimination</em>），我们可以构造：
+$$
+\begin{cases}
+x_{10} + (-\frac{x_{10}}{x_{00}}) \cdot x_{00} = 0
+x_{20} + (-\frac{x_{20}}{x_{00}}) \cdot x_{00} = 0
+x_{30} + (-\frac{x_{30}}{x_{00}}) \cdot x_{00} = 0
+\end{cases}
+$$</p>
+<p>不难看出：
+$$
+L_0 = \begin{bmatrix}
+1&amp;0&amp;0&amp;0\\<br>
+-\frac{x_{10}}{x_{00}}&amp;1&amp;0&amp;0\\<br>
+-\frac{x_{20}}{x_{00}}&amp;0&amp;1&amp;0\\<br>
+-\frac{x_{30}}{x_{00}}&amp;0&amp;0&amp;1
+\end{bmatrix}
+$$</p>
+<p>我们接着处理$L_0 A$这个新的矩阵
+$$
+\exists L_1, L_1 L_0 A = L_1 \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;x^{'}_{11}&amp;x^{'}_{12}&amp;x^{'}_{13}\\<br>
+0&amp;x^{'}_{21}&amp;x^{'}_{22}&amp;x^{'}_{23}\\<br>
+0&amp;x^{'}_{31}&amp;x^{'}_{32}&amp;x^{'}_{33}
+\end{bmatrix} = \begin{bmatrix}
+x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
+0&amp;x^{'}_{11}&amp;x^{'}_{12}&amp;x^{'}_{13}\\<br>
+0&amp;0&amp;x^{''}_{22}&amp;x^{''}_{23}\\<br>
+0&amp;0&amp;x^{''}_{32}&amp;x^{''}_{33}
+\end{bmatrix}\\<br>
+L_1 = ?
+$$</p>
+<p>同理可得：
+$$
+L_1 = \begin{bmatrix}
+1&amp;0&amp;0&amp;0\\<br>
+0&amp;1&amp;0&amp;0\\<br>
+0&amp;-\frac{x^{'}<em>{21}}{x^{'}</em>{11}}&amp;1&amp;0\\<br>
+0&amp;-\frac{x^{'}<em>{31}}{x^{'}</em>{11}}&amp;0&amp;1
+\end{bmatrix}
+$$</p>
 
         </div>
 

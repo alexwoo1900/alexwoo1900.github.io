@@ -1027,6 +1027,9 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
         <img class="mx-auto" alt="计算扫描线" src="/image/scanline.png" />   
     </p>
 <h3 id="绘制扫描线">绘制扫描线</h3>
+<p>这一步骤会利用到视口变换时所忽略的点数据中的z分量。<br>
+在使用左手坐标系的D3D中，对于在原点的摄像机，视域体中的点数据z分量越小，离镜头越近。<br>
+近端的物体会遮蔽拥有相同XY轴坐标的远端物体。</p>
 <pre><code class="language-cpp">void device_draw_scanline(device_t *device, scanline_t *scanline) {
 	IUINT32 *framebuffer = device-&gt;framebuffer[scanline-&gt;y];
 	float *zbuffer = device-&gt;zbuffer[scanline-&gt;y];
@@ -1037,7 +1040,7 @@ void trapezoid_init_scan_line(const trapezoid_t *trap, scanline_t *scanline, int
 	for (; w &gt; 0; x++, w--) {
 		if (x &gt;= 0 &amp;&amp; x &lt; width) {
 			float rhw = scanline-&gt;v.rhw;
-			// rhw与z成反比，rhw越大，z越小，离摄像机越近
+			// rhw与z成反比，rhw越大，z越小
 			if (rhw &gt;= zbuffer[x]) {
 				float w = 1.0f / rhw;
 				zbuffer[x] = rhw;

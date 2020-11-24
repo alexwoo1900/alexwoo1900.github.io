@@ -133,14 +133,15 @@ x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
 x_{10}&amp;x_{11}&amp;x_{12}&amp;x_{13}\\<br>
 x_{20}&amp;x_{21}&amp;x_{22}&amp;x_{23}\\<br>
 x_{30}&amp;x_{31}&amp;x_{32}&amp;x_{33}
-\end{bmatrix}\\<br>
+\end{bmatrix}
+$$
+$$
 \exists L_0, L_0 A = \begin{bmatrix}
 x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
 0&amp;x^{'}_{11}&amp;x^{'}_{12}&amp;x^{'}_{13}\\<br>
 0&amp;x^{'}_{21}&amp;x^{'}_{22}&amp;x^{'}_{23}\\<br>
 0&amp;x^{'}_{31}&amp;x^{'}_{32}&amp;x^{'}_{33}
-\end{bmatrix}\\<br>
-L_0 = ?
+\end{bmatrix}
 $$</p>
 <p>根据高斯消元法（<em>Gaussian Elimination</em>），我们可以构造：
 $$
@@ -171,10 +172,9 @@ x_{00}&amp;x_{01}&amp;x_{02}&amp;x_{03}\\<br>
 0&amp;x^{'}_{11}&amp;x^{'}_{12}&amp;x^{'}_{13}\\<br>
 0&amp;0&amp;x^{''}_{22}&amp;x^{''}_{23}\\<br>
 0&amp;0&amp;x^{''}_{32}&amp;x^{''}_{33}
-\end{bmatrix}\\<br>
-L_1 = ?
+\end{bmatrix}
 $$</p>
-<p>同理可得：
+<p>那么同理可得：
 $$
 L_1 = \begin{bmatrix}
 1&amp;0&amp;0&amp;0\\<br>
@@ -185,7 +185,7 @@ L_1 = \begin{bmatrix}
 $$</p>
 <p>根据经验，我们可以计算出所有的L，使得$L_{n-1} \cdots L_1 L_0 A = U, n = rank(A)$</p>
 <p>$$
-\because A = LU
+\because A = LU\\<br>
 \therefore L = L^{-1}_0 L^{-1}_1 \cdots L^{-1}_{n-1}
 $$</p>
 

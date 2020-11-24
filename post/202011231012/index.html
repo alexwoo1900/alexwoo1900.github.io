@@ -183,12 +183,12 @@ L_1 = \begin{bmatrix}
 0&amp;-\frac{x^{'}_{31}}{x^{'}_{11}}&amp;0&amp;1
 \end{bmatrix}
 $$</p>
-<p>根据经验，我们可以计算出$L_{n-1} \cdots L_1 L_0 A = U, n = rank(A)$中的任意L_x。</p>
+<p>根据经验，我们可以计算出$L_{n-1} \cdots L_1 L_0 A = U, n = rank(A)$中的任意$L_x$。</p>
 <p>$$
 \because A = LU\\<br>
 \therefore L = L^{-1}_0 L^{-1}_1 \cdots L^{-1}_{n-1}
 $$</p>
-<p>接下来是想要快速求解$L^{-1}<em>x$的逆，以$L_0$为例：
+<p>接下来是想要快速求解$L^{-1}_x$的逆，以$L_0$为例：
 $$
 \left[
 \begin{array}{cccc|cccc}
@@ -207,9 +207,9 @@ $$
 \right]\\<br>
 $$
 $$
-L^{-1}<em>0 = \begin{pmatrix}
+L^{-1}_0 = \begin{pmatrix}
 1&amp;0&amp;0&amp;0\\<br>
-\frac{x</em>{10}}{x</em>{00}}&amp;1&amp;0&amp;0\\<br>
+\frac{x_{10}}{x_{00}}&amp;1&amp;0&amp;0\\<br>
 \frac{x_{20}}{x_{00}}&amp;0&amp;1&amp;0\\<br>
 \frac{x_{30}}{x_{00}}&amp;0&amp;0&amp;1
 \end{pmatrix}

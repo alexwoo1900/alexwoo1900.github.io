@@ -94,12 +94,12 @@
             <blockquote>
 <p>「月圆之夜，紫禁之巅，一剑西来，天外飞仙」&ndash;Thomas Bayes</p>
 </blockquote>
-<p>紫禁之巅，白云城主叶孤城约战</p>
-<p>宫门外地观众分成两派，一派是频率主义（<em>Frequentism</em>）者，一派是贝叶斯主义（<em>Bayesianism</em>）者。
-对于谁胜谁负的预测，频率主义者信奉参考对战双方过往交手的战绩，并认为“决战场地是定在皇宫内还是野外”这类条件并不会影响最终结果。
+<p>紫禁之巅，白云城主叶孤城约战。</p>
+<p>宫门外地观众分成两派，一派是频率主义（<em>Frequentism</em>）者，一派是贝叶斯主义（<em>Bayesianism</em>）者。<br>
+对于谁胜谁负的预测，频率主义者信奉参考对战双方过往交手的战绩，并认为“决战场地是定在皇宫内还是野外”这类条件并不会影响最终结果。<br>
 而贝叶斯主义者则凭借自己对于双方的认识作为推测基础，有的人印象流地认为叶孤城的武功更高，加上西门吹雪也曾说自己无法破解叶的“天外飞仙”，很自然地就押宝在白云城主身上。</p>
 <p>“过往交手”或者“个人印象”中的“叶孤城胜率”属于先验概率（<em>Prior probability</em>），只不过前者属于客观先验概率（<em>Objective prior probability</em>），后者是主观先验概率（<em>Personal prior probability</em>）。这次紫禁之巅“叶孤城胜率”则属于后验概率（<em>Posterior probability</em>）。</p>
-<p>在观众的眼里有自己的“叶孤城胜率”的推测方式，那存不存在“叶孤城获胜”这个事件的客观概率呢？
+<p>在观众的眼里有自己的“叶孤城胜率”的推测方式，那存不存在“叶孤城获胜”这个事件的客观概率呢？<br>
 如果西门与叶可以交手无数场并被记录下来，通过控制变量法我们也许可以拟出一条包含武功、兵器、场地等无数变量的胜率函数。尽管它可能存在，但因为时间与空间成本，我们不可能真正地把它求解出来。现实中大多数问题也是如此，完全客观的概率仅存在于理论当中。</p>
 <p>既然客观概率不可得，那我们先把“叶孤城能否获胜”这个抽象事件简化成“西门吹雪能否防住天外飞仙”，这样更容易利用主观概率工具来进行胜率分析。</p>
 <p>作为常年看两大高手在江湖厮杀的吃瓜群众，我们早已熟知两人的剑术风格：</p>
@@ -108,31 +108,31 @@ $P(xi_def) = 0.98$</p>
 <p>而“天外飞仙”作为叶孤城的必杀（<em>ultimate skill</em>），有一招制敌的效果，他本人对此十分自信，不惧守势。<br>
 但释放过后会元气大伤，所以也并不会轻易使用。必杀出手概率为1%。
 $$
-P(ye_ult | def) = P(ye_ult) = 0.01
+P(ye_{ult} | xi_{def}) = P(ye_{ult}) = 0.01
 $$</p>
 <p>根据贝叶斯公式：
 $$
-P(xi_def | ye_ult) = \frac{P(xi_def, ye_ult)}{P(ye_ult)} = \frac{P(ye_ult | xi_def) P(xi_def)}{P(ye_ult)} = 0.98
+P(xi_{def} | ye_{ult}) = \frac{P(xi_{def}, ye_{ult})}{P(ye_{ult})} = \frac{P(ye_{ult} | xi_{def}) P(xi_{def})}{P(ye_{ult})} = 0.98
 $$
 可以得出结论，叶孤城如果对于自己的“天外飞仙”过于自负，被西门吹雪防住的概率会非常地高。反之，如果叶出招谨慎，降低$P(ye_ult | xi_def)$，那胜利地天平将向他倾斜。</p>
-<p>事实上，叶孤城不是莽夫。他不可能明知西门吹雪有高格挡率还在他进行格挡的时候直接使用“天外飞仙”，通常$P(ye_ult | def) &lt; P(ye_ult)$。
+<p>事实上，叶孤城不是莽夫。他不可能明知西门吹雪有高格挡率还在他进行格挡的时候直接使用“天外飞仙”，通常$P(ye_ult | def) &lt; P(ye_ult)$。<br>
 我们稍稍地细化一下两位高手的设定，使我们的预测变得更加合理：</p>
 <p>西门吹雪剑术精湛，出手极快，三分守七分攻。
 $$
-P(xi_atk) = 0.7\\<br>
-P(xi_def) = 0.25\\<br>
-P(xi_stk) = 0.05\\<br>
-P(xi_def_ok) = 0.98
+P(xi_{atk}) = 0.7\\<br>
+P(xi_{def}) = 0.25\\<br>
+P(xi_{stk}) = 0.05\\<br>
+P(xi_{defok}) = 0.98
 $$</p>
 <p>叶孤城只会在西门吹雪“硬直”的时候才比较可能使用“天外飞仙”
 $$
-P(ye_ult | xi_stk) = 0.85
-P(ye_ult | xi_def) = 0.1
-P(ye_ult | xi_atk) = 0.05
+P(ye_{ult} | xi_{stk}) = 0.85
+P(ye_{ult} | xi_{def}) = 0.1
+P(ye_{ult} | xi_{atk}) = 0.05
 $$</p>
 <p>根据贝叶斯公式：
 $$
-P(xi_def | ye_ult) P(xi_def_ok) = \frac{P(xi_def, ye_ult)}{P(ye_ult)} = \frac{P(ye_ult | xi_def) P(xi_def)}{P(ye_ult | xi_stk) P(xi_stk) + P(ye_ult | xi_def) P(xi_def) + P(ye_ult | xi_atk) P(xi_atk)} P(xi_def_ok) = 24%
+P(xi_{def} | ye_{ult}) P(xi_{defok}) = \frac{P(xi_{def}, ye_{ult})}{P(ye_{ult})} = \frac{P(ye_{ult} | xi_{def}) P(xi_{def})}{P(ye_{ult} | xi_{stk}) P(xi_{stk}) + P(ye_{ult} | xi_{def}) P(xi_{def}) + P(ye_{ult} | xi_{atk}) P(xi_{atk})} P(xi_{defok}) = 24%
 $$
 这个提升了“战斗智商”的叶孤城似乎有着不错的胜率。</p>
 <p>不过这个设定还是不切实际，它只考虑到了叶孤城对西门吹雪的杀伤性，并没有包含西门吹雪对叶孤城的攻击。</p>

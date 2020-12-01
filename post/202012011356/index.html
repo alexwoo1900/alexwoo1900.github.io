@@ -108,31 +108,31 @@ $P(X_{def}) = 0.98$</p>
 <p>而“天外飞仙”作为叶孤城的必杀（<em>ultimate skill</em>），有一招制敌的效果，他本人对此十分自信，不惧守势。<br>
 但释放过后会元气大伤，所以也并不会轻易使用。必杀出手概率为1%。
 $$
-P(ye_{ult} | xi_{def}) = P(ye_{ult}) = 0.01
+P(Y_{ult} | X_{def}) = P(Y_{ult}) = 0.01
 $$</p>
 <p>根据贝叶斯公式：
 $$
-P(xi_{def} | ye_{ult}) = \frac{P(xi_{def}, ye_{ult})}{P(ye_{ult})} = \frac{P(ye_{ult} | xi_{def}) P(xi_{def})}{P(ye_{ult})} = 0.98
+P(X_{def} | Y_{ult}) = \frac{P(X_{def}, Y_{ult})}{P(Y_{ult})} = \frac{P(Y_{ult} | X_{def}) P(X_{def})}{P(Y_{ult})} = 0.98
 $$
 可以得出结论，叶孤城如果对于自己的“天外飞仙”过于自负，被西门吹雪防住的概率会非常地高。反之，如果叶出招谨慎，降低$P(ye_ult | xi_def)$，那胜利地天平将向他倾斜。</p>
-<p>事实上，叶孤城不是莽夫。他不可能明知西门吹雪有高格挡率还在他进行格挡的时候直接使用“天外飞仙”，通常$P(ye_ult | def) &lt; P(ye_ult)$。<br>
+<p>事实上，我们使用的设定过于粗糙。叶孤城不是莽夫，他不可能明知西门吹雪进行格挡还直接使用“天外飞仙”，通常$P(Y_{ult} | X_{def}) &lt; P(Y_{ult})$。<br>
 我们稍稍地细化一下两位高手的设定，使我们的预测变得更加合理：</p>
 <p>西门吹雪剑术精湛，出手极快，三分守七分攻。
 $$
-P(xi_{atk}) = 0.7\\<br>
-P(xi_{def}) = 0.25\\<br>
-P(xi_{stk}) = 0.05\\<br>
-P(xi_{defok}) = 0.98
+P(X_{atk}) = 0.7\\<br>
+P(X_{def}) = 0.25\\<br>
+P(X_{stk}) = 0.05\\<br>
+P(X_{defok}) = 0.98
 $$</p>
 <p>叶孤城只会在西门吹雪“硬直”的时候才比较可能使用“天外飞仙”
 $$
-P(ye_{ult} | xi_{stk}) = 0.85
-P(ye_{ult} | xi_{def}) = 0.1
-P(ye_{ult} | xi_{atk}) = 0.05
+P(Y_{ult} | X_{stk}) = 0.85
+P(Y_{ult} | X_{def}) = 0.1
+P(Y_{ult} | X_{atk}) = 0.05
 $$</p>
 <p>根据贝叶斯公式：
 $$
-P(xi_{def} | ye_{ult}) P(xi_{defok}) = \frac{P(xi_{def}, ye_{ult})}{P(ye_{ult})} = \frac{P(ye_{ult} | xi_{def}) P(xi_{def})}{P(ye_{ult} | xi_{stk}) P(xi_{stk}) + P(ye_{ult} | xi_{def}) P(xi_{def}) + P(ye_{ult} | xi_{atk}) P(xi_{atk})} P(xi_{defok}) = 24%
+P(X_{def} | Y_{ult}) P(X_{defok}) = \frac{P(X_{def}, Y_{ult})}{P(Y_{ult})} = \frac{P(Y_{ult} | X_{def}) P(X_{def})}{P(Y_{ult} | X_{stk}) P(X_{stk}) + P(Y_{ult} | X_{def}) P(X_{def}) + P(Y_{ult} | X_{atk}) P(X_{atk})} P(X_{defok}) = 24%
 $$
 这个提升了“战斗智商”的叶孤城似乎有着不错的胜率。</p>
 <p>不过这个设定还是不切实际，它只考虑到了叶孤城对西门吹雪的杀伤性，并没有包含西门吹雪对叶孤城的攻击。</p>

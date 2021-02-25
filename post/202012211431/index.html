@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>Direct3D 11高级教程之DXUT篇（八） | 绣湖小屋</title>
+    <meta property="og:title" content="Direct3D 11高级教程之DXUT篇（八） - 绣湖小屋">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-12-21T14:31:37&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-12-21T14:31:37&#43;08:00'>
+        
+    <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
+    <meta name="description" content="Direct3D 11高级教程之DXUT篇（八）">
+        
+    <meta name="author" content="Alex Woo">
+    <meta property="og:url" content="https://alexwoo1900.github.io/post/202012211431/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <link rel="stylesheet" href='/css/prism.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://alexwoo1900.github.io">
+                        绣湖小屋
+                    </a>
+                
+                <p class="description">专注于Web软件开发、桌面软件开发，不限语言</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://alexwoo1900.github.io">首页</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">Direct3D 11高级教程之DXUT篇（八）</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年12月21日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="前言">前言</h2>
+<p>本系列博文为Github上directx-sdk-samples项目附带教程的译文，翻译范围为DXUT部分的Tutorial 08 ~ 10和FX部分的Tutorial 11 ~ 14。</p>
+<p>为使得读者能更加流畅地阅览中文版本，译者在翻译时对部分原文作了意译处理，故给出英文原版方便读者对照。</p>
+<h2 id="正文">正文</h2>
+<p>Tutorial 08</p>
+<p>教程8</p>
+<p>This tutorial introduces DXUT. DXUT is a layer that is built on top of Direct3D to help make samples, prototypes, tools, and professional games more robust and easier to build. It simplifies Windows and Direct3D APIs, based on typical usage.
+The result of this tutorial is a sample that looks just like Tutorial07. However, it is implemented differently.</p>
+<p>本系列教程主要是介绍DXUT框架。DXUT框架构建在Direct3D之上，用来提高示例、原型、工具和专业游戏的健壮性，同时简化了Windows和Direct3D的接口使用，使开发者更容易构建相关类型的项目。
+与教程7相比，本篇项目最后呈现的结果不变，但其内在由DXUT实现。</p>
+<p>DXUT
+DXUT provides a simplified process for creating a window, creating (or selecting) a Direct3D device, and handling Windows messages. This allows you to spend less time worrying about how to perform these standard tasks.
+DXUT for Direct3D 11 is also highly componentized. The core component of DXUT contains the standard window creation, device creation, and management functions. Optional components of DXUT include functions such as camera manipulation, a GUI system, and mesh handling. This tutorial explains the DXUT core component. Optional components are explained in later tutorials. Features introduced in this tutorial include device creation, the main loop, and simple keyboard input.
+DXUT exposes a wide range of callback functions that the user can hook into. The callbacks are called by DXUT at logical points during program execution. You can insert custom code into the callbacks to build the application, while DXUT manages the window and device management implementation requirements.</p>
+<p>DXUT
+DXUT为创建窗口、创建Direct3D设备和处理窗口消息提供了简化的流程。这使得你不会在实现一些标准上浪费时间。
+Direct3D 11的DXUT框架高度组件化。它的核心组件包括标准窗口创建、设备创建以及管理函数。而其可选组件则包括摄像机操作，图形界面系统和网格处理在内的一些方法。
+本篇博文主要讲述DXUT核心组件，对可选组件的介绍将会发布在后面的篇目中。这里要介绍的功能包括设备创建、主循环和简单的键盘输入。
+DXUT给开发者开放了很大一部分回调函数。这些回调函数会在程序运行到特定时间点的时候被DXUT所调用。在DXUT进行窗口以及设备管理的同时，你可以在回调中加入自定义的代码以构建属于你自己的应用。</p>
+<h3 id="设置回调函数">设置回调函数</h3>
+<p>Modifying the WinMain function of an application is the first step. In previous tutorials, WinMain invoked the initialization function, and then entered the message loop. In the DXUT framework, WinMain behaves similarly.</p>
+<p>第一步是修改程序的WinMain函数，在先前的教程中，WinMain函数会调用多个初始化函数，然后使程序进入消息循环。在DXUT框架中，WinMain的实现也差不多。</p>
+<p>First, the callback functions are set by the application. These are the functions that DXUT calls during specific events when the application is run. Notable events include device creation, swap chain creation, keyboard entry, frame move, and frame rendering.</p>
+<p>首先，我们要为程序设置一些回调函数。当程序在运行中遭遇到特定的事件时，DXUT就会调用这些函数。这些所谓的事件包括创建设备、创建交换链、访问键盘、移动帧以及渲染帧。</p>
+<pre><code class="language-cpp">// Direct3D11 callbacks
+// Direct3D11的诸多回调
+DXUTSetCallbackD3D11DeviceAcceptable( IsD3D11DeviceAcceptable );
+DXUTSetCallbackD3D11DeviceCreated( OnD3D11CreateDevice );
+DXUTSetCallbackD3D11SwapChainResized( OnD3D11ResizedSwapChain );
+DXUTSetCallbackD3D11SwapChainReleasing( OnD3D11ReleasingSwapChain );
+DXUTSetCallbackD3D11DeviceDestroyed( OnD3D11DestroyDevice );
+DXUTSetCallbackD3D11FrameRender( OnD3D11FrameRender );
+
+DXUTSetCallbackMsgProc( MsgProc );
+DXUTSetCallbackKeyboard( KeyboardProc );
+DXUTSetCallbackFrameMove( OnFrameMove );
+DXUTSetCallbackDeviceChanging( ModifyDeviceSettings );
+DXUTSetCallbackDeviceRemoved( OnDeviceRemoved );
+</code></pre>
+<p>Then the application sets any additional DXUT settings, as in the following example:</p>
+<p>程序要对DXUT进行一些额外的配置，像下面这个例子：</p>
+<pre><code class="language-cpp">// Show the cursor and clip it when in full screen
+DXUTSetCursorSettings( true, true );
+</code></pre>
+<p>Finally, the initialization functions are called. The difference between this tutorial and the basic tutorials is that you have to deal only with application specific code during initialization. This is because the device and window creation is handled by DXUT. Application specific code can be inserted during each of the associated callback functions. DXUT invokes these functions as it progresses through the initialization process.</p>
+<p>最后，我们要调用一些初始化函数。和基础教程不同，因为DXUT框架会自动帮你创建设备和窗口，所以你只需要编写特定的程序代码就可以完成程序初始化。那些特定的代码可以插入到相关的回调函数中，DXUT框架会如同进行常规初始化那样调用这些函数。</p>
+<pre><code class="language-cpp">// Initialize DXUT and create the desired Win32 window and Direct3D device for the application. Calling each of these
+// functions is optional, but they allow you to set options that control the behavior of the framework.
+// 初始化DXUT以及为你的程序创建Win32窗口和Direct3D设备。这些函数是可选的，
+// 但这样显式地调用它们能让你对框架的行为有更细致的控制。
+DXUTInit( true, true, nullptr );
+// Parse the command line, handle the default hotkeys and show msgboxes
+DXUTCreateWindow( L&quot;Tutorial8&quot; );
+DXUTCreateDevice( D3D_FEATURE_LEVEL_10_0, true, 800, 600 ); 
+</code></pre>
+<h3 id="用dxuttrace调试">用DXUTTrace调试</h3>
+<p><code>DXUTTrace</code> is a macro that can be called to create debug output for the application. It functions much like the standard debug output functions, but it allows a variable number of arguments. For example:</p>
+<p>DXUTTrace是个可以为程序创建调试输出信息的宏。它的使用方式和常规的调试输出函数一样，不过它可以接受数量可变的参数。</p>
+<pre><code class="language-cpp">DXUTTRACE( L&quot;Hit points left: %d\n&quot;, nHitPoints );
+</code></pre>
+<p>In this tutorial, it is placed next to function entry, to report the state of the application. For instance, at the beginning of <code>OnD3D11ResizedSwapChain()</code>, the debugger reports &ldquo;SwapChain Reset called&rdquo;.</p>
+<p>在本教程中，为了记录程序的状态，我们在函数的入口处调用这个宏。比如在OnD3D11ResizedSwapChain的开头，调试宏会输出“SwapChain Reset called”</p>
+<pre><code class="language-cpp">DXUTTRACE( L&quot;SwapChain Reset called\n&quot; );
+</code></pre>
+<h3 id="设备管理和初始化">设备管理和初始化</h3>
+<p>DXUT provides various methods for creating and configuring the window and the Direct3D device. The methods that are used in this tutorial are listed below. They are sufficient for a moderately complex Direct3D application.</p>
+<p>DXUT提供多种方式创建和配置窗口以及Direct3D设备。相关的函数已经如下列出。对于一个中等复杂的Direct3D应用来说，它们已经够用了。</p>
+<p>The procedure from the previous tutorial inside InitDevice() and CleanupDevice() has been properly managed by splitting it into the following functions.
+之前的基础教程提到的InitDevice()以及CleanupDevice()已经被以下的函数所替代。</p>
+<p>•	IsD3D11DeviceAcceptable Callback
+•	ModifyDeviceSettings Callback
+•	OnD3D11CreateDevice Callback
+•	OnD3D11DestroyDevice Callback</p>
+<p>Because not all resources are created at the same time, we can minimize overhead by reducing the number of repeated calls. We achieve this goal by recreating only resources that are context dependent. For the sake of simplicity, previous tutorials recreated everything whenever the screen was resized.</p>
+<p>由于不是所有资源都需要在同一时间加载，我们可以通过减少重复调用的次数来最小化开销。为了达到这个目的，我们只重建设备上下文所依赖的资源。但为了简化理解，之前的教程在每当需要调整屏幕大小时都会重建所有资源。</p>
+<h4 id="isd3d11deviceacceptable回调">IsD3D11DeviceAcceptable回调</h4>
+<p>This function is invoked for each combination of valid device settings that is found on the system. It allows the application to accept or reject each combination. For example, the application can reject all REF devices, or it can reject full screen device setting combinations.
+In this tutorial, all devices are acceptable, because we do not need any advanced functionality.</p>
+<p>这个函数是用来应对系统中可以找到的有效设备设置的每一种组合。它可以决定程序是接受还是拒绝某个配置组。举个例子，程序可以拒绝所有的REF设备，或者它可以拒绝所有的全屏设备设置组。
+本教程中所有设备都是可接受的，因为我们不需要任何高级功能。</p>
+<h4 id="modifydevicesettings回调">ModifyDeviceSettings回调</h4>
+<p>This callback function allows the application to change any device settings immediately before DXUT creates the device. In this tutorial, nothing needs to be done in the callback, because we do not need any advanced functionality.</p>
+<p>这个回调允许程序在DXUT正式创建设备之前即时修改任何设备设置。在本教程中，该函数不需要做任何事情，因为我们不需要任何高级功能。</p>
+<h4 id="ond3d11createdevice回调">OnD3D11CreateDevice回调</h4>
+<p>This function is called after the Direct3D11 device is created. After the device is created, an application can use this callback to allocate resources, set buffers, and handle other necessary tasks.
+In this tutorial, most of the InitDevice() function from tutorial 7 is copied into this callback function. The code for device and swap chain creation is omitted, because these functions are handled by DXUT. <code>OnD3D11CreateDevice</code> creates the effect, the vertex/index buffers, the textures, and the transformation matrices. The code has been copied from tutorial 7 with minimal alterations.</p>
+<p>该函数在Direct3D11设备被创建后调用。在设备被创建后，程序可以使用这个回调来分配资源，创建缓冲区以及完成其他必要的任务。
+基础教程7中InitDevice()的大部分代码会直接复制到这个回调函数里。但有关创建设备和交换链的代码会被删掉，因为这部分由DXUT内部执行。<code>OnD3D11CreateDevice</code>创建着色器、顶点缓冲区和索引缓冲区、纹理以及转换矩阵。相关的代码以作最小修改的代价从教程7中移植过来。</p>
+<h4 id="ond3d11destroydevice回调">OnD3D11DestroyDevice回调</h4>
+<p>This callback function is called immediately before the ID3D11Device is released by DXUT. This callback is used to release resources that were used by the device.
+In this tutorial, <code>OnD3D11DestroyDevice</code> releases the resources that were created by the <code>OnD3D11CreateDevice</code> function. These resources include the vertex/index buffers, the layout, the textures, and the effect. The code is copied from the CleanupDevice() function, but it has been changed to use the <code>SAFE_RELEASE</code> macro.</p>
+<p>这个回调函数在<code>ID3D11Device</code>被DXUT释放时就第一时间被调用了。该回调用来释放被设备使用的资源。
+在本教程中<code>OnD3D11DestroyDevice</code>释放的就是被<code>OnD3D11CreateDevice</code>函数创建的资源。这些资源包括顶点缓冲区、索引缓冲区、数据布局、纹理以及着色器。内容大部分还是复制自CleanupDevice()，这里的代码只是用<code>SAFE_RELEASE</code>宏简化了语句表达。</p>
+<h3 id="渲染">渲染</h3>
+<p>For rendering, DXUT provides two callback functions to initiate rendering for your application. The first, <code>OnFrameMove</code>, is called before each frame is rendered. It advances time in the application. The second, <code>OnD3D11FrameRender</code>, provides rendering for DXUT.
+These two functions split the work of the Render() function into logical steps. <code>OnFrameMove</code> updates all the matrices for animation. <code>OnD3D11FrameRender</code> contains the rendering calls.</p>
+<p>对于渲染，DXUT提供了两个回调函数用来给程序渲染初始化。一个是<code>OnFrameMove</code>，在渲染每一帧之前被调用，它根据时间来安排具体的逻辑。第二个的<code>OnD3D11FrameRender</code>则是为DXUT提供实际的渲染功能。
+这两个函数把Render()的工作分为两个步骤。<code>OnFrameMove</code>负责更新运动矩阵以支持动画效果。<code>OnD3D11FrameRender</code>则包含着有关渲染的调用。</p>
+<h4 id="onframemove回调">OnFrameMove回调</h4>
+<p>This function is called before a frame is rendered. It is used to process the world state. However, its update frequency depends on the speed of the system. On faster systems, it is called more often per second. This means that any state update code must be regulated by time. Otherwise, it performs differently on a slower system than on a faster system.
+Every time the function is called in the tutorial, the world is updated once, and the mesh color is adjusted. This code is copied directly from the Render() function in tutorial 7. Note that the rendering calls are not included.</p>
+<p>这个函数在帧被渲染前调用。它被用来更新模型矩阵的状态，其更新频率取决于系统的速度。在速度更快的系统中，这个函数会在一秒钟内被调用更多次。这意味着其中任何状态更新的代码都必须根据时间参数来调节。（即状态的改变要依赖于时间，时间间隔短，改变的幅度小。时间间隔长，改变的幅度大）否则程序的渲染在不同速度的系统中就会有所区别。
+本篇教程中程序每调用一次这个函数，模型矩阵就会更新一次，同时网格颜色也会得到调整，这些状态更新代码是从教程7的Render()中直接复制过来的。
+要注意的是具体的渲染调用并不在这个回调函数里面。</p>
+<h4 id="ond3d11framerender回调">OnD3D11FrameRender回调</h4>
+<p>This function is called whenever a frame is redrawn. Within this function, effects are applied, resources are associated, and the drawing for the scene is called.
+In this tutorial, this function contains the calls to clear the back buffer and stencil buffer, set up the matrices, and draw the cubes.</p>
+<p>该函数在帧重绘时被调用。我们通常会在这个函数里应用着色，关联资源和绘制场景。
+在本教程中，这个函数包含了对清空后缓冲和（深度）模板缓冲、设置矩阵以及绘制方块这些功能的调用。</p>
+<h3 id="消息处理">消息处理</h3>
+<p>Message processing is an intrinsic property of all window applications. DXUT exposes these messages for advanced applications.</p>
+<p>消息处理是所有窗口程序的固有属性。DXUT为高级应用程序开放了这部分接口。</p>
+<h4 id="msgproc回调">MsgProc回调</h4>
+<p>DXUT invokes this function when window messages are received. The function allows the application to handle messages as it sees fit.
+In this tutorial, no additional messages are handled.</p>
+<p>DXUT在收到窗口消息的时候会调用该函数。函数允许程序在合适的时候处理这些消息。
+不过本教程不对任何额外的消息作处理。</p>
+<h4 id="keyboardproc回调">KeyboardProc回调</h4>
+<p>This callback function is invoked by DXUT when a key is pressed. It can be used as a simple function to process keyboard commands.
+The KeyboardProc callback is not used in this tutorial, because keyboard interaction is not necessary. However, there is a skeleton case for F1, which you can experiment with. Try to insert code to toggle the rotation of the cubes.</p>
+<p>DXUT会在键盘上的某个键被按下时调用该函数。这个回调可以像一个普通函数那样处理键盘指令。
+本教程中不会使用这个键盘回调函数，因为键盘交互是非必要的。但代码中包含F1键的处理例子，你可以仿照它，填入一些其他代码来实现对方块旋转的触发。</p>
+<h3 id="总结">总结</h3>
+<p>The functions covered in this tutorial can get you started with a project on DXUT. Tutorials 9 and 10 cover more advanced DXUT features.
+To start a new project using DXUT, you can use the Sample Browser to copy and rename any sample project in the DirectX SDK. The EmptyProject11 sample is a good blank starting point for DXUT applications, or you can choose another sample.</p>
+<p>本教程中涵盖的函数足够让你开始一个DXUT项目。教程9和教程10 将会囊括更多DXUT的高级功能。
+开展一个新的DXUT项目的时候，你可以在复制并重命名DirectX SDK下的示例项目。空白项目11是开发DXUT应用的绝佳起点，当然，你也可以选择其他例子。</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://alexwoo1900.github.io">Alex Woo</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://alexwoo1900.github.io/post/202012211431/">https://alexwoo1900.github.io/post/202012211431/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/202012011356/">决战紫禁之巅与贝叶斯理论</a></li>
+        
+        <li><a href="/post/202011231012/">高效矩阵计算</a></li>
+        
+        <li><a href="/post/202011031500/">解读传统光栅化 - mini3d代码全剖析</a></li>
+        
+        <li><a href="/post/202010281458/">国内开源镜像站列表</a></li>
+        
+        <li><a href="/post/202010281058/">Discuz论坛搬迁记录</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo = "alexwoo1900/alexwoo1900.github.io"
+            issue-term = "pathname"
+            theme = "github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="https://alexwoo1900.github.io">绣湖小屋 By Alex Woo</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='/js/prism.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://alexwoo1900.github.io/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://alexwoo1900.github.io">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202012211431/" title="Direct3D 11高级教程之DXUT篇（八）">Direct3D 11高级教程之DXUT篇（八）</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202012011356/" title="决战紫禁之巅与贝叶斯理论">决战紫禁之巅与贝叶斯理论</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202011231012/" title="高效矩阵计算">高效矩阵计算</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202011031500/" title="解读传统光栅化 - mini3d代码全剖析">解读传统光栅化 - mini3d代码全剖析</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202010281458/" title="国内开源镜像站列表">国内开源镜像站列表</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202010281058/" title="Discuz论坛搬迁记录">Discuz论坛搬迁记录</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://alexwoo1900.github.io/" title="绣湖小屋">绣湖小屋</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://alexwoo1900.github.io/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

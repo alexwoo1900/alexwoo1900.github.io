@@ -6,7 +6,16 @@
     <description>Recent content on 绣湖小屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 01 Dec 2020 13:56:42 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Dec 2020 14:31:37 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Direct3D 11高级教程之DXUT篇（八）</title>
+      <link>https://alexwoo1900.github.io/post/202012211431/</link>
+      <pubDate>Mon, 21 Dec 2020 14:31:37 +0800</pubDate>
+      
+      <guid>https://alexwoo1900.github.io/post/202012211431/</guid>
+      <description>前言 本系列博文为Github上directx-sdk-samples项目附带教程的译文，翻译范围为DXUT部分的Tutorial 08 ~ 10和FX部分的Tutorial 11 ~ 14。 为使得读者能更加流畅地阅览中文版本，译者在翻译时对部分原文作了意译处理，故给出英文原版方便读者对照。 正文 Tutorial</description>
+    </item>
+    
     <item>
       <title>决战紫禁之巅与贝叶斯理论</title>
       <link>https://alexwoo1900.github.io/post/202012011356/</link>

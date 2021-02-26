@@ -101,7 +101,7 @@
 <p>This tutorial introduces the use of meshes to import source art. It demonstrates meshes by using DXUT. However, meshes can also be used without DXUT.<br>
 In the tutorial, you replace a cube in the center of the window with a model that is imported from a file. The model already contains a texture with mapped coordinates.</p>
 <p>本篇教程介绍将原始美术资料导入成网格对象的使用方式，代码中使用DXUT框架来演示这一过程。但即使不依赖DXUT，你也一样可以使用网格。<br>
-在教程中你会用文件中导入地模型来替代先前的方块。这个模型已经包含了匹配好的纹理。</p>
+在教程中你会用文件中导入的模型来替代先前的方块。这个模型已经包含了匹配好的纹理。</p>
 <h3 id="网格">网格</h3>
 <p>Listing each vertex within the source code is a tedious and crude method to define source art.<br>
 Instead, there are methods to import already constructed models into your application.</p>
@@ -124,16 +124,16 @@ The file format we use for importing is the .SDKMESH format. See the Samples Con
 这个类包含对网格进行导入、渲染、销毁等方法。<br>
 用于导入的文件后缀为.SDKMESH，我们可以用一些工具（Samples Content Exporter）将Autodesk的FBX文件转换成这种目标格式。</p>
 <h3 id="构造网格">构造网格</h3>
-<p>To import the model, we first create a CDXUTSDKMesh object.<br>
+<p>To import the model, we first create a <code>CDXUTSDKMesh</code> object.<br>
 It is called g_Mesh in this case, but in general the object name and the source art name should match, for easier association.</p>
-<p>我们要想导入模型，首先要创建CDXUTSDKMesh对象。<br>
+<p>我们要想导入模型，首先要创建<code>CDXUTSDKMesh</code>对象。<br>
 这里它被命名为g_Mesh，但为了更容易被理解，我们通常要求对象名称和美术资源名称要相对应。</p>
 <pre><code class="language-cpp">CDXUTSDKMesh g_Mesh;
 </code></pre>
 <p>Next, we call the Create function to read the SDKMESH file and store it into the object.<br>
-The Create function requires that we pass in the D3D11Device and the name of the file holding our mesh</p>
+The Create function requires that we pass in the <code>D3D11Device</code> and the name of the file holding our mesh</p>
 <p>接下来我们将调用网格构造函数读取SDKMESH文件并把其中的数据转换成对象。<br>
-这个构造函数要求我们传入D3D11Device和网格文件名。</p>
+这个构造函数要求我们传入<code>D3D11Device</code>和网格文件名。</p>
 <p>In this case, we import a file that is called &ldquo;tiny.sdkmesh&rdquo;.<br>
 The format for the vertices that define this mesh contains vertex coordinates, normals, and texture coordinates. We must specify our input layout to match, as shown in the following example.</p>
 <p>在本例子中，文件名是“tiny.sdkmesh”。<br>
@@ -158,16 +158,16 @@ Next we begin rendering.</p>
 <h3 id="渲染网格">渲染网格</h3>
 <p>In the previous tutorials, because we had explicit control of the vertex buffer and the index buffers, we had to set them up properly before every frame. However, with a mesh, these elements are abstracted. Therefore, we only have to provide the effects technique that should be used to render the mesh, and it does all the work.</p>
 <p>在之前的教程中，我们显式地控制了顶点缓冲器和索引缓冲器，在每一帧渲染前都必须把它们设置正确。而现在直接使用网格数据，这些结构都被隐藏在底层。因此我们只需要提供用于渲染网格的effects technique就能完成所有的工作。</p>
-<p>The difference from the previous tutorial is that we removed the portion of OnD3D11FrameRender where it began rendering the cube.  We replaced it with the mesh rendering call.<br>
+<p>The difference from the previous tutorial is that we removed the portion of <code>OnD3D11FrameRender</code> where it began rendering the cube.  We replaced it with the mesh rendering call.<br>
 It is always good practice to set the correct input layout before any mesh is rendered. This ensures that the layout of the mesh matches the input assembler.</p>
-<p>和先前教程不同的是，我们将OnD3D11FrameRender函数中渲染方块的代码换成了有关网格渲染的调用。<br>
+<p>和先前教程不同的是，我们将<code>OnD3D11FrameRender</code>函数中渲染方块的代码换成了有关网格渲染的调用。<br>
 在网格渲染前将数据布局设置好是个不错的实践，它可以确保网格的数据布局和输入汇编器相匹配。</p>
 <pre><code class="language-cpp">//
 // Set the Vertex Layout
 //    pd3dDevice-&gt;IASetInputLayout( g_pVertexLayout );
 </code></pre>
-<p>The actual rendering is done by calling the Render function inside the CDXUTSDKMesh class. After the technique&rsquo;s buffers are correctly associated, it can be rendered.</p>
-<p>实际的渲染通过调用CDXUTSDKMesh类内部的渲染方法完成。在着色器缓冲被正确关联之后，它就可以开始渲染了。</p>
+<p>The actual rendering is done by calling the Render function inside the <code>CDXUTSDKMesh</code> class. After the technique&rsquo;s buffers are correctly associated, it can be rendered.</p>
+<p>实际的渲染通过调用<code>CDXUTSDKMesh</code>类内部的渲染方法完成。在着色器缓冲被正确关联之后，它就可以开始渲染了。</p>
 <pre><code class="language-cpp">//
 // Render the mesh
 //
@@ -204,8 +204,8 @@ Notice that the mesh is much bigger than the cube. Try applying a scale to the w
 <p>如果模型矩阵被正确地设置，我们现在就可以看到先前的方块已经被这个复杂得多的模型所代替。<br>
 要注意的是这个模型比方块可大得多。为了让模型更好地适应屏幕，你可以尝试对模型矩阵施加一个缩放的变化。</p>
 <h3 id="销毁网格">销毁网格</h3>
-<p>Like all objects, the CDXUTSDKMesh object must be destroyed after usage. This is done by calling the Destroy function.
-如同所有其他对象那样，CDXUTSDKMesh对象在使用完后必须被销毁。这可以通过调用该对象内部的销毁函数完成。</p>
+<p>Like all objects, the <code>CDXUTSDKMesh</code> object must be destroyed after usage. This is done by calling the Destroy function.</p>
+<p>如同所有其他对象那样，<code>CDXUTSDKMesh</code>对象在使用完后必须被销毁。这可以通过调用该对象内部的销毁函数完成。</p>
 <pre><code class="language-cpp">g_Mesh.Destroy();  
 </code></pre>
 

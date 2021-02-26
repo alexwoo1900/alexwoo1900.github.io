@@ -6,7 +6,16 @@
     <description>Recent content on 绣湖小屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 21 Dec 2020 14:31:37 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Feb 2021 10:10:59 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Direct3D 11高级教程之DXUT篇（九）</title>
+      <link>https://alexwoo1900.github.io/post/202102261010/</link>
+      <pubDate>Fri, 26 Feb 2021 10:10:59 +0800</pubDate>
+      
+      <guid>https://alexwoo1900.github.io/post/202102261010/</guid>
+      <description>前言 本系列博文为Github上directx-sdk-samples项目附带教程的译文。 翻译范围为DXUT部分的Tutorial 08 ~ 10和FX部分的Tutorial 11 ~ 14。 为使得读者能更加流畅地阅览中文版本，译者在翻译时对部分原文作了意译处理，故给出英文原版方便读者对照。 正文 Tutorial09</description>
+    </item>
+    
     <item>
       <title>Direct3D 11高级教程之DXUT篇（八）</title>
       <link>https://alexwoo1900.github.io/post/202012211431/</link>

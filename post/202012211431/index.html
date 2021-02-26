@@ -101,7 +101,7 @@
 <p>This tutorial introduces DXUT.<br>
 DXUT is a layer that is built on top of Direct3D to help make samples, prototypes, tools, and professional games more robust and easier to build. It simplifies Windows and Direct3D APIs, based on typical usage.<br>
 The result of this tutorial is a sample that looks just like Tutorial07. However, it is implemented differently.</p>
-<p>本系列教程主要是介绍DXUT框架。<br>
+<p>本篇教程主要是介绍DXUT框架。<br>
 DXUT框架构建在Direct3D之上，用来提高示例、原型、工具和专业游戏的健壮性，同时简化了Windows和Direct3D的接口使用，使开发者更容易构建相关类型的项目。<br>
 与教程7相比，本篇项目最后呈现的结果不变，但其内在由DXUT实现。</p>
 <p>DXUT<br>
@@ -207,7 +207,8 @@ In this tutorial, nothing needs to be done in the callback, because we do not ne
 In this tutorial, most of the InitDevice() function from tutorial 7 is copied into this callback function. The code for device and swap chain creation is omitted, because these functions are handled by DXUT.<br>
 <code>OnD3D11CreateDevice</code> creates the effect, the vertex/index buffers, the textures, and the transformation matrices. The code has been copied from tutorial 7 with minimal alterations.</p>
 <p>该函数在Direct3D11设备被创建后调用。在设备被创建后，程序可以使用这个回调来分配资源，创建缓冲区以及完成其他必要的任务。<br>
-基础教程7中InitDevice()的大部分代码会直接复制到这个回调函数里。但有关创建设备和交换链的代码会被删掉，因为这部分由DXUT内部执行。  <code>OnD3D11CreateDevice</code>创建着色器、顶点缓冲区和索引缓冲区、纹理以及转换矩阵。相关的代码以作最小修改的代价从教程7中移植过来。</p>
+基础教程7中InitDevice()的大部分代码会直接复制到这个回调函数里。但有关创建设备和交换链的代码会被删掉，因为这部分由DXUT内部执行。<br>
+<code>OnD3D11CreateDevice</code>创建着色器、顶点缓冲区和索引缓冲区、纹理以及转换矩阵。相关的代码以作最小修改的代价从教程7中移植过来。</p>
 <h4 id="ond3d11destroydevice回调">OnD3D11DestroyDevice回调</h4>
 <p>This callback function is called immediately before the ID3D11Device is released by DXUT. This callback is used to release resources that were used by the device.<br>
 In this tutorial, <code>OnD3D11DestroyDevice</code> releases the resources that were created by the <code>OnD3D11CreateDevice</code> function.<br>
@@ -228,7 +229,7 @@ These two functions split the work of the Render() function into logical steps. 
 <p>This function is called before a frame is rendered.<br>
 It is used to process the world state. However, its update frequency depends on the speed of the system. On faster systems, it is called more often per second. This means that any state update code must be regulated by time. Otherwise, it performs differently on a slower system than on a faster system.<br>
 Every time the function is called in the tutorial, the world is updated once, and the mesh color is adjusted. This code is copied directly from the Render() function in tutorial 7. Note that the rendering calls are not included.</p>
-<p>这个函数在帧被渲染前调用。
+<p>这个函数在帧被渲染前调用。<br>
 它被用来更新模型矩阵的状态，其更新频率取决于系统的速度。在速度更快的系统中，这个函数会在一秒钟内被调用更多次。这意味着其中任何状态更新的代码都必须根据时间参数来调节。（即状态的改变要依赖于时间，时间间隔短，改变的幅度小。时间间隔长，改变的幅度大）否则程序的渲染在不同速度的系统中就会有所区别。<br>
 本篇教程中程序每调用一次这个函数，模型矩阵就会更新一次，同时网格颜色也会得到调整，这些状态更新代码是从教程7的Render()中直接复制过来的。
 要注意的是具体的渲染调用并不在这个回调函数里面。</p>
@@ -379,6 +380,10 @@ To start a new project using DXUT, you can use the Sample Browser to copy and re
     <section class="widget">
         <h3 class="widget-title">最近文章</h3>
 <ul class="widget-list">
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202102261010/" title="Direct3D 11高级教程之DXUT篇（九）">Direct3D 11高级教程之DXUT篇（九）</a>
+    </li>
     
     <li>
         <a href="https://alexwoo1900.github.io/post/202012211431/" title="Direct3D 11高级教程之DXUT篇（八）">Direct3D 11高级教程之DXUT篇（八）</a>

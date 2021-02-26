@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>Direct3D 11高级教程之DXUT篇（九） | 绣湖小屋</title>
+    <meta property="og:title" content="Direct3D 11高级教程之DXUT篇（九） - 绣湖小屋">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-02-26T10:10:59&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-02-26T10:10:59&#43;08:00'>
+        
+    <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
+    <meta name="description" content="Direct3D 11高级教程之DXUT篇（九）">
+        
+    <meta name="author" content="Alex Woo">
+    <meta property="og:url" content="https://alexwoo1900.github.io/post/202102261010/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <link rel="stylesheet" href='/css/prism.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://alexwoo1900.github.io">
+                        绣湖小屋
+                    </a>
+                
+                <p class="description">专注于Web软件开发、桌面软件开发，不限语言</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://alexwoo1900.github.io">首页</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://alexwoo1900.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">Direct3D 11高级教程之DXUT篇（九）</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2021年2月26日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="前言">前言</h2>
+<p>本系列博文为Github上directx-sdk-samples项目附带教程的译文。<br>
+翻译范围为DXUT部分的Tutorial 08 ~ 10和FX部分的Tutorial 11 ~ 14。<br>
+为使得读者能更加流畅地阅览中文版本，译者在翻译时对部分原文作了意译处理，故给出英文原版方便读者对照。</p>
+<h2 id="正文">正文</h2>
+<p>Tutorial09<br>
+教程9</p>
+<p>This tutorial introduces the use of meshes to import source art. It demonstrates meshes by using DXUT. However, meshes can also be used without DXUT.<br>
+In the tutorial, you replace a cube in the center of the window with a model that is imported from a file. The model already contains a texture with mapped coordinates.</p>
+<p>本篇教程介绍将原始美术资料导入成网格对象的使用方式，代码中使用DXUT框架来演示这一过程。但即使不依赖DXUT，你也一样可以使用网格。<br>
+在教程中你会用文件中导入地模型来替代先前的方块。这个模型已经包含了匹配好的纹理。</p>
+<h3 id="网格">网格</h3>
+<p>Listing each vertex within the source code is a tedious and crude method to define source art.<br>
+Instead, there are methods to import already constructed models into your application.</p>
+<p>用“在代码中列出所有顶点信息”的方式定义美术资源是一种既冗长又粗糙的实践。<br>
+我们有一些别的方法可以把构造好的模型直接导入到我们的应用程序中。</p>
+<p>A mesh is a collection of predefined vertex data which often includes additional information such as normal vectors, colors, materials, and texture coordinates.<br>
+As long as the format of the mesh file is known, the mesh file can be imported and rendered.</p>
+<p>网格是一种预定义的点集，除位置外，它通常包含法线向量、颜色、材质和纹理坐标等额外信息。<br>
+只要网格文件格式已知，那么该文件就能被导入和渲染。</p>
+<p>Meshes are used to maintain source art separately from application code, so that the art can be reused.<br>
+Therefore, meshes are stored in separate files. They are rarely generated in an application itself. Instead, they are created in 3D authoring software. The cube that was generated in previous tutorials can be saved into a separate file, and then re-loaded.<br>
+However, importing can be much more efficient, especially if the mesh scales in complexity. One of the biggest benefits is the ability to import the texture coordinates, so that they match up perfectly. These can easily be specified in authoring applications.</p>
+<p>网格是独立于应用代码之外的一种能够维持美术作品原始形态的结构，这使得这些美术资源能被重复利用。<br>
+因此，网格被存储在单独的文件里。这些文件很少被应用程序自己生成。它们都是来源于一些其他三维设计软件。先前教程的方块也可以存储为一个独立文件，要用的时候就直接载入它。<br>
+不管怎样，导入要比硬编码高效得多，尤其是模型本身要进行缩放。导入方式的其中一大优点是它可以导入纹理坐标，这使得缩放时模型仍能和纹理完美匹配。我们在设计软件中也很容易设置这些纹理坐标。</p>
+<p>DXUT handles meshes by using the CDXUTSDKMesh class.<br>
+This class includes functions to import, render, and destroy a mesh.<br>
+The file format we use for importing is the .SDKMESH format. See the Samples Content Exporter for a utility that can generate these files from Autodesdk FBX files.</p>
+<p>DXUT使用CDXUTSDKMesh类来处理网格数据。<br>
+这个类包含对网格进行导入、渲染、销毁等方法。<br>
+用于导入的文件后缀为.SDKMESH，我们可以用一些工具（Samples Content Exporter）将Autodesk的FBX文件转换成这种目标格式。</p>
+<h3 id="构造网格">构造网格</h3>
+<p>To import the model, we first create a CDXUTSDKMesh object.<br>
+It is called g_Mesh in this case, but in general the object name and the source art name should match, for easier association.</p>
+<p>我们要想导入模型，首先要创建CDXUTSDKMesh对象。<br>
+这里它被命名为g_Mesh，但为了更容易被理解，我们通常要求对象名称和美术资源名称要相对应。</p>
+<pre><code class="language-cpp">CDXUTSDKMesh g_Mesh;
+</code></pre>
+<p>Next, we call the Create function to read the SDKMESH file and store it into the object.<br>
+The Create function requires that we pass in the D3D11Device and the name of the file holding our mesh</p>
+<p>接下来我们将调用网格构造函数读取SDKMESH文件并把其中的数据转换成对象。<br>
+这个构造函数要求我们传入D3D11Device和网格文件名。</p>
+<p>In this case, we import a file that is called &ldquo;tiny.sdkmesh&rdquo;.<br>
+The format for the vertices that define this mesh contains vertex coordinates, normals, and texture coordinates. We must specify our input layout to match, as shown in the following example.</p>
+<p>在本例子中，文件名是“tiny.sdkmesh”。<br>
+点数据的格式定义了它会包含位置坐标、法线向量以及纹理坐标这些数据。我们必须像下面那样显式地指明我们的输入格式。</p>
+<pre><code class="language-cpp">// Define the input layout
+const D3D11_INPUT_ELEMENT_DESC layout[] =
+{
+{ L&quot;POSITION&quot;, 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+{ L&quot;NORMAL&quot;, 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+{ L&quot;TEXCOORD0&quot;, 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+}; 
+</code></pre>
+<p>After the layout is defined, we call the Create function to import the model.</p>
+<p>布局定义好了后，我们调用网格构造函数把模型导入进来。</p>
+<pre><code class="language-cpp">// Load the mesh
+V_RETURN( g_Mesh.Create( pd3dDevice, L&quot;tiny.sdkmesh&quot; ) );
+</code></pre>
+<p>If there are no errors, g_Mesh now contains the vertex and index buffer for our newly imported mesh, as well as textures and materials.<br>
+Next we begin rendering.</p>
+<p>不出意外的话，此时的g_Mesh已经拥有包含模型数据的顶点缓冲器、索引缓冲器、纹理以及材质。<br>
+接下来我们开始渲染。</p>
+<h3 id="渲染网格">渲染网格</h3>
+<p>In the previous tutorials, because we had explicit control of the vertex buffer and the index buffers, we had to set them up properly before every frame. However, with a mesh, these elements are abstracted. Therefore, we only have to provide the effects technique that should be used to render the mesh, and it does all the work.</p>
+<p>在之前的教程中，我们显式地控制了顶点缓冲器和索引缓冲器，在每一帧渲染前都必须把它们设置正确。而现在直接使用网格数据，这些结构都被隐藏在底层。因此我们只需要提供用于渲染网格的effects technique就能完成所有的工作。</p>
+<p>The difference from the previous tutorial is that we removed the portion of OnD3D11FrameRender where it began rendering the cube.  We replaced it with the mesh rendering call.<br>
+It is always good practice to set the correct input layout before any mesh is rendered. This ensures that the layout of the mesh matches the input assembler.</p>
+<p>和先前教程不同的是，我们将OnD3D11FrameRender函数中渲染方块的代码换成了有关网格渲染的调用。<br>
+在网格渲染前将数据布局设置好是个不错的实践，它可以确保网格的数据布局和输入汇编器相匹配。</p>
+<pre><code class="language-cpp">//
+// Set the Vertex Layout
+//    pd3dDevice-&gt;IASetInputLayout( g_pVertexLayout );
+</code></pre>
+<p>The actual rendering is done by calling the Render function inside the CDXUTSDKMesh class. After the technique&rsquo;s buffers are correctly associated, it can be rendered.</p>
+<p>实际的渲染通过调用CDXUTSDKMesh类内部的渲染方法完成。在着色器缓冲被正确关联之后，它就可以开始渲染了。</p>
+<pre><code class="language-cpp">//
+// Render the mesh
+//
+UINT Strides[1];
+UINT Offsets[1];
+ID3D11Buffer* pVB[1];
+pVB[0] = g_Mesh.GetVB11( 0, 0 );
+Strides[0] = ( UINT )g_Mesh.GetVertexStride( 0, 0 );
+Offsets[0] = 0;
+pd3dImmediateContext-&gt;IASetVertexBuffers( 0, 1, pVB, Strides, Offsets );
+pd3dImmediateContext-&gt;IASetIndexBuffer( g_Mesh.GetIB11( 0 ), g_Mesh.GetIBFormat11( 0 ), 0 ); 
+</code></pre>
+<p>Because we are not using the Effects 11 library, the application is responsible for setting up the shaders and constants.<br>
+After that is done, we can render the mesh one subset at a time.</p>
+<p>因为还没有使用Effects 11的库，所以依然由我们自己的代码负责创建着色器和一些必要常量。<br>
+完成这步之后，我们就可以一次一个子集地渲染网格了。</p>
+<pre><code class="language-cpp">for( UINT subset = 0; subset &lt; g_Mesh.GetNumSubsets( 0 ); ++subset )
+{
+auto pSubset = g_Mesh.GetSubset( 0, subset ); 
+auto PrimType = g_Mesh.GetPrimitiveType11( ( SDKMESH_PRIMITIVE_TYPE )pSubset-&gt;PrimitiveType );
+
+pd3dImmediateContext-&gt;IASetPrimitiveTopology( PrimType ); 
+
+// Ignores most of the material information in them mesh to use
+// only a simple shader
+auto pDiffuseRV = g_Mesh.GetMaterial( pSubset-&gt;MaterialID )-&gt;pDiffuseRV11;
+
+pd3dImmediateContext-&gt;PSSetShaderResources( 0, 1, &amp;pDiffuseRV ); 
+pd3dImmediateContext-&gt;DrawIndexed( ( UINT )pSubset-&gt;IndexCount, 0, (UINT)pSubset-&gt;VertexStart );
+}
+</code></pre>
+<p>If the world matrix is properly set for the model, we can now see that the cube in our previous example is replaced by this more complicated mesh.<br>
+Notice that the mesh is much bigger than the cube. Try applying a scale to the world matrix to get the mesh to fit the screen better.</p>
+<p>如果模型矩阵被正确地设置，我们现在就可以看到先前的方块已经被这个复杂得多的模型所代替。<br>
+要注意的是这个模型比方块可大得多。为了让模型更好地适应屏幕，你可以尝试对模型矩阵施加一个缩放的变化。</p>
+<h3 id="销毁网格">销毁网格</h3>
+<p>Like all objects, the CDXUTSDKMesh object must be destroyed after usage. This is done by calling the Destroy function.
+如同所有其他对象那样，CDXUTSDKMesh对象在使用完后必须被销毁。这可以通过调用该对象内部的销毁函数完成。</p>
+<pre><code class="language-cpp">g_Mesh.Destroy();  
+</code></pre>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://alexwoo1900.github.io">Alex Woo</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://alexwoo1900.github.io/post/202102261010/">https://alexwoo1900.github.io/post/202102261010/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/202012211431/">Direct3D 11高级教程之DXUT篇（八）</a></li>
+        
+        <li><a href="/post/202012011356/">决战紫禁之巅与贝叶斯理论</a></li>
+        
+        <li><a href="/post/202011231012/">高效矩阵计算</a></li>
+        
+        <li><a href="/post/202011031500/">解读传统光栅化 - mini3d代码全剖析</a></li>
+        
+        <li><a href="/post/202010281458/">国内开源镜像站列表</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo = "alexwoo1900/alexwoo1900.github.io"
+            issue-term = "pathname"
+            theme = "github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="https://alexwoo1900.github.io">绣湖小屋 By Alex Woo</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='/js/prism.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://alexwoo1900.github.io/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://alexwoo1900.github.io">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202102261010/" title="Direct3D 11高级教程之DXUT篇（九）">Direct3D 11高级教程之DXUT篇（九）</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202012211431/" title="Direct3D 11高级教程之DXUT篇（八）">Direct3D 11高级教程之DXUT篇（八）</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202012011356/" title="决战紫禁之巅与贝叶斯理论">决战紫禁之巅与贝叶斯理论</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202011231012/" title="高效矩阵计算">高效矩阵计算</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202011031500/" title="解读传统光栅化 - mini3d代码全剖析">解读传统光栅化 - mini3d代码全剖析</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202010281458/" title="国内开源镜像站列表">国内开源镜像站列表</a>
+    </li>
+    
+    <li>
+        <a href="https://alexwoo1900.github.io/post/202010281058/" title="Discuz论坛搬迁记录">Discuz论坛搬迁记录</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://alexwoo1900.github.io/" title="绣湖小屋">绣湖小屋</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://alexwoo1900.github.io/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

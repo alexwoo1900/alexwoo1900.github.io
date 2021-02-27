@@ -9,8 +9,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Direct3D 11高级教程之DXUT篇（三上） | 绣湖小屋</title>
-    <meta property="og:title" content="Direct3D 11高级教程之DXUT篇（三上） - 绣湖小屋">
+    <title>Direct3D 11高级教程之DXUT篇（三） | 绣湖小屋</title>
+    <meta property="og:title" content="Direct3D 11高级教程之DXUT篇（三） - 绣湖小屋">
     <meta property="og:type" content="article">
         
     <meta property="article:published_time" content='2021-02-27T10:28:15&#43;08:00'>
@@ -19,7 +19,7 @@
     <meta property="article:modified_time" content='2021-02-27T10:28:15&#43;08:00'>
         
     <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
-    <meta name="description" content="Direct3D 11高级教程之DXUT篇（三上）">
+    <meta name="description" content="Direct3D 11高级教程之DXUT篇（三）">
         
     <meta name="author" content="Alex Woo">
     <meta property="og:url" content="https://alexwoo1900.github.io/post/202102271028/">
@@ -77,7 +77,7 @@
     
     <article class="post">
         <header>
-            <h1 class="post-title">Direct3D 11高级教程之DXUT篇（三上）</h1>
+            <h1 class="post-title">Direct3D 11高级教程之DXUT篇（三）</h1>
         </header>
         <date class="post-meta meta-date">
             2021年2月27日
@@ -363,6 +363,84 @@ LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext )
     return 0;
 }
 </code></pre>
+<h3 id="3d设置对话框">3D设置对话框</h3>
+<p>There is a special built-in dialog that controls the settings of the Direct3D device. This dialog is provided by DXUT as <code>CD3DSettingsDlg</code>.<br>
+It functions like a custom dialog, but it provides all the options that users need to modify settings.</p>
+<p>DXUT框架有一种内置的名叫<code>CD3DSettingsDlg</code>的特殊对话框可以调整Direct3D设备的设置。<br>
+它的功能类似于自定义对话框，不同的是它为用户提供了所有必要的设备配置项。</p>
+<pre><code class="language-cpp">CD3DSettingsDlg         g_SettingsDlg;       // Device settings dialog
+</code></pre>
+<p>Initialization is much like other dialogs. Simply call the Init function.<br>
+However, every time Direct3D changes its swap chain or device, the dialog must also be updated. Therefore, it must include an appropriately named call within <code>OnD3D11CreateDevice</code> and <code>OnD3D11ResizedSwapChain</code>.<br>
+Likewise, changes to destroyed objects must also be notified. Therefore, we need the appropriate calls within <code>OnD3D11DestroyDevice</code>.</p>
+<p>它的初始化就像其他对话框那样，只需要调用初始化函数即可。<br>
+每次Direct3D改变它的交换链或者设备时，该对话框都会被更新。因此它在<code>OnD3D11CreateDevice</code>和<code>OnD3D11ResizedSwapChain</code>里要有类似命名的调用。<br>
+同样，当这些对象被销毁时，该对话框也要即时获知。因此在<code>OnD3D11DestroyDevice</code>内部也要有差不多的调用。</p>
+<pre><code class="language-cpp">g_SettingsDlg.Init( &amp;g_DialogResourceManager );
+
+V_RETURN( g_SettingsDlg.OnD3D11CreateDevice( pd3dDevice ) );
+V_RETURN( g_SettingsDlg.OnD3D11ResizedSwapChain( pd3dDevice, pBackBufferSurfaceDesc ) );
+
+g_SettingsDlg.OnD3D11DestroyDevice();
+</code></pre>
+<p>On the rendering side, to switch the appearance of the dialog, we use a flag called IsActive(). If this flag is set to false, then the panel is not rendered.<br>
+Switching the panel is handled by the HUD dialog. The IDC_CHANGEDEVICE that is associated with the HUD controls this flag.</p>
+<p>当要切换面板显示时，我们使用一个叫IsActive()的标记，假如该标记被设置成false，说明该面板还没被渲染。<br>
+面板的切换由HUD对话框控制，具体地说，是由HUD下标识为IDC_CHANGEDEVICE的控件掌握。</p>
+<pre><code class="language-cpp">if( g_SettingsDlg.IsActive() )
+{
+    g_SettingsDlg.MsgProc( hWnd, uMsg, wParam, lParam );
+    return 0;
+}
+</code></pre>
+<p>After the initialization steps are complete, you can include the dialog in your application. Try compiling the tutorial and interacting with the Change Settings panel to see its effect. The reconstruction of the Direct3D device or swap chain is done internally by DXUT.</p>
+<p>初始化步骤完成后，你可以把对话框加入到你的应用中。试着编译教程代码并且使用配置调整界面看看效果。Direct3D设备和交换链的重建工作由DXUT框架完成。</p>
+<h3 id="文本渲染">文本渲染</h3>
+<p>An application is not very interesting if the user has no idea what to do.<br>
+DXUT includes a utility class to draw 2D text onto the screen, for feedback to the user. This class, <code>CDXUTTextHelper</code>, allows you to draw lines of text anywhere on the screen, by using simple string inputs.<br>
+First, we instantiate the class. Because text rendering can be isolated from most of the initialization procedures, we keep most of the code within RenderText.</p>
+<p>能让用户无从下手的应用程序肯定很无趣。<br>
+为了能反馈信息给用户，DXUT框架包含了一个可以绘制二维文本到屏幕上的工具类。这个类就是<code>CDXUTTextHelper</code>，它允许你只使用简单的字符串输入就可以在屏幕上的任何地方绘制文本。<br>
+首先我们得实例化这个类。因为文本的渲染可以独立于大多数初始化流程，我们把这部分代码单独放在RenderText里面。</p>
+<pre><code class="language-cpp">CDXUTTextHelper* g_pTxtHelper = nullptr;
+g_pTxtHelper = new CDXUTTextHelper( pd3dDevice, pd3dImmediateContext, &amp;g_DialogResourceManager, 15 );
+</code></pre>
+<h4 id="渲染">渲染</h4>
+<p>The text in this sample includes statistics on the rendering. There is also a help section that explains how to manipulate the model by using the mouse.<br>
+The rendering calls must be done within <code>OnD3D11FrameRender</code>. Here, we call RenderText within the frame render call.</p>
+<p>例子里面的文本控件可以输出渲染统计信息，这对于阐述清楚使用鼠标是如何操纵模型这一点十分有用。<br>
+渲染过程必须在<code>OnD3D11FrameRender</code>中被调用，RenderText也不例外。</p>
+<p>The first section is always rendered first. The first call to text rendering is <code>Begin()</code>. This notifies the engine to start sending text to the screen.<br>
+Next, we set the position of the cursor and the color of the text. Now we can draw.<br>
+Text string output is performed by calling <code>DrawTextLine</code>. Pass in the string, and output that corresponds to the string is provided at the current position.<br>
+The cursor is incremented while text is written. For example, if the string contains &ldquo;\n&rdquo;, the cursor is automatically moved to the next line.</p>
+<p>第一部分总是先渲染。文本渲染的第一个调用是<code>Begin()</code>。它告诉引擎开始发送文本字符串到屏幕上。<br>
+接着我们要设置光标的位置和文本的颜色。然后进行绘制。<br>
+我们用<code>DrawTextLine</code>来输出文本字符串。传入字符串，然后在当前的位置输出它。<br>
+打印文本的时候光标的位置也随着移动。举个例子，加入字符串中包含\n字符，光标就会自动移动到下一行。</p>
+<pre><code class="language-cpp">g_pTxtHelper-&gt;Begin();
+g_pTxtHelper-&gt;SetInsertionPos( 5, 5 );
+g_pTxtHelper-&gt;SetForegroundColor( Colors::Yellow );
+g_pTxtHelper-&gt;DrawTextLine( DXUTGetFrameStats( DXUTIsVsyncEnabled() ) );
+g_pTxtHelper-&gt;DrawTextLine( DXUTGetDeviceStats() );
+</code></pre>
+<p>Because the help text is drawn in the same way, we do not need to review its code.
+You can reposition the pointer at any time by calling <code>SetInsertionPos</code>.
+When you are satisfied with the text output, call <code>End()</code> to notify the engine.</p>
+<p>由于帮助文本使用相同的方式绘制，所以我们不需要再审查它的代码。<br>
+你可以调用<code>SetInsertionPos</code>重新定位光标。<br>
+调整至满意的位置后，你可以调用<code>End()</code>告诉引擎准备工作已就绪。</p>
+<pre><code class="language-cpp">g_pTxtHelper-&gt;End();
+</code></pre>
+<h3 id="依赖">依赖</h3>
+<p>DXUT-based samples typically make use of runtime HLSL compilation. Build-time compilation is recommended for all production Direct3D applications, but for experimentation and samples development runtime HLSL compilation is preferred. Therefore, the D3DCompile*.DLL must be available in the search path when these programs are executed.<br>
+•	When using the Windows 8.x SDK and targeting Windows Vista or later, you can include the D3DCompile_46 or D3DCompile_47 DLL side-by-side with your application copying the file from the REDIST folder.</p>
+<p>基于DXUT框架的示例使用的是运行时HLSL编译。通常来说Direct3D相关的软件产品最好使用构建期HLSL编译，但对于实验性项目或者示例项目，更推荐使用运行时编译。因此在程序运行的时候，它必须要能找到D3DCompile*.DLL这类文件。<br>
+当使用Window 8.x SDK且构建目标是Windows Vista以上的系统时，你可以在你的程序中包含D3DCompile_46.DLL或者D3DCompile_47.DLL，它们可以复制自REDIST文件夹。（具体路径见下）</p>
+<pre><code>%ProgramFiles(x86)%\Windows kits\8.0\Redist\D3D\arm, x86 or x64
+%ProgramFiles(x86)%\Windows kits\8.1\Redist\D3D\arm, x86 or x64
+%ProgramFiles(x86)%\Windows kits\10\Redist\D3D\arm, x86 or x64
+</code></pre>
 
         </div>
 
@@ -479,7 +557,7 @@ LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext )
 <ul class="widget-list">
     
     <li>
-        <a href="https://alexwoo1900.github.io/post/202102271028/" title="Direct3D 11高级教程之DXUT篇（三上）">Direct3D 11高级教程之DXUT篇（三上）</a>
+        <a href="https://alexwoo1900.github.io/post/202102271028/" title="Direct3D 11高级教程之DXUT篇（三）">Direct3D 11高级教程之DXUT篇（三）</a>
     </li>
     
     <li>

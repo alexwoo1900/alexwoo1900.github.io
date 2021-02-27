@@ -171,7 +171,7 @@ First, the dialog class is instantiated. Then, individual controls can be added.
 <p>用户交互可以通过使用CDXUTDialog类实现。<br>
 这个类提供可以包含许多控件的对话框，这种对话框可以接收用户的输入并将其传递给应用程序处理。<br>
 我们首先要做的是让对话框类被实例化，然后往里面添加独立控件。</p>
-<h4 id="对象声明">对象声明</h4>
+<h4 id="对话框声明">对话框声明</h4>
 <p>In this tutorial, two dialogs are added.<br>
 One is called g_HUD, and it contains the same code as the Direct3D 11 samples.<br>
 The other is called g_SampleUI, and it demonstrates functions that are specific to this tutorial.<br>
@@ -259,6 +259,109 @@ This allows the dialogs to be drawn so that the user can actually see them.</p>
 //
 g_HUD.OnRender( fElapsedTime ); 
 g_SampleUI.OnRender( fElapsedTime ); 
+</code></pre>
+<h3 id="资源管理器初始化">资源管理器初始化</h3>
+<p>The resource manager must be initialized at every callback that is associated with initialization and destruction. This is because the GUI must be recreated whenever a device is created, or a swap chain is recreated.<br>
+The <code>CDXUTDialogResourceManager</code> class contains functions that correspond to each callback. Each function has the same name as its corresponding callback. All we need to do to is insert the code to call them in the appropriate places.</p>
+<p>资源管理器必须在每一个与创建和销毁有关的回调函数中初始化，因为每当一个设备或者一个交换链被重建，图形界面也会跟着被重建。  <code>CDXUTDialogResourceManager</code>类包含有与每一种回调函数相对应的函数。每些函数都有和相应回调函数相同的名字。我们所要做的是在合适的地方调用它们。</p>
+<pre><code class="language-cpp">V_RETURN( g_DialogResourceManager.OnD3D11CreateDevice( pd3dDevice, pd3dImmediateContext ) );
+V_RETURN( g_DialogResourceManager.OnD3D11ResizedSwapChain( pd3dDevice, pBackBufferSurfaceDesc ) );
+g_DialogResourceManager.OnD3D11ReleasingSwapChain();
+g_DialogResourceManager.OnD3D11DestroyDevice();
+</code></pre>
+<h3 id="响应图形界面事件">响应图形界面事件</h3>
+<p>After everything is initialized, we can write code to handle the GUI interaction.<br>
+During initialization of the dialogs, we set the callback function to OnGUIEvent. Now we create the OnGUIEvent function, which listens for events that are related to the GUI and then processes them. (The GUI is invoked by the framework.)</p>
+<p>一切都初始化完毕后，我们可以开始写代码来处理与图形界面的交互。<br>
+在对话框初始化的过程中，它的回调函数被设置为了OnGUIEvent。现在我们来构造这个函数，它将被用来监听与处理图形界面相关的事件。</p>
+<p>OnGUIEvent is a simple function that contains a case statement for each IDC identifier that was listed when the dialogs were created.<br>
+Each case statement contains the handler code, with the assumption that the user interacts with the control. The code here is very similar to the Win32 code that handles controls.</p>
+<p>OnGUIEvent是一个包含对对话框的IDC标识进行分支判断的语句的简单函数。<br>
+里面的每一个分支都包含着人与相应控件交互时的处理代码。这个代码和Win32处理控件的代码非常类似。</p>
+<p>The controls that are related to the HUD call functions that are built into DXUT.<br>
+There is a DXUT function to switch between fullscreen and windowed mode, to switch the reference software renderer on and off, and to change the device settings.<br>
+The SampleUI dialog contains custom code to manipulate the variables that are associated with the slider. It gathers the value, updates the associated text, and passes the value to the shader.</p>
+<p>跟这个HUD有关的控件能够调用DXUT内部函数。<br>
+代码中的这些DXUT函数分别是用来切换全屏与窗口模式、启动或关闭软件渲染器和改变设备配置的。<br>
+SampleUI对话框内有一些代码用来维护与滑动条相关联的变量。对话框获取到该变量的值后，把值传递给着色器，并且更新相关的文本控件。</p>
+<pre><code class="language-cpp">void CALLBACK OnGUIEvent( UINT nEvent, int nControlID,
+	CDXUTControl* pControl, void* pUserContext )
+{
+    switch( nControlID )
+    {
+        case IDC_TOGGLEFULLSCREEN:
+            DXUTToggleFullScreen();
+            break;
+        case IDC_TOGGLEREF:
+            DXUTToggleREF();
+            break;
+        case IDC_TOGGLEWARP:
+            DXUTToggleWARP();
+            break;
+        case IDC_CHANGEDEVICE:
+            g_SettingsDlg.SetActive( !g_SettingsDlg.IsActive() );
+            break;
+        case IDC_TOGGLESPIN:
+        {
+            g_bSpinning = 
+		g_SampleUI.GetCheckBox(IDC_TOGGLESPIN)-&gt;GetChecked();
+            break;
+        }
+        case IDC_PUFF_SCALE:
+        {
+            WCHAR sz[100];
+            g_fModelPuffiness = ( float )(
+		g_SampleUI.GetSlider( IDC_PUFF_SCALE )-&gt;GetValue() * 0.01f );
+            swprintf_s( sz, 100, L&quot;Puffiness: %0.2f&quot;, g_fModelPuffiness );
+            g_SampleUI.GetStatic( IDC_PUFF_STATIC )-&gt;SetText( sz );
+            break;
+        }
+    }
+}
+</code></pre>
+<h3 id="更新消息处理">更新消息处理</h3>
+<p>Now we have dialog messages and user interactions. Messages that are passed to the application must be handled by the dialogs.<br>
+The relevant code is handled within the <code>MsgProc</code> callback that is provided by DXUT.<br>
+In previous tutorials, this section is empty, because there are no messages to be processed. Now, we must make sure that messages intended for the resource manager and dialogs are properly routed.</p>
+<p>现在，我们完成了用户交互部分，也能获取到对话框传过来的消息。这种传递到应用程序的消息必须要被处理掉。<br>
+消息处理代码写在DXUT框架提供的<code>MsgProc</code>回调里面。<br>
+在先前的教程中，因为没有相关的消息，所以这部分是空白的。但现在我们要确保用于资源管理器和对话框的消息能被正确地处理。</p>
+<p>No special message processing code is required. We just call the <code>MsgProc</code>s for each dialog, to ensure that the message is handled.<br>
+This is done by calling the <code>MsgProc</code> function that corresponds to each class.<br>
+Note that the function provides a flag to notify the framework that no further processing of the message is required, and therefore the framework can exit.</p>
+<p>这里不用编写什么特殊的消息处理代码。我们只需要为每个对话框调用一次<code>MsgProc</code>函数就可以确保消息不会被忽略。<br>
+具体的做法就是调用对应类中的<code>MsgProc</code>函数。<br>
+要注意的是代码中还添加了一个用来通知DXUT“不用再处理该消息”的标记，因此框架能够高效地退出。</p>
+<pre><code class="language-cpp">LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam,
+LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext )
+{
+    // Always allow dialog resource manager calls to handle
+// global messages so GUI state is updated correctly
+    *pbNoFurtherProcessing = g_DialogResourceManager.MsgProc( hWnd, uMsg,
+    wParam, lParam );
+    if( *pbNoFurtherProcessing )
+        return 0;
+
+    if( g_D3DSettingsDlg.IsActive() )
+    {
+        g_D3DSettingsDlg.MsgProc( hWnd, uMsg, wParam, lParam );
+        return 0;
+    }
+
+    // Give the dialogs a chance to handle the message first
+    *pbNoFurtherProcessing = g_HUD.MsgProc( hWnd, uMsg, wParam, lParam );
+    if( *pbNoFurtherProcessing )
+        return 0;
+    *pbNoFurtherProcessing = g_SampleUI.MsgProc( hWnd, uMsg,
+    wParam, lParam );
+    if( *pbNoFurtherProcessing )
+        return 0;
+
+    if( uMsg == WM_CHAR &amp;&amp; wParam == '1' )
+        DXUTToggleFullScreen();
+
+    return 0;
+}
 </code></pre>
 
         </div>

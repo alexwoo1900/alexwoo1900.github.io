@@ -9,8 +9,8 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Direct3D 11高级教程之FX篇（二） 待补完 | 绣湖小屋</title>
-    <meta property="og:title" content="Direct3D 11高级教程之FX篇（二） 待补完 - 绣湖小屋">
+    <title>Direct3D 11高级教程之FX篇（二） | 绣湖小屋</title>
+    <meta property="og:title" content="Direct3D 11高级教程之FX篇（二） - 绣湖小屋">
     <meta property="og:type" content="article">
         
     <meta property="article:published_time" content='2021-03-01T14:49:16&#43;08:00'>
@@ -19,7 +19,7 @@
     <meta property="article:modified_time" content='2021-03-01T14:49:16&#43;08:00'>
         
     <meta name="Keywords" content="Web,JavaScript,C语言,C&#43;&#43;,Python,专业引擎,alexwoo1900">
-    <meta name="description" content="Direct3D 11高级教程之FX篇（二） 待补完">
+    <meta name="description" content="Direct3D 11高级教程之FX篇（二）">
         
     <meta name="author" content="Alex Woo">
     <meta property="og:url" content="https://alexwoo1900.github.io/post/202103011449/">
@@ -77,7 +77,7 @@
     
     <article class="post">
         <header>
-            <h1 class="post-title">Direct3D 11高级教程之FX篇（二） 待补完</h1>
+            <h1 class="post-title">Direct3D 11高级教程之FX篇（二）</h1>
         </header>
         <date class="post-meta meta-date">
             2021年3月1日
@@ -98,17 +98,27 @@
 <h2 id="正文">正文</h2>
 <p>Tutorial12</p>
 <p>教程12</p>
-<p>This tutorial focuses on the pixel shader and its capabilities. There are many things that can be accomplished with the pixel shader, and some of the more common functions are listed. The pixel shader will apply an environment map to the object.
+<p>This tutorial focuses on the pixel shader and its capabilities. There are many things that can be accomplished with the pixel shader, and some of the more common functions are listed. The pixel shader will apply an environment map to the object.<br>
 The outcome of the tutorial is that the model will become shiny, and it will reflect its surrounding environment.</p>
+<p>本教程专注于像素着色器及其功能。有了像素着色器我们可以实现许多事情，下面列举了它的一些普通用法，比如给对象施加环境贴图。<br>
+本篇的代码效果是让模型变得更有光泽，并且能够反射周围的场景。</p>
 <h3 id="像素着色器">像素着色器</h3>
-<p>Pixel shaders are used to manipulate the final color of a pixel before it reaches the output merger. Each pixel that is rendered will be passed through this shader before output. Once the pixel has passed through the pixel shader, the only operations that can be performed are those performed by the output merger, such as alpha blending, depth testing, stencil testing, and so on.
+<p>Pixel shaders are used to manipulate the final color of a pixel before it reaches the output merger. Each pixel that is rendered will be passed through this shader before output. Once the pixel has passed through the pixel shader, the only operations that can be performed are those performed by the output merger, such as alpha blending, depth testing, stencil testing, and so on.<br>
 The pixel shader evolved from the texture mapping found in early hardware. Instead of just a simple texture lookup, it is possible to compute the final color from multiple sources, as well as alter it according to the vertex data. For general applications, however, a pixel shader does multiple lookups on different textures.</p>
+<p>像素着色器的作用是在输出合并之前处理像素的最终颜色。每一个经过渲染的像素在输出之前都会被传入这个着色器里。当像素从像素着色器出来的时候，它只能进行输出合并器赋予它的操作，比如alpha混合、深度测试、模板测试等。<br>
+像素着色器由早期硬件上的纹理映射演变而来。如今的它已不仅仅是个简单的纹理查找器。它还能计算不同来源数据的最终颜色，甚至根据顶点数据来修改它们。大部分应用中，一个像素着色器可以进行多种纹理的查找。</p>
 <h3 id="环境贴图">环境贴图</h3>
-<p>On surfaces which are reflective, it is not possible to just do a texture lookup on fixed texture coordinates to determine the final color. This is because whenever the object or viewer moves, the reflection alters. Thus, we must update reflection every time something moves.
-An effective method to trick the observer to believe it&rsquo;s a dynamic reflection of the environment is to generate a special texture that can wrap around the object. This texture is referred as a cube map. A cube map is effectively placing an object in the middle of a cube, with each face of the cube being a texture. An environment map is a cube map which has the textures which correspond to the view of the environment on that face. If the environment is static, these environment maps can be pre-generated. If the environment is dynamic, the cubemap needs to be updated on-the-fly. See the CubeMapGS sample for an illustration of how to do this.
+<p>On surfaces which are reflective, it is not possible to just do a texture lookup on fixed texture coordinates to determine the final color. This is because whenever the object or viewer moves, the reflection alters. Thus, we must update reflection every time something moves.<br>
+An effective method to trick the observer to believe it&rsquo;s a dynamic reflection of the environment is to generate a special texture that can wrap around the object. This texture is referred as a cube map. A cube map is effectively placing an object in the middle of a cube, with each face of the cube being a texture. An environment map is a cube map which has the textures which correspond to the view of the environment on that face.<br>
+If the environment is static, these environment maps can be pre-generated. If the environment is dynamic, the cubemap needs to be updated on-the-fly. See the CubeMapGS sample for an illustration of how to do this.<br>
 From this environment map, we can calculate what a camera will see as the reflection. First we can find the direction the camera is viewing the object, and from that, reflect it off the normal of each pixel and perform a lookup based on that reflected vector.</p>
+<p>对于一个具有反射性的表面，其上面的像素的最终颜色不可能只由在固定纹理坐标上查找到的纹理来决定。不管什么时候，只要物体或者观察者一移动，目标物表面上的反射就改变了。因此每当有什么东西发生了移动，我们都必须更新目标物的反射值。<br>
+一个能让观察者误以为是动态反射的有效手段是创建一种能够裹住目标对象的特殊纹理。这种纹理被称为方盒贴图，这个方盒贴图将目标物置于方盒中心，方盒的每一个面都是一块纹理。环境贴图就是一种带将环境图像作为其纹理的方盒贴图。<br>
+对于静态不动的环境，这类环境贴图可以被预生成。假如环境是动态的，环境贴图就必须要被实时渲染出来。去看看CubeMapGS这个例子对此的演示。<br>
+从环境贴图中我们可以计算出摄像机可以看到什么反射图像。首先，我们可以获取到从摄像机到观察目标物的向量，再通过它，计算出关于每个像素法线的反射向量。最后用这个反射向量来作环境纹理查找。</p>
 <h4 id="创建环境贴图">创建环境贴图</h4>
 <p>The setup of the environment map is not the emphasis of this tutorial. The procedure to follow is very similar to that of a normal texture map. Please refer to Tutorial 7, Texture Mapping and Constant Buffers, for an explanation of how to properly initialize a texture map and its associated resource view.</p>
+<p>环境贴图的创建不是本教程的重点。下面展示的流程跟普通纹理贴图非常相似。请参照教程7的纹理贴图和常量缓冲的内容，它已经能阐述清楚如何正确地初始化一个纹理贴图及其相关的资源视图。</p>
 <pre><code class="language-cpp">// Load the Environment Map
 ID3D11Resource *pResource = nullptr;
 V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, L&quot;Lobby\\LobbyCube.dds&quot; ) );
@@ -131,21 +141,31 @@ if(pResource)
 g_pEnvMapVariable-&gt;SetResource( g_pEnvMapSRV );
 </code></pre>
 <h4 id="实现查找">实现查找</h4>
-<p>We will step through the simple algorithm described above and perform a proper lookup of an environment map. The calculations are done in the vertex shader and then interpolated to the pixel shader for the lookup. It is better to compute it in the vertex shader and interpolate to the pixel shader since there are fewer computations necessary.
-To compute the reflected vector for the lookup, we require two pieces of information. First is the normal of the pixel in question, second is the direction of the eye.
+<p>We will step through the simple algorithm described above and perform a proper lookup of an environment map.<br>
+The calculations are done in the vertex shader and then interpolated to the pixel shader for the lookup. It is better to compute it in the vertex shader and interpolate to the pixel shader since there are fewer computations necessary.
+To compute the reflected vector for the lookup, we require two pieces of information. First is the normal of the pixel in question, second is the direction of the eye.<br>
 Since the operation is done in view space, we must transform the pixel&rsquo;s normal to proper viewing space.</p>
+<p>我们将通过一个简单的算法来实践上面描述的东西&ndash;对环境贴图作正确的纹理查找。<br>
+这些计算由顶点着色器完成，其结果输入到像素着色器中以供后续的查找动作。顶点着色器负责计算，像素着色器负责使用的方式可以降低运算量。<br>
+为了计算用于查找的反射向量，我们需要两组信息。一个是像素的法线向量，一个是视线向量。<br>
+因为该操作在视图空间内完成，我们必须将像素的法线向量变换到视图空间上。</p>
 <pre><code class="language-cpp">float3 viewNorm = mul( input.Norm, (float3x3)View );
 </code></pre>
-<p>Next we need to find the direction of the camera. Note, however, that we are already in view space, and thus, the camera&rsquo;s direction is that of the Z-axis (0,0,-1.0), since we are staring directly at the object.
+<p>Next we need to find the direction of the camera. Note, however, that we are already in view space, and thus, the camera&rsquo;s direction is that of the Z-axis (0,0,-1.0), since we are staring directly at the object.<br>
 Now that we have our two pieces of information, we can calculate the reflection of the vector with the reflect command. The variable ViewR is used to store the resulting reflection for processing in the pixel shader.</p>
+<p>接下来我们要获取视线向量，由于我们已经处于视图空间，因此我们可以直接定义视线向量为(0,0,-1.0)。（摄像机所对的方向为Z正方向，所以从摄像机到场景的视线向量为(0,0,1)，但reflect使用的是自目标物到摄像机的向量，所以最终使用时需要Z值取反）<br>
+现在我们已经得到了两组参数，接着调用reflect函数来计算反射向量。参数ViewR用于存储该计算结果。</p>
 <pre><code class="language-cpp">output.ViewR = reflect( viewNorm, float3(0,0,-1.0) );
 </code></pre>
 <p>Once the correct vector has been calculated in the vertex shader, we can process the environment map in the pixel shader. This is done by calling a built-in function to sample the environment map and return the color value from that texture.</p>
+<p>当这些向量在顶点着色器中被正确计算，我们可以开始在像素着色器中处理环境贴图了。这一步通过调用一个内置函数就可以达到采样环境贴图并返回对应颜色的目的。</p>
 <pre><code class="language-cpp">// Load the environment map texture
 float4 cReflect = g_txEnvMap.Sample( samLinearClamp, viewR );
 </code></pre>
-<p>Since it is all normalized (and texture coordinates range from 0 to 1), the x and y coordinates will correspond directly to the texture coordinates that it needs to look up.
+<p>Since it is all normalized (and texture coordinates range from 0 to 1), the x and y coordinates will correspond directly to the texture coordinates that it needs to look up.<br>
 As a bonus, we included the code to do the original flat texture lookup, and computed that as the diffuse term. To play with the amount of reflection, you can modulate cReflect by a scaling factor against cDiffuse and experiment with the results. You can have a very reflective character or a somewhat dull character.</p>
+<p>由于所有向量都被归一化（并且纹理坐标的范围也是0到1），向量的x坐标和y坐标可以直接对应到它要查找的目标纹理的坐标系上。<br>
+作为额外惊喜，我们还包含了一些作原始平面纹理查找以及漫反射计算的代码。当有大量的反射需要处理时，针对漫反射你可以用一个比例因子来调整反射率，并对结果进行实验。你可以由此获得一个极具光泽或阴沉暗淡的模型。</p>
 
         </div>
 
@@ -262,7 +282,7 @@ As a bonus, we included the code to do the original flat texture lookup, and com
 <ul class="widget-list">
     
     <li>
-        <a href="https://alexwoo1900.github.io/post/202103011449/" title="Direct3D 11高级教程之FX篇（二） 待补完">Direct3D 11高级教程之FX篇（二） 待补完</a>
+        <a href="https://alexwoo1900.github.io/post/202103011449/" title="Direct3D 11高级教程之FX篇（二）">Direct3D 11高级教程之FX篇（二）</a>
     </li>
     
     <li>

@@ -901,7 +901,7 @@ void device_destroy(device_t *device)
 <ol>
 <li>应用矩阵变换（模型变换、视图变换、投影变换）</li>
 <li>进行CVV裁剪</li>
-<li>归一化坐标</li>
+<li>透视除法</li>
 <li>视口变换</li>
 </ol>
 <h4 id="应用矩阵变换">应用矩阵变换</h4>
@@ -921,8 +921,8 @@ void device_destroy(device_t *device)
 	return check;
 }
 </code></pre>
-<h4 id="归一化坐标">归一化坐标</h4>
-<p>归一化（<em>nomalize/homogenize</em>），又称为透视除法，是指以下转换过程：
+<h4 id="透视除法">透视除法</h4>
+<p>透视除法，代码中被注释为归一化（<em>nomalize/homogenize</em>），是指以下转换过程：
 $$
 \{x^{'}, y^{'}, z^{'}, w^{'} \neq 1\} \rightarrow \{\frac{x^{'}}{w^{'}}, \frac{y^{'}}{w^{'}}, \frac{z^{'}}{w^{'}}, 1\}
 $$

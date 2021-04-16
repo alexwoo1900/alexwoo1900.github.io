@@ -190,7 +190,11 @@ mini3d通过framebuffer指向的空间来存储图像数据，这要求在程序
 	// bcHeight为负，表示从上往下存储图像，采用32位颜色像素
 	BITMAPINFO bi = { { sizeof(BITMAPINFOHEADER), w, -h, 1, 32, BI_RGB,
 		w * h * 4, 0, 0, 0, 0 } };
-	// 创建位图内存区域（ptr指向），并返DIB句柄（screen_hb）
+	hDC = GetDC(screen_handle);
+	// 创建内存设备环境，实际上就是开辟一段内存存放图像数据
+	screen_dc = CreateCompatibleDC(hDC);
+	ReleaseDC(screen_handle, hDC);
+	// 创建DIB内存区域（ptr指向），并返DIB句柄（screen_hb）
 	screen_hb = CreateDIBSection(screen_dc, &amp;bi, DIB_RGB_COLORS, &amp;ptr, 0, 0);
 	if (screen_hb == NULL) return -3;
 	// 将DIB句柄（screen_hb）换入内存设备环境（screen_dc）

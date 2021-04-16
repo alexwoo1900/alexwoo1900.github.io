@@ -213,66 +213,7 @@ int main(void)
 </code></pre>
 <h2 id="图形渲染">图形渲染</h2>
 <p>把一系列的点组合成基本图形元素，再转换成framebuffer上的像素数据，中间需要经历很多算法处理。<br>
-下面我们从数据准备阶段的内存分配讲起，把mini3d涉及到的图形原理给剖析清楚。</p>
-<h3 id="初始化设备对象">初始化设备对象</h3>
-<p><code>device_t</code>用来保存最终需要呈现在窗口中的图像数据，包括帧缓存（framebuffer）、深度缓存（zbuffer）、纹理缓存（texture）。</p>
-<pre><code class="language-cpp">void device_init(device_t *device, int width, int height, void *fb) 
-{
-	int need = sizeof(void*) * (height * 2 + 1024) + width * height * 8;
-	char *ptr = (char*)malloc(need + 64);
-	char *framebuf, *zbuf;
-	int j;
-	assert(ptr);
-	device-&gt;framebuffer = (IUINT32**)ptr;
-	device-&gt;zbuffer = (float**)(ptr + sizeof(void*) * height);
-	ptr += sizeof(void*) * height * 2;
-	device-&gt;texture = (IUINT32**)ptr;
-	ptr += sizeof(void*) * 1024;
-	framebuf = (char*)ptr;
-	zbuf = (char*)ptr + width * height * 4;
-	ptr += width * height * 8;
-	if (fb != NULL) framebuf = (char*)fb;
-	for (j = 0; j &lt; height; j++) {
-		device-&gt;framebuffer[j] = (IUINT32*)(framebuf + width * 4 * j);
-		device-&gt;zbuffer[j] = (float*)(zbuf + width * 4 * j);
-	}
-	device-&gt;texture[0] = (IUINT32*)ptr;
-	device-&gt;texture[1] = (IUINT32*)(ptr + 16);
-	memset(device-&gt;texture[0], 0, 64);
-	device-&gt;tex_width = 2;
-	device-&gt;tex_height = 2;
-	device-&gt;max_u = 1.0f;
-	device-&gt;max_v = 1.0f;
-	device-&gt;width = width;
-	device-&gt;height = height;
-	device-&gt;background = 0xc0c0c0;
-	device-&gt;foreground = 0;
-	transform_init(&amp;device-&gt;transform, width, height);
-	device-&gt;render_state = RENDER_STATE_WIREFRAME;
-}
-
-void device_destroy(device_t *device) 
-{
-	if (device-&gt;framebuffer)
-		free(device-&gt;framebuffer);
-	device-&gt;framebuffer = NULL;
-	device-&gt;zbuffer = NULL;
-	device-&gt;texture = NULL;
-}
-</code></pre>
-<p><code>device_t</code>的初始内存分配方式如下图示：
-
-        <img class="mx-auto" alt="device内存分配" src="/image/device_memory_alloc.png" />   
-    </p>
-<h3 id="初始化摄像机对象">初始化摄像机对象</h3>
-<p>摄像机（<em>camera/eye</em>）是一个虚拟出来在三维世界中代表人眼的对象，它的诸多属性共同决定着场景的被可视范围。</p>
-<p>初始化摄像机要做的就是给定摄像机的位置与朝向，然后对应着更新视图矩阵。（有关视图矩阵在下一小节详细分析）</p>
-<pre><code class="language-cpp">void camera_at_zero(device_t *device, float x, float y, float z) {
-	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 0, 1, 1 };
-	matrix_set_lookat(&amp;device-&gt;transform.view, &amp;eye, &amp;at, &amp;up);
-	transform_update(&amp;device-&gt;transform);
-}
-</code></pre>
+下面我们从最基础的从三维场景到二维图像的数学原理讲起，把mini3d涉及到的图形学知识给剖析清楚。</p>
 <h3 id="数学推导约定">数学推导约定</h3>
 <p>接下来我们要进入数学推导部分，为了方便理解后续的证明，我们作出如下约定：</p>
 <p>正篇涉及的图形推导均按照Direct3D（下称D3D）的标准进行，即：</p>
@@ -305,12 +246,12 @@ x&amp;y
 \end{pmatrix}
 $$</p>
 <p>虽然我们很容易构建平面旋转矩阵，但对于三维空间来说，却不那么容易。</p>
-<p>
-        <img class="mx-auto" alt="立体旋转" src="/image/rotate_3d.png" />   
-    </p>
 <p>模拟三维空间旋转时，由于涉及的变量较多，我们一般都把它简化为绕某个旋转轴旋转某个角度。
 从原向量（点位置）到新向量（绕某个轴旋转后的点位置）的变换矩阵可以用罗德里格斯公式（<em>Rodrigues Rotation</em>）得出。</p>
 <p>这里给出罗德里格斯公式证明：</p>
+<p>
+        <img class="mx-auto" alt="立体旋转" src="/image/rotate_3d.png" />   
+    </p>
 <p>$$
 \because v = v_\bot + v_\Vert\\<br>
 \therefore v_\bot = v - v_\Vert\\<br>
@@ -814,7 +755,94 @@ $$
 0&amp;0&amp;1&amp;0
 \end{pmatrix}
 $$</p>
-<h3 id="准备三角形数据">准备三角形数据</h3>
+<h3 id="初始化设备对象">初始化设备对象</h3>
+<p>结束了数学证明部分的叙述，接下来要对具体的mini3d代码进行讲解。<br>
+首先是设备对象的声明。<code>device_t</code>用来保存最终需要呈现在窗口中的图像数据，包括帧缓存（framebuffer）、深度缓存（zbuffer）、纹理缓存（texture）。</p>
+<pre><code class="language-cpp">void device_init(device_t *device, int width, int height, void *fb) 
+{
+	int need = sizeof(void*) * (height * 2 + 1024) + width * height * 8;
+	char *ptr = (char*)malloc(need + 64);
+	char *framebuf, *zbuf;
+	int j;
+	assert(ptr);
+	device-&gt;framebuffer = (IUINT32**)ptr;
+	device-&gt;zbuffer = (float**)(ptr + sizeof(void*) * height);
+	ptr += sizeof(void*) * height * 2;
+	device-&gt;texture = (IUINT32**)ptr;
+	ptr += sizeof(void*) * 1024;
+	framebuf = (char*)ptr;
+	zbuf = (char*)ptr + width * height * 4;
+	ptr += width * height * 8;
+	if (fb != NULL) framebuf = (char*)fb;
+	for (j = 0; j &lt; height; j++) {
+		device-&gt;framebuffer[j] = (IUINT32*)(framebuf + width * 4 * j);
+		device-&gt;zbuffer[j] = (float*)(zbuf + width * 4 * j);
+	}
+	device-&gt;texture[0] = (IUINT32*)ptr;
+	device-&gt;texture[1] = (IUINT32*)(ptr + 16);
+	memset(device-&gt;texture[0], 0, 64);
+	device-&gt;tex_width = 2;
+	device-&gt;tex_height = 2;
+	device-&gt;max_u = 1.0f;
+	device-&gt;max_v = 1.0f;
+	device-&gt;width = width;
+	device-&gt;height = height;
+	device-&gt;background = 0xc0c0c0;
+	device-&gt;foreground = 0;
+	transform_init(&amp;device-&gt;transform, width, height);
+	device-&gt;render_state = RENDER_STATE_WIREFRAME;
+}
+
+void device_destroy(device_t *device) 
+{
+	if (device-&gt;framebuffer)
+		free(device-&gt;framebuffer);
+	device-&gt;framebuffer = NULL;
+	device-&gt;zbuffer = NULL;
+	device-&gt;texture = NULL;
+}
+</code></pre>
+<p><code>device_t</code>的初始内存分配方式如下图示：
+
+        <img class="mx-auto" alt="device内存分配" src="/image/device_memory_alloc.png" />   
+    </p>
+<h3 id="初始化摄像机对象">初始化摄像机对象</h3>
+<p>摄像机（<em>camera/eye</em>）是一个虚拟出来在三维世界中代表人眼的对象，它的诸多属性共同决定着场景的被可视范围。</p>
+<p>初始化摄像机要做的就是给定摄像机的位置与朝向，然后对应着更新视图矩阵。（有关视图矩阵在下一小节详细分析）</p>
+<pre><code class="language-cpp">void camera_at_zero(device_t *device, float x, float y, float z) {
+	point_t eye = { x, y, z, 1 }, at = { 0, 0, 0, 1 }, up = { 0, 0, 1, 1 };
+	matrix_set_lookat(&amp;device-&gt;transform.view, &amp;eye, &amp;at, &amp;up);
+	transform_update(&amp;device-&gt;transform);
+}
+</code></pre>
+<h3 id="初始化纹理内存">初始化纹理内存</h3>
+<p>我们需要开辟一段内存来存放我们的纹理数据，mini3d使用的是由蓝白相间格子组成的256*256的方形纹理。</p>
+<pre><code class="language-cpp">void init_texture(device_t *device) {
+	static IUINT32 texture[256][256];
+	int i, j;
+	for (j = 0; j &lt; 256; j++) {
+		for (i = 0; i &lt; 256; i++) {
+			int x = i / 32, y = j / 32;
+			texture[j][i] = ((x + y) &amp; 1)? 0xffffff : 0x3fbcef;
+		}
+	}
+	device_set_texture(device, texture, 256 * 4, 256, 256);
+}
+</code></pre>
+<h3 id="准备点数据">准备点数据</h3>
+<p>这里是对点数据进行硬编码。在实际的应用中，开发者使用某种特定的loader将包含大量点的mesh数据导入到程序中。</p>
+<pre><code>vertex_t mesh[8] = {
+	{ { -1, -1,  1, 1 }, { 0, 0 }, { 1.0f, 0.2f, 0.2f }, 1 },
+	{ {  1, -1,  1, 1 }, { 0, 1 }, { 0.2f, 1.0f, 0.2f }, 1 },
+	{ {  1,  1,  1, 1 }, { 1, 1 }, { 0.2f, 0.2f, 1.0f }, 1 },
+	{ { -1,  1,  1, 1 }, { 1, 0 }, { 1.0f, 0.2f, 1.0f }, 1 },
+	{ { -1, -1, -1, 1 }, { 0, 0 }, { 1.0f, 1.0f, 0.2f }, 1 },
+	{ {  1, -1, -1, 1 }, { 0, 1 }, { 0.2f, 1.0f, 1.0f }, 1 },
+	{ {  1,  1, -1, 1 }, { 1, 1 }, { 1.0f, 0.3f, 0.3f }, 1 },
+	{ { -1,  1, -1, 1 }, { 1, 0 }, { 0.2f, 1.0f, 0.3f }, 1 },
+};
+</code></pre>
+<h3 id="处理点数据">处理点数据</h3>
 <p>从数据源获取到mesh对象的三角顶点数据之后，我们必须对其进行一系列的处理。</p>
 <pre><code class="language-cpp">void device_draw_primitive(device_t *device, const vertex_t *v1,
 	const vertex_t *v2, const vertex_t *v3) {
@@ -858,7 +886,7 @@ $$</p>
 </code></pre>
 <p>以上的代码主要内容有几点：</p>
 <ol>
-<li>应用矩阵变换（包括模型变换、视图变换、投影变换）</li>
+<li>应用矩阵变换（模型变换、视图变换、投影变换）</li>
 <li>进行CVV裁剪</li>
 <li>归一化坐标</li>
 <li>视口变换</li>

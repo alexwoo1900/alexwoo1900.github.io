@@ -6,7 +6,16 @@
     <description>Recent content on 绣湖小屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 01 Mar 2021 14:49:16 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 May 2021 13:49:09 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MSDN备忘录--COM对象和接口</title>
+      <link>https://alexwoo1900.github.io/post/202105201349/</link>
+      <pubDate>Thu, 20 May 2021 13:49:09 +0800</pubDate>
+      
+      <guid>https://alexwoo1900.github.io/post/202105201349/</guid>
+      <description>简介 本文是对MSDN文档《COM Objects and Interfaces》一章的翻译及补充说明 原文 COM Objects and Interfaces COM is a technology that allows objects to interact across process and computer boundaries as easily as within a single process. COM enables this by specifying that the only way to manipulate the data associated with an object is through an interface on the object. When this term is used in this documentation, it refers to an implementation in code of a COM binary-compliant interface that is associated with an object. COM uses the word interface in a sense different from that typically used in Visual C++ programming. A C++ interface refers to all of</description>
+    </item>
+    
     <item>
       <title>Direct3D 11高级教程之FX篇（二）</title>
       <link>https://alexwoo1900.github.io/post/202103011449/</link>

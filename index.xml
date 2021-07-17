@@ -6,7 +6,16 @@
     <description>Recent content on 绣湖小屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 20 May 2021 14:04:48 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Jul 2021 09:25:34 +0800</lastBuildDate><atom:link href="https://alexwoo1900.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>7000元主机装机实录</title>
+      <link>https://alexwoo1900.github.io/post/202107150925/</link>
+      <pubDate>Thu, 15 Jul 2021 09:25:34 +0800</pubDate>
+      
+      <guid>https://alexwoo1900.github.io/post/202107150925/</guid>
+      <description>初衷 打算组装一台相对（于购买整机）成本更低的生产力主机，用于日常的游戏录制和视频剪辑。 基本配置 虽然是组装机器，但考虑到后续会用来剪辑渲染视频，设备组件需要较好的稳定性，所以并没有在某宝收二手，最终成本略高。 部件 品牌 品质 数量 总价 CPU i9 9900KF 全新-独立盒装 1 2399 散热器 NH-D15S 全新-顶级风冷 1 589 主板</description>
+    </item>
+    
     <item>
       <title>MSDN备忘录--接口和接口实现</title>
       <link>https://alexwoo1900.github.io/post/202105201404/</link>
